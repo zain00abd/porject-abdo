@@ -45,7 +45,7 @@ const Page = () => {
   useEffect(() => {
     if (status == "authenticated") {
       setnameuser(session.user.name);
-      console.log(nameuser);
+      
     }
   }, [status]);
 
@@ -63,14 +63,14 @@ const Page = () => {
 
   //       if (user.arrinvoce && user.arrinvoce.length > 0) {
   //         const getmony = JSON.parse(user.arrinvoce);
-  //         console.log("************user************");
+  //         
   //         let arrtoo = [];
   //         getmony.forEach((arrmoney) => {
   //           const totalonearr = arrmoney.money.reduce((acc, num) => acc + num, 0);
   //           totalarruser += totalonearr;
   //           arrtoo.push(totalarruser);
   //         });
-  //         console.log(arrtoo);
+  //         
   //       }
 
   //       totalarruser = Math.abs(totalarruser);
@@ -95,35 +95,40 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
+      console.log( result[0].expen)
       let expensesarr = JSON.parse(result[0].expen[result[0].expen.length - 1]);
+      console.log(expensesarr)
+      
+      
+      
       setdate(expensesarr.date);
       setlastexpen(expensesarr.expenses);
 
       let customerarr = expensesarr.expenses;
-      console.log(customerarr);
+      
 
       const datacustomer = customerarr.map((user, index) => {
-        console.log(user);
+        
         let totalinvoicecustomer = 0;
 
-        // console.log(user.arrinvoce)
+        // 
         if (user.money && user.money.length > 0) {
           const getmony = customerarr;
-          console.log(getmony);
+          
 
           let arrtoo = [];
           getmony.forEach((arrmoney) => {
-            console.log(arrmoney);
+            
             const totalonearr = arrmoney.money.reduce(
               (acc, num) => acc + num,
               0
             );
             totalinvoicecustomer += totalonearr;
             settatalarr(totalinvoicecustomer);
-            console.log(totalinvoicecustomer);
+            
             arrtoo.push(totalinvoicecustomer);
           });
-          console.log(arrtoo);
+          
         }
 
         totalinvoicecustomer = Math.abs(totalinvoicecustomer);
@@ -131,11 +136,11 @@ const Page = () => {
         if (totalinvoicecustomer === 0) {
           user.total = 0;
         }
-        // console.log(user.name)
+        // 
         return user;
       });
 
-      console.log(datacustomer);
+      
 
       // setdata(datacustomer);
       // setdataSearch(datacustomer);
@@ -144,36 +149,36 @@ const Page = () => {
     };
 
     if (nameuser) {
-      console.log("hoooommeeee");
+      
     }
     getData();
   }, [today]);
 
   const searchuser = (value) => {
-    console.log(value);
+    
     const filteredData = dataSearch.filter((item) =>
       item.name.toLowerCase().includes(value.toLowerCase())
     );
-    console.log(filteredData);
+    
     setdata(filteredData);
   };
 
   const addItem = () => {
-    console.log("zain");
+    
 
     const newItem = {
       id: 1 + items.length,
     };
 
     setiteams([...items, newItem]);
-    console.log(items);
+    
   };
 
   let arrdes = [];
   let arrmoney = [];
   useEffect(() => {
     settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
-    // console.log(moment().format(`D/${moment().get('month')+1}/YYYY`))
+    // 
     sessionStorage.removeItem("arr1");
     sessionStorage.removeItem("arr2");
     arrdes = [];
@@ -194,9 +199,9 @@ const Page = () => {
 
     if (arrmode === "mon") {
       if (isNaN(value)) {
-        console.log(isNaN(value));
+        
         const matches = value.match(/(\d+)[^\d]*$/);
-        console.log(matches);
+        
 
         if (matches) {
           value = matches[1];
@@ -210,7 +215,7 @@ const Page = () => {
 
     if (arrmode === "dis") {
       arrdes[arrindex] = value;
-      // console.log(arrdes)
+      // 
     } else {
       arrmoney[arrindex] = +value;
     }
@@ -223,9 +228,9 @@ const Page = () => {
 
   const filterarr = () => {
     settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
-    console.log(today);
+    
     setoclock(moment().format("LT"));
-    console.log(oclock);
+    
 
     let arrdesfilter = arrdes.filter(function (value) {
       return value !== null && value !== undefined && value !== "";
@@ -241,8 +246,8 @@ const Page = () => {
       );
     });
 
-    // console.log("Filtered arrdes:", arrdesfilter);
-    // console.log("Filtered arrmoney:", arrmoneyfilter);
+    // 
+    // 
 
     setarrdis(arrdesfilter);
     setarrmon(arrmoneyfilter);
@@ -317,7 +322,7 @@ const Page = () => {
     });
 
     const dataFromBackend = await response.json();
-    console.log(dataFromBackend);
+    
 
     const fetchDataAndNotify = async () => {
       const baseURL = window.location.origin;
