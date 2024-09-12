@@ -377,10 +377,10 @@ const Page = () => {
       <Head actev={"home"} />
 
       {date === null ? (
-        <div class="text-center" style={{height:"100vh" , top:"150px", position:"relative"}}>
+        <div className="text-center" style={{height:"100vh" , top:"150px", position:"relative"}}>
   Loading...
-  <div class="spinner-border" role="status" style={{width:"3rem", height:"3rem"}}>
-    <span class="visually-hidden">Loading...</span>
+  <div className="spinner-border" role="status" style={{width:"3rem", height:"3rem"}}>
+    <span className="visually-hidden">Loading...</span>
   </div>
 </div>
       ) : (
@@ -390,6 +390,7 @@ const Page = () => {
                     <ul
             className="list-group mt-4 opacity-100 shadow-lg bg-body-tertiary rounded"
             style={{ padding: 0 }}
+            key={index}
           >
 
 
