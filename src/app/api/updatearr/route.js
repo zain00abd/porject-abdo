@@ -13,6 +13,7 @@ export async function PUT(request) {
   // 3- تعديل آخر عنصر في المصفوفة expen
   const invoice = await ItemArrModal.findOne({ _id: "66d1c9f56f10c7937d54a1b0" });
   const lastIndex = invoice.expen.length - 1; // حساب الـ index الأخير في المصفوفة
+  console.log(lastIndex)
 
   // 4- تعديل آخر عنصر في المصفوفة expen
   const result = await ItemArrModal.updateOne(

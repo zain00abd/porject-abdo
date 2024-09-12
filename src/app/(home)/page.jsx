@@ -543,7 +543,7 @@ const Page = () => {
 
                     <input
                       className="col-3"
-                      type=""
+                      type="text"
                       pattern="[0-9]*"
                       id={`mon_${item.id}`}
                       onKeyUp={(e) => {
