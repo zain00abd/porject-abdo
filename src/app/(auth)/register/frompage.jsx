@@ -152,8 +152,8 @@ const Frompage = () => {
             <div className="suggestion">
               <p>
                 {" "}
-                هل لديك حساب بالفعل؟{" "}
-                <Link href={"/signin"}> تسجيل الدخول </Link>
+                   العودة الى الصفحة الرئيسية{" "}
+                <Link href={"/"}> الصفحة الرئيسية </Link>
               </p>
             </div>
             <button

@@ -44,10 +44,15 @@ const Page = () => {
 
   useEffect(() => {
     if (status == "authenticated") {
-      setnameuser(session.user.name);
+      if(session.user.name !== null){
+      console.log(session.user.email.split("@")[1].split(".")[0])
+
+        setnameuser(session.user.email.split("@")[1].split(".")[0]);
+      }
       
     }
-  }, [status]);
+
+  }, [session]);
 
   // useEffect(() => {
 
@@ -352,7 +357,7 @@ const Page = () => {
 
   return (
     <>
-      <Head actev={"home"} />
+      <Head actev={"home"} level={nameuser} />
 
       {date === null ? (
         <Loading />

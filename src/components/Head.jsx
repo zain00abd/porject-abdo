@@ -5,12 +5,12 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import "./stylecomp.css";
 
-const Head = ({ actev }) => {
+const Head = ({ actev, level }) => {
   return (
     <nav
       className="navbar sticky-top navbar-expand-lg navbar-dark"
       aria-label="Offcanvas navbar large"
-      style={{backgroundColor:"#253d53b9"}}
+      style={{ backgroundColor: "#253d53b9" }}
     >
       <div className="container-fluid">
         <button
@@ -33,7 +33,7 @@ const Head = ({ actev }) => {
         >
           <div className="offcanvas-header">
             <h5 className="offcanvas-title" id="offcanvasNavbar2Label">
-              Offcanvas
+              اعدادات
             </h5>
             <button
               type="button"
@@ -46,17 +46,17 @@ const Head = ({ actev }) => {
             {/*  start nav  */}
 
             <ul className="navbar-nav justify-content-start flex-grow-1">
-            <li className="nav-item text-center item-align-center d-none d-lg-flex">
+              <li className="nav-item text-center item-align-center d-none d-lg-flex">
                 <button
                   className={`nav-link bg-danger m-auto ${
                     actev == "home" && "active"
                   }`}
-                  
-                  onClick={() =>{
-                    signOut()
+                  onClick={() => {
+                    signOut();
                   }}
                 >
-                   تسجيل الخروج  <i className="fa-solid fa-right-from-bracket"></i>
+                  تسجيل الخروج{" "}
+                  <i className="fa-solid fa-right-from-bracket"></i>
                 </button>
               </li>
             </ul>
@@ -74,31 +74,43 @@ const Head = ({ actev }) => {
             </ul>
 
             {/*  end nav  */}
-            <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li className="nav-item d-lg-none text-center">
+            <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 ">
+              {level === "admin" && (
+                <li className="nav-item mb-3">
+                  <Link className={`nav-link text-center`} href="/register">
+                    اضافة عميل <i className="fa-solid fa-user-plus"></i>
+                  </Link>
+                </li>
+              )}
+
+              <li
+                className="nav-item d-lg-none text-center mb-5"
+                style={{ position: "absolute", bottom: "0px", width: "90%" }}
+              >
                 <button
                   className={`nav-link bg-danger w-50 m-auto ${
                     actev == "home" && "active"
                   }`}
-                  
-                  onClick={() =>{
-                    signOut()
+                  onClick={() => {
+                    signOut();
                   }}
                 >
                   تسجيل الخروج <i className="fa-solid fa-right-to-bracket"></i>
                 </button>
               </li>
 
-              <li className="nav-item">
-                <Link
-                  className={`nav-link d-none d-lg-block ${
-                    actev == "adduser" && "active"
-                  }`}
-                  href="/adduser"
-                >
-                  اضافة عميل <i className="fa-solid fa-user-plus"></i>
-                </Link>
-              </li>
+              {level === "admin" && (
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link d-none d-lg-block ${
+                      actev == "adduser" && "active"
+                    }`}
+                    href="/alldata"
+                  >
+                    جميع البيانات <i className="fa-solid fa-database"></i>
+                  </Link>
+                </li>
+              )}
 
               <li className="">
                 <Link
@@ -115,27 +127,29 @@ const Head = ({ actev }) => {
           </div>
         </div>
 
-        <div className="accordion d-lg-none" id="accordionExample">
-          <button
-            className=""
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-            style={{
-              background: "linear-gradient(45deg, #00bd9d, #165e00, #00bd9d)",
-              outline: "none",
-              border: "none",
-              height: "35px",
-              borderRadius: "15px",
-            }}
-          >
-            <i
-              className="fa-solid fa-magnifying-glass fa-lg gradient-icon"
-              style={{ color: "#e0ecff" }}
-            ></i>
-          </button>
-        </div>
+        {actev == "adduser" && (
+          <div className="accordion d-lg-none" id="accordionExample">
+            <button
+              className=""
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+              style={{
+                background: "linear-gradient(45deg, #00bd9d, #165e00, #00bd9d)",
+                outline: "none",
+                border: "none",
+                height: "35px",
+                borderRadius: "15px",
+              }}
+            >
+              <i
+                className="fa-solid fa-magnifying-glass fa-lg gradient-icon"
+                style={{ color: "#e0ecff" }}
+              ></i>
+            </button>
+          </div>
+        )}
 
         <Link className="d-lg-none" href="/">
           <i
@@ -146,14 +160,16 @@ const Head = ({ actev }) => {
           />
         </Link>
 
-        <Link className="d-lg-none" href="/adduser">
-          <i
-            className={`fa-solid fa-user-plus fa-lg gradient-icon ${
-              actev == "adduser" && "actev-nav"
-            }`}
-            style={{ color: "#e0ecff" }}
-          ></i>
-        </Link>
+        {level === "admin" && (
+          <Link className="d-lg-none" href="/alldata">
+            <i
+              className={`fa-solid fa-database fa-lg gradient-icon ${
+                actev == "adduser" && "actev-nav"
+              }`}
+              style={{ color: "#e0ecff" }}
+            ></i>
+          </Link>
+        )}
       </div>
 
       <form
@@ -173,7 +189,7 @@ const Head = ({ actev }) => {
               placeholder="Search"
               aria-label="Search"
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn-success" type="submit">
               Search
             </button>
           </div>

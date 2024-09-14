@@ -4,6 +4,8 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+
 
 const Formsignin = () => {
   const router = useRouter();
@@ -21,6 +23,7 @@ const Formsignin = () => {
   // }, []);
 
   const handelsubmit = async (e) => {
+    setloading(true)
     e.preventDefault();
     console.log(email + " / " + password);
 
@@ -32,6 +35,9 @@ const Formsignin = () => {
     console.log(res);
 
     if (res.error) {
+      setloading(false)
+      toast.error(" الايميل وكلمة السر غير متطابقة ");
+
       return;
     }
     router.replace("/");

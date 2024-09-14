@@ -20,8 +20,7 @@
 }
 
 .actev-nav::before{
-  background: linear-gradient(45deg, #78c2ff, #004bd6, #78c2ff);
-
+  background: linear-gradient(45deg, #78c2ff, #006bc2, #78c2ff);
 
 }
 

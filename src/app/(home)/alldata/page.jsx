@@ -374,7 +374,7 @@ const Page = () => {
 
   return (
     <>
-      <Head actev={"home"} />
+      <Head actev={"adduser"} />
 
       {date === null ? (
         <div className="text-center" style={{height:"100vh" , top:"150px", position:"relative"}}>
@@ -669,7 +669,7 @@ const Page = () => {
         </div>
       </div>
 
-      <Footer />
+      <Footer page={"alldata"}/>
     </>
   );
 };
