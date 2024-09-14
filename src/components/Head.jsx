@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import "./stylecomp.css";
 
-const Head = ({ actev, level }) => {
+const Head = ({ actev, level, email, name }) => {
   return (
     <nav
       className="navbar sticky-top navbar-expand-lg navbar-dark"
@@ -33,7 +33,7 @@ const Head = ({ actev, level }) => {
         >
           <div className="offcanvas-header">
             <h5 className="offcanvas-title" id="offcanvasNavbar2Label">
-              اعدادات
+              {name}
             </h5>
             <button
               type="button"
@@ -86,7 +86,8 @@ const Head = ({ actev, level }) => {
               <li
                 className="nav-item d-lg-none text-center mb-5"
                 style={{ position: "absolute", bottom: "0px", width: "90%" }}
-              >
+                >
+                  {email}
                 <button
                   className={`nav-link bg-danger w-50 m-auto ${
                     actev == "home" && "active"
@@ -94,10 +95,11 @@ const Head = ({ actev, level }) => {
                   onClick={() => {
                     signOut();
                   }}
-                >
+                  >
                   تسجيل الخروج <i className="fa-solid fa-right-to-bracket"></i>
                 </button>
               </li>
+              
 
               {level === "admin" && (
                 <li className="nav-item">

@@ -21,6 +21,8 @@ const Page = () => {
   const [tatalarr, settatalarr] = useState(null);
   const [date, setdate] = useState(null);
   const [plusmoney, setplusmoney] = useState(null);
+  const [level, setlevel] = useState(null);
+  const [email, setemail] = useState(null);
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -44,14 +46,12 @@ const Page = () => {
 
   useEffect(() => {
     if (status == "authenticated") {
-      if(session.user.name !== null){
-      console.log(session.user.email.split("@")[1].split(".")[0])
-
-        setnameuser(session.user.email.split("@")[1].split(".")[0]);
+      if (session.user.name !== null) {
+        setlevel(session.user.email.split("@")[1].split(".")[0]);
+        setnameuser(session.user.name);
+        setemail(session.user.email);
       }
-      
     }
-
   }, [session]);
 
   // useEffect(() => {
@@ -68,14 +68,14 @@ const Page = () => {
 
   //       if (user.arrinvoce && user.arrinvoce.length > 0) {
   //         const getmony = JSON.parse(user.arrinvoce);
-  //         
+  //
   //         let arrtoo = [];
   //         getmony.forEach((arrmoney) => {
   //           const totalonearr = arrmoney.money.reduce((acc, num) => acc + num, 0);
   //           totalarruser += totalonearr;
   //           arrtoo.push(totalarruser);
   //         });
-  //         
+  //
   //       }
 
   //       totalarruser = Math.abs(totalarruser);
@@ -100,40 +100,33 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
-      console.log( result[0].expen)
+      console.log(result[0].expen);
       let expensesarr = JSON.parse(result[0].expen[result[0].expen.length - 1]);
-      console.log(expensesarr)
-      
-      
-      
+      console.log(expensesarr);
+
       setdate(expensesarr.date);
       setlastexpen(expensesarr.expenses);
 
       let customerarr = expensesarr.expenses;
-      
 
       const datacustomer = customerarr.map((user, index) => {
-        
         let totalinvoicecustomer = 0;
 
-        // 
+        //
         if (user.money && user.money.length > 0) {
           const getmony = customerarr;
-          
 
           let arrtoo = [];
           getmony.forEach((arrmoney) => {
-            
             const totalonearr = arrmoney.money.reduce(
               (acc, num) => acc + num,
               0
             );
             totalinvoicecustomer += totalonearr;
             settatalarr(totalinvoicecustomer);
-            
+
             arrtoo.push(totalinvoicecustomer);
           });
-          
         }
 
         totalinvoicecustomer = Math.abs(totalinvoicecustomer);
@@ -141,11 +134,9 @@ const Page = () => {
         if (totalinvoicecustomer === 0) {
           user.total = 0;
         }
-        // 
+        //
         return user;
       });
-
-      
 
       // setdata(datacustomer);
       // setdataSearch(datacustomer);
@@ -154,36 +145,31 @@ const Page = () => {
     };
 
     if (nameuser) {
-      
     }
     getData();
   }, [today]);
 
   const searchuser = (value) => {
-    
     const filteredData = dataSearch.filter((item) =>
       item.name.toLowerCase().includes(value.toLowerCase())
     );
-    
+
     setdata(filteredData);
   };
 
   const addItem = () => {
-    
-
     const newItem = {
       id: 1 + items.length,
     };
 
     setiteams([...items, newItem]);
-    
   };
 
   let arrdes = [];
   let arrmoney = [];
   useEffect(() => {
     settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
-    // 
+    //
     sessionStorage.removeItem("arr1");
     sessionStorage.removeItem("arr2");
     arrdes = [];
@@ -204,9 +190,7 @@ const Page = () => {
 
     if (arrmode === "mon") {
       if (isNaN(value)) {
-        
         const matches = value.match(/(\d+)[^\d]*$/);
-        
 
         if (matches) {
           value = matches[1];
@@ -220,7 +204,7 @@ const Page = () => {
 
     if (arrmode === "dis") {
       arrdes[arrindex] = value;
-      // 
+      //
     } else {
       arrmoney[arrindex] = +value;
     }
@@ -233,9 +217,8 @@ const Page = () => {
 
   const filterarr = () => {
     settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
-    
+
     setoclock(moment().format("LT"));
-    
 
     let arrdesfilter = arrdes.filter(function (value) {
       return value !== null && value !== undefined && value !== "";
@@ -251,8 +234,8 @@ const Page = () => {
       );
     });
 
-    // 
-    // 
+    //
+    //
 
     setarrdis(arrdesfilter);
     setarrmon(arrmoneyfilter);
@@ -327,7 +310,6 @@ const Page = () => {
     });
 
     const dataFromBackend = await response.json();
-    
 
     const fetchDataAndNotify = async () => {
       const baseURL = window.location.origin;
@@ -357,7 +339,7 @@ const Page = () => {
 
   return (
     <>
-      <Head actev={"home"} level={nameuser} />
+      <Head actev={"home"} level={level} email={email} name={nameuser} />
 
       {date === null ? (
         <Loading />
@@ -547,9 +529,13 @@ const Page = () => {
                     </button>
 
                     <input
+                      required
                       className="col-3"
                       type="text"
                       pattern="[0-9]*"
+                      name="rtty"
+                      pattern="[0-9]*"
+                      inputMode="numeric"
                       id={`mon_${item.id}`}
                       onKeyUp={(e) => {
                         addarritem(e.target.value, e.target.id, e.target);

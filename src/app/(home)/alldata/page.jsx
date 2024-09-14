@@ -21,6 +21,9 @@ const Page = () => {
   const [tatalarr, settatalarr] = useState(null);
   const [date, setdate] = useState(null);
   const [plusmoney, setplusmoney] = useState(null);
+  const [email, setemail] = useState(null);
+  const [level, setlevel] = useState(null);
+  
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -44,10 +47,13 @@ const Page = () => {
 
   useEffect(() => {
     if (status == "authenticated") {
-      setnameuser(session.user.name);
-      
+      if (session.user.name !== null) {
+        setlevel(session.user.email.split("@")[1].split(".")[0]);
+        setnameuser(session.user.name);
+        setemail(session.user.email)
+      }
     }
-  }, [status]);
+  }, [session]);
 
   // useEffect(() => {
 
@@ -374,7 +380,7 @@ const Page = () => {
 
   return (
     <>
-      <Head actev={"adduser"} />
+      <Head actev={"adduser"} level={"admin"} email={email} name={nameuser} />
 
       {date === null ? (
         <div className="text-center" style={{height:"100vh" , top:"150px", position:"relative"}}>
