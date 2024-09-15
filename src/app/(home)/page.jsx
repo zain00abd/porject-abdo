@@ -531,10 +531,9 @@ const Page = () => {
                     <input
                       required
                       className="col-3"
-                      type="text"
+                      type="tel"
                       pattern="[0-9]*"
                       name="rtty"
-                      pattern="[0-9]*"
                       inputMode="numeric"
                       id={`mon_${item.id}`}
                       onKeyUp={(e) => {

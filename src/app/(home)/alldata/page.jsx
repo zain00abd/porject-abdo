@@ -23,6 +23,7 @@ const Page = () => {
   const [plusmoney, setplusmoney] = useState(null);
   const [email, setemail] = useState(null);
   const [level, setlevel] = useState(null);
+  const [totalalldata, settotalalldata] = useState(null);
   
 
   const [arrdis, setarrdis] = useState([]);
@@ -105,12 +106,13 @@ const Page = () => {
       
       let allex = []
 
+      let arralltotal = []
       allexpen.map(exn =>{
         
         
         
         let expensesarr = JSON.parse(exn);
-        console.log(expensesarr)
+        // console.log(expensesarr)
         // console.log(expensesarr)
         
   
@@ -123,10 +125,10 @@ const Page = () => {
         let customerarr = expensesarr.expenses;
         
   
+        let totalinvoicecustomer = 0;
         const datacustomer = customerarr.map((user, index) => {
           user.date = expensesarr.date
           
-          let totalinvoicecustomer = 0;
           
           // 
           if (user.money && user.money.length > 0) {
@@ -134,7 +136,8 @@ const Page = () => {
             
             
             let arrtoo = [];
-            getmony.forEach((arrmoney) => {
+            getmony.forEach((arrmoney, indexI) => {
+              console.log(indexI)
               
               
               const totalonearr = arrmoney.money.reduce(
@@ -142,25 +145,39 @@ const Page = () => {
                 0
               );
               totalinvoicecustomer += totalonearr;
+              if(index == 0){
+
+                arralltotal.push(totalonearr)
+              }
               settatalarr(totalinvoicecustomer);
               
               arrtoo.push(totalinvoicecustomer);
             });
+            console.log(arrtoo)
             
           }
           
           totalinvoicecustomer = Math.abs(totalinvoicecustomer);
+          console.log(totalinvoicecustomer)
           user.total = totalinvoicecustomer;
           if (totalinvoicecustomer === 0) {
             user.total = 0;
           }
-
+          console.log(arralltotal)
+          
           // 
-
+          
           return user;
         });
+        
+        settotalalldata(
+          arralltotal.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            0
+          )
+        );
         allex.push(datacustomer)
-        console.log(datacustomer)
+        // console.log(datacustomer)
         
         
       })
@@ -516,166 +533,8 @@ const Page = () => {
         </div>
       )}
 
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        // @ts-ignore
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="btn-close opacity-0"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                disabled
-              ></button>
 
-              <h6
-                className="modal-title me-5 w-100 text-center"
-                id="staticBackdropLabel"
-              >
-                <i className="fa-solid fa-comment-dollar fa-rotate-180 fa-xl me-2"></i>
-                اضافة مصروفات
-                <i className="fa-solid fa-comment-dollar fa-xl ms-2"></i>
-              </h6>
-            </div>
-
-            {/* start modal body */}
-
-            <div className="modal-body">
-              <div className="row g-0 justify-content-evenly">
-                <button className="col-1 opacity-0" disabled>
-                  <i
-                    className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
-                    style={{ color: "#360000" }}
-                  ></i>
-                </button>
-                <h6 className="col-3 text-center"> المبلغ </h6>
-                <i
-                  className="fa-solid fa-arrow-right-arrow-left col-1 opacity-0"
-                  style={{
-                    color: "#FFD43B",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                ></i>
-                <h6 className="col-6 text-center">الوصف</h6>
-              </div>
-
-              {items.map((item, index) => {
-                return (
-                  <div
-                    className="row g-0 justify-content-evenly"
-                    id={item.id}
-                    key={index}
-                  >
-                    <button className="col-1">
-                      <i
-                        className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
-                        style={{ color: "#550000" }}
-                      ></i>
-                    </button>
-
-                    <input
-                      className="col-3"
-                      type="text"
-                      pattern="[0-9]*"
-                      id={`mon_${item.id}`}
-                      onKeyUp={(e) => {
-                        addarritem(e.target.value, e.target.id, e.target);
-                      }}
-                    />
-
-                    <i
-                      className="fa-solid fa-arrow-right-arrow-left col-1"
-                      style={{
-                        color: "#FFD43B",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    ></i>
-
-                    <input
-                      className="col-6"
-                      type="text"
-                      id={`dis_${item.id}`}
-                      onKeyUp={(e) => {
-                        addarritem(e.target.value, e.target.id, e.target);
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            <div
-              className="row g-0 justify-content-evenly"
-              style={{
-                display: "flex",
-                textAlign: "center",
-                alignItems: "center",
-                backgroundColor: "#00313aab",
-              }}
-            >
-              <div className="col-4 text-center">
-                الاجمالي: <small className="text-danger">{plusmoney}</small>
-              </div>
-
-              <button
-                className="plus-item col-2 p-1"
-                style={{ background: "none", border: "none", width: "40px" }}
-                onClick={() => {
-                  addItem();
-                }}
-              >
-                <i
-                  className="fa-solid fa-circle-plus fa-xl"
-                  style={{ color: "#fcba32" }}
-                ></i>
-              </button>
-
-              <div
-                className="col-4 text-center"
-                style={{ letterSpacing: "1.5px" }}
-              >
-                {today}
-              </div>
-            </div>
-
-            {/* end modal body */}
-
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  submitupdate();
-                }}
-              >
-                Understood
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <Footer page={"alldata"}/>
+      <Footer page={"alldata"} total={totalalldata}/>
     </>
   );
 };

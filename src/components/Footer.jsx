@@ -2,7 +2,7 @@ import React from "react";
 
 import "./stylecomp.css";
 
-const Footer = ({ page }) => {
+const Footer = ({ page, total }) => {
   return (
     <footer
       // @ts-ignore
@@ -13,8 +13,12 @@ const Footer = ({ page }) => {
         </div>
         {page === "alldata" ? (
           <>
-            <span style={styles.number}> 12345 </span>
+          
+            <p style={{display:"inline", alignItems:"center", textAlign:"center"}}> ج </p>
+            {" "}
+            <span style={styles.number}> {total} </span>
             <span> : إجمالي المعروض </span>
+            
           </>
         ) : (
           <button

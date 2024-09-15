@@ -4,16 +4,7 @@
   font-weight: 600;
 }
 body {
-  background: linear-gradient(to top, #abb6c0 0%, #e8ebf2 50%, #e2e7ed 100%),
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.534) 50%,
-      rgba(255, 255, 255, 0.644) 61%,
-      rgba(0, 0, 0, 0.671) 73%
-    ),
-    linear-gradient(33deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%);
-
-
+  background-color: #b4c1cab9;
 }
 .div-time {
   border: 0.1ex solid #f1aeb5;
