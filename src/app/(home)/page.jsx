@@ -3,13 +3,17 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { notFound, usePathname } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { notFound, usePathname,useRouter } from "next/navigation";
+import { useEffect, useState, Suspense, useRef } from "react";
+import { toast } from "react-toastify";
+
+
 
 import moment from "moment";
 import Head from "components/Head";
 import Footer from "components/Footer";
 import Loading from "./loading.jsx";
+import Musseg from "components/Musseg.jsx";
 
 const Page = () => {
   const { data: session, status } = useSession();
@@ -23,6 +27,7 @@ const Page = () => {
   const [plusmoney, setplusmoney] = useState(null);
   const [level, setlevel] = useState(null);
   const [email, setemail] = useState(null);
+  const [issubmit, setissubmit] = useState(false);
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -31,6 +36,10 @@ const Page = () => {
 
   const [allexpen, setallexpen] = useState(null);
   const [lastexpen, setlastexpen] = useState([]);
+
+  const buttonRef = useRef(null);
+  const router = useRouter();
+
 
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -287,6 +296,7 @@ const Page = () => {
   };
 
   const submitupdate = async () => {
+    setissubmit(true)
     const baseURL = window.location.origin;
     let routefile;
     let Postroute;
@@ -311,34 +321,41 @@ const Page = () => {
 
     const dataFromBackend = await response.json();
 
-    const fetchDataAndNotify = async () => {
-      const baseURL = window.location.origin;
-      // const response = await fetch("your-api-endpoint");
-      // const dataFromBackend = await response.json();
+    // const fetchDataAndNotify = async () => {
+    //   const baseURL = window.location.origin;
+    //   // const response = await fetch("your-api-endpoint");
+    //   // const dataFromBackend = await response.json();
 
-      // استدعاء API لإرسال البريد الإلكتروني
-      await fetch(`${baseURL}/api/sendEmail`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: "noursamir190@gmail.com",
-          subject: "Subject of the Email",
-          text: "Body of the Email",
-        }),
-      });
+    //   // استدعاء API لإرسال البريد الإلكتروني
+    //   await fetch(`${baseURL}/api/sendEmail`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       to: "noursamir190@gmail.com",
+    //       subject: "Subject of the Email",
+    //       text: "Body of the Email",
+    //     }),
+    //   });
 
-      // أكمل باقي الأكواد هنا
-    };
+    //   // أكمل باقي الأكواد هنا
+    // };
 
     if (response.ok) {
-      fetchDataAndNotify();
+      // fetchDataAndNotify();
+      setissubmit(false)
+      toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ")
+      setTimeout(() => {
+        
+        window.location.reload();
+      }, 1500);
     }
   };
 
   return (
     <>
+      <Musseg />
       <Head actev={"home"} level={level} email={email} name={nameuser} />
 
       {date === null ? (
@@ -600,23 +617,42 @@ const Page = () => {
 
             {/* end modal body */}
 
-            <div className="modal-footer">
+            <div className="modal-footer d-flex justify-content-between">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
+                disabled={issubmit && "disabled"}
+                ref={buttonRef}
               >
-                Close
+                الغاء
               </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  submitupdate();
-                }}
-              >
-                Understood
-              </button>
+
+              {issubmit ? (
+                <>
+                  <button className="btn btn-primary" type="button" disabled>
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                    {" "}
+                    <span role="status">...انتظار</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={() => {
+                      submitupdate();
+                    }}
+                  >
+                    حفظ الفاتورة
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
