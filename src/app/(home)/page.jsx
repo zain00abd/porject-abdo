@@ -186,6 +186,8 @@ const Page = () => {
   }, []);
 
   const addarritem = (value, id, inp) => {
+    console.log(inp)
+    console.log(id)
     const arrmode = id.split("_")[0];
     const arrindex = id.split("_")[1];
 
@@ -247,7 +249,9 @@ const Page = () => {
     //
 
     setarrdis(arrdesfilter);
+    console.log(arrdesfilter)
     setarrmon(arrmoneyfilter);
+    console.log(arrmoneyfilter)
 
     setplusmoney(
       arrmoneyfilter.reduce(
@@ -257,7 +261,20 @@ const Page = () => {
     );
   };
 
-  const cheackoldarr = () => {};
+
+  const daleteitem = (item) =>{
+    let ItemIndex = item.parentElement.parentElement.id
+    console.log(item.parentElement.parentElement)
+    if(item.parentElement.parentElement.className === "row g-0 justify-content-evenly"){
+
+      addarritem(null, `dis_${ItemIndex}`)
+      addarritem(null, `mon_${ItemIndex}`)
+
+      item.parentElement.parentElement.remove()
+    }
+
+  }
+
 
   const expobject = () => {
     let expenarr = [
@@ -344,12 +361,12 @@ const Page = () => {
 
     if (response.ok) {
       // fetchDataAndNotify();
-      setissubmit(false)
+      
       toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ")
       setTimeout(() => {
         
         window.location.reload();
-      }, 1500);
+      }, 2000);
     }
   };
 
@@ -538,7 +555,9 @@ const Page = () => {
                     id={item.id}
                     key={index}
                   >
-                    <button className="col-1">
+                    <button className="col-1" onClick={(e) =>{
+                      daleteitem(e.target)
+                    }}>
                       <i
                         className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
                         style={{ color: "#550000" }}
