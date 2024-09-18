@@ -125,6 +125,7 @@ const Head = ({ actev, level, email, name }) => {
                   القائمة الرئيسية
                 </Link>
               </li>
+              
             </ul>
           </div>
         </div>
@@ -163,14 +164,27 @@ const Head = ({ actev, level, email, name }) => {
         </Link>
 
         {level === "admin" && (
-          <Link className="d-lg-none" href="/alldata">
+<>
+            <Link className="d-lg-none" href="/alldata">
+              <i
+                className={`fa-solid fa-database fa-lg gradient-icon ${
+                  actev == "adduser" && "actev-nav"
+                }`}
+                style={{ color: "#e0ecff" }}
+              ></i>
+            </Link>
+
+            <Link className="d-lg-none" href="/wallet">
             <i
-              className={`fa-solid fa-database fa-lg gradient-icon ${
-                actev == "adduser" && "actev-nav"
+              className={`fa-solid fa-wallet fa-lg gradient-icon ${
+                actev == "wallet" && "actev-nav"
               }`}
               style={{ color: "#e0ecff" }}
             ></i>
           </Link>
+</>
+
+          
         )}
       </div>
 

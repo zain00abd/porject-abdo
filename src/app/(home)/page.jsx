@@ -110,9 +110,9 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
-      console.log(result[0].expen);
+      
       let expensesarr = JSON.parse(result[0].expen[result[0].expen.length - 1]);
-      console.log(expensesarr);
+      
 
       setdate(expensesarr.date);
       setlastexpen(expensesarr.expenses);
@@ -175,7 +175,7 @@ const Page = () => {
 
     setiteams([...items, newItem]);
     setpackitem((num) => num +2)
-    console.log(packitem)
+    
   };
 
   let arrdes = [];
@@ -190,8 +190,8 @@ const Page = () => {
   }, []);
 
   const addarritem = (value, id, inp) => {
-    console.log(inp)
-    console.log(id)
+    
+    
     const arrmode = id.split("_")[0];
     const arrindex = id.split("_")[1];
 
@@ -253,9 +253,9 @@ const Page = () => {
     //
 
     setarrdis(arrdesfilter);
-    console.log(arrdesfilter)
+    
     setarrmon(arrmoneyfilter);
-    console.log(arrmoneyfilter)
+    
 
     setplusmoney(
       arrmoneyfilter.reduce(
@@ -268,7 +268,7 @@ const Page = () => {
 
   const daleteitem = (item) =>{
     let ItemIndex = item.parentElement.parentElement.id
-    console.log(item.parentElement.parentElement)
+    
     if(item.parentElement.parentElement.className === "row g-0 justify-content-evenly"){
 
       addarritem(null, `dis_${ItemIndex}`)
