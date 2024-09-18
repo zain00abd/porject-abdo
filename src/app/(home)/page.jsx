@@ -28,7 +28,8 @@ const Page = () => {
   const [level, setlevel] = useState(null);
   const [email, setemail] = useState(null);
   const [issubmit, setissubmit] = useState(false);
-
+  const [packitem, setpackitem] = useState(0);
+  
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
   const [oclock, setoclock] = useState(null);
@@ -151,12 +152,13 @@ const Page = () => {
       // setdataSearch(datacustomer);
 
       addItem();
+      setpackitem(2)
     };
 
     if (nameuser) {
     }
     getData();
-  }, [today]);
+  }, []);
 
   const searchuser = (value) => {
     const filteredData = dataSearch.filter((item) =>
@@ -172,6 +174,8 @@ const Page = () => {
     };
 
     setiteams([...items, newItem]);
+    setpackitem((num) => num +2)
+    console.log(packitem)
   };
 
   let arrdes = [];
@@ -271,6 +275,7 @@ const Page = () => {
       addarritem(null, `mon_${ItemIndex}`)
 
       item.parentElement.parentElement.remove()
+      setpackitem((num) => num -2)
     }
 
   }
@@ -667,6 +672,7 @@ const Page = () => {
                     onClick={() => {
                       submitupdate();
                     }}
+                    disabled={packitem !== (arrdis.length + arrmon.length) && "disabled" }
                   >
                     حفظ الفاتورة
                   </button>
