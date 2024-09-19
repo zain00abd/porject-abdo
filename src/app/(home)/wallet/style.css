@@ -21,3 +21,28 @@
   padding: 10px 30px;
   font-size: 1.2rem;
 }
+
+.modal-body input {
+  background-color: #00313ac0;
+  border: none;
+  outline: none;
+  text-align: center;
+  height: 35px;
+  color: #ffffff;
+  border-radius: 5px;
+  font-weight: 400;
+
+}
+
+.modal-body input::placeholder {
+  color: #ffffffc2;
+}
+
+.modal-content {
+  background-color: #3c5363;
+  color: #ffffff;
+}
+
+.modal-body{
+  margin: auto;
+}

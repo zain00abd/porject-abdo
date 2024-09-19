@@ -3,11 +3,9 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { notFound, usePathname,useRouter } from "next/navigation";
+import { notFound, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense, useRef } from "react";
 import { toast } from "react-toastify";
-
-
 
 import moment from "moment";
 import Head from "components/Head";
@@ -29,7 +27,7 @@ const Page = () => {
   const [email, setemail] = useState(null);
   const [issubmit, setissubmit] = useState(false);
   const [packitem, setpackitem] = useState(0);
-  
+
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
   const [oclock, setoclock] = useState(null);
@@ -40,7 +38,6 @@ const Page = () => {
 
   const buttonRef = useRef(null);
   const router = useRouter();
-
 
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -110,9 +107,8 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
-      
+
       let expensesarr = JSON.parse(result[0].expen[result[0].expen.length - 1]);
-      
 
       setdate(expensesarr.date);
       setlastexpen(expensesarr.expenses);
@@ -152,7 +148,7 @@ const Page = () => {
       // setdataSearch(datacustomer);
 
       addItem();
-      setpackitem(2)
+      setpackitem(2);
     };
 
     if (nameuser) {
@@ -174,8 +170,7 @@ const Page = () => {
     };
 
     setiteams([...items, newItem]);
-    setpackitem((num) => num +2)
-    
+    setpackitem((num) => num + 2);
   };
 
   let arrdes = [];
@@ -190,8 +185,6 @@ const Page = () => {
   }, []);
 
   const addarritem = (value, id, inp) => {
-    
-    
     const arrmode = id.split("_")[0];
     const arrindex = id.split("_")[1];
 
@@ -253,9 +246,8 @@ const Page = () => {
     //
 
     setarrdis(arrdesfilter);
-    
+
     setarrmon(arrmoneyfilter);
-    
 
     setplusmoney(
       arrmoneyfilter.reduce(
@@ -265,21 +257,20 @@ const Page = () => {
     );
   };
 
+  const daleteitem = (item) => {
+    let ItemIndex = item.parentElement.parentElement.id;
 
-  const daleteitem = (item) =>{
-    let ItemIndex = item.parentElement.parentElement.id
-    
-    if(item.parentElement.parentElement.className === "row g-0 justify-content-evenly"){
+    if (
+      item.parentElement.parentElement.className ===
+      "row g-0 justify-content-evenly"
+    ) {
+      addarritem(null, `dis_${ItemIndex}`);
+      addarritem(null, `mon_${ItemIndex}`);
 
-      addarritem(null, `dis_${ItemIndex}`)
-      addarritem(null, `mon_${ItemIndex}`)
-
-      item.parentElement.parentElement.remove()
-      setpackitem((num) => num -2)
+      item.parentElement.parentElement.remove();
+      setpackitem((num) => num - 2);
     }
-
-  }
-
+  };
 
   const expobject = () => {
     let expenarr = [
@@ -318,7 +309,7 @@ const Page = () => {
   };
 
   const submitupdate = async () => {
-    setissubmit(true)
+    setissubmit(true);
     const baseURL = window.location.origin;
     let routefile;
     let Postroute;
@@ -366,10 +357,9 @@ const Page = () => {
 
     if (response.ok) {
       // fetchDataAndNotify();
-      
-      toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ")
+
+      toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ");
       setTimeout(() => {
-        
         window.location.reload();
       }, 2000);
     }
@@ -560,19 +550,34 @@ const Page = () => {
                     id={item.id}
                     key={index}
                   >
-                    <button className="col-1" onClick={(e) =>{
-                      daleteitem(e.target)
-                    }}>
-                      <i
-                        className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
-                        style={{ color: "#550000" }}
-                      ></i>
-                    </button>
+                    {index !== 0 ? (
+                      <button
+                        className="col-1"
+                        onClick={(e) => {
+                          daleteitem(e.target);
+                        }}
+                      >
+                        <i
+                          className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
+                          style={{ color: "#550000" }}
+                        ></i>
+                      </button>
+                    ) : (
+                      <button
+                        className="col-1 opacity-0"
+                      >
+                        <i
+                          className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
+                          style={{ color: "#550000" }}
+                        ></i>
+                      </button>
+                    )}
 
                     <input
                       required
                       className="col-3"
                       type="tel"
+                      maxLength={5}
                       pattern="[0-9]*"
                       name="rtty"
                       inputMode="numeric"
@@ -595,6 +600,7 @@ const Page = () => {
                     <input
                       className="col-6"
                       type="text"
+                      maxLength={19}
                       id={`dis_${item.id}`}
                       onKeyUp={(e) => {
                         addarritem(e.target.value, e.target.id, e.target);
@@ -658,8 +664,7 @@ const Page = () => {
                     <span
                       className="spinner-border spinner-border-sm"
                       aria-hidden="true"
-                    ></span>
-                    {" "}
+                    ></span>{" "}
                     <span role="status">...انتظار</span>
                   </button>
                 </>
@@ -672,7 +677,9 @@ const Page = () => {
                     onClick={() => {
                       submitupdate();
                     }}
-                    disabled={packitem !== (arrdis.length + arrmon.length) && "disabled" }
+                    disabled={
+                      packitem !== arrdis.length + arrmon.length && "disabled"
+                    }
                   >
                     حفظ الفاتورة
                   </button>
