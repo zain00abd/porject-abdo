@@ -12,6 +12,7 @@ const Wallet = () => {
   const [transactions, setTransactions] = useState([]);
   const [show, setShow] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [inpmoney, setinpmoney] = useState(0);
 
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -25,31 +26,55 @@ const Wallet = () => {
       }
       const result = await res.json();
       setAmount(result[0].wallet);
-      console.log(result[0].wallet);
+      const arrtransactions = result[0].transactions;
+      console.log(arrtransactions);
+
+      // const arrt = arrtransactions.mpa((item, index) => {
+      //   console.log(item);
+      // });
+
+      // console.log(JSON.parse(result[0].transactions[0]));
     };
 
     getData();
   }, []);
 
-  // const fetchWalletData = async () => {
-  //   try {
-  //     const response = await axios.get('/api/wallet');
-  //     setBalance(response.data.balance);
-  //     setTransactions(response.data.transactions);
-  //   } catch (error) {
-  //     console.error('Error fetching wallet data', error);
-  //   }
-  // };
+  const handeladdwallet = async () => {
+    const baseURL = window.location.origin;
+    const response = await fetch(`${baseURL}/api/addwallet`, {
+      method: `PUT`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        money: Number(+amount + +inpmoney),
+      }),
+    });
 
-  // const handleAddMoney = async () => {
-  //   try {
-  //     await axios.post('/api/wallet/add', { amount });
-  //     setShow(false);
-  //     fetchWalletData(); // Refresh data
-  //   } catch (error) {
-  //     console.error('Error adding money', error);
-  //   }
-  // };
+    const dataFromBackend = await response.json();
+    SetTransaction()
+  };
+
+  const SetTransaction = async () => {
+    const baseURL = window.location.origin;
+    const response = await fetch(`${baseURL}/api/settransaction`, {
+      method: `PUT`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // @ts-ignore
+        transactions: {
+          date: '9/9/2024',
+          mode: 'minus',
+          money: 1000,
+          user: 'عبد الله'
+      }
+      }),
+    });
+
+    const objFromFrontEnd = await response.json();
+  };
 
   return (
     <>
@@ -69,29 +94,42 @@ const Wallet = () => {
         <div className="balance-display text-center mb-4">
           <h2>:الرصيد الحالي</h2>
           <h3 className="text-success" id="balance-display">
-            $ {amount}
+            {amount == 0 ? (
+              <div className="spinner-border text-success" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <>$ {amount}</>
+            )}
           </h3>
         </div>
         {/* زر لإضافة الأموال */}
         <div className="text-center mb-4">
           <button
             type="button"
-            className="btn btn-primary btn-add-money"
+            className="btn btn-success btn-add-money"
             data-bs-toggle="modal"
             data-bs-target="#addMoneyModal"
           >
-            <i className="bi bi-plus-circle" /> إضافة أموال
+            <i className="fa-solid fa-plus fa-fade "></i> إضافة أموال
           </button>
         </div>
         {/* سجل المعاملات */}
-        <div className="card shadow-sm mb-4">
+        <div className="card shadow-sm mb-5">
           <div className="card-header">
             <h3 className="text-center">سجل المعاملات</h3>
           </div>
-          <div className="card-body transaction-list">
+          <div className="card-body transaction-list p-0">
             <ul className="list-group" id="transaction-list">
-              <li className="list-group-item text-center">
-                لا توجد معاملات حتى الآن
+              <li
+                className={`list-group-item list-group-item-action p-3 list-group-item-success`}
+              >
+                <div className="row g-0 d-flex justify-content-between w-100">
+                  <p className="m-0 col-6 text-center"> 9/9/2024 </p>
+                  <p className="m-0 col-6 text-center"> عبدالله </p>
+                </div>
+
+                <p className="m-0 text-center"> $ 5000+ </p>
               </li>
             </ul>
           </div>
@@ -123,20 +161,25 @@ const Wallet = () => {
                   className="modal-title text-center"
                   id="staticBackdropLabel"
                 >
-                  اضافة مبلغ الى المحفظة
+                  اضافة اموال الى المحفظة
                 </h6>
               </div>
 
               {/* start modal body */}
 
               <div className="modal-body">
+                <p className="text-warning"> يمكنك اضافة المبلغ الذي تريد </p>
                 <input
                   required
                   className=""
                   type="tel"
                   pattern="[0-9]*"
                   inputMode="numeric"
-                  placeholder="$$ اضافة مبلغ "
+                  placeholder="$$ المبلغ "
+                  onKeyUp={(e) => {
+                    // @ts-ignore
+                    setinpmoney(e.target.value);
+                  }}
                 />
               </div>
 
@@ -168,7 +211,13 @@ const Wallet = () => {
 
                 <>
                   {" "}
-                  <button type="button" className="btn btn-primary">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      handeladdwallet();
+                    }}
+                  >
                     اضافة المبلغ
                   </button>
                 </>
@@ -176,7 +225,6 @@ const Wallet = () => {
             </div>
           </div>
         </div>
-        
       </div>
     </>
   );

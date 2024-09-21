@@ -363,6 +363,9 @@ const Page = () => {
         window.location.reload();
       }, 2000);
     }
+    else{
+      console.log("error1111111")
+    }
   };
 
   return (
