@@ -55,6 +55,7 @@ const Page = () => {
     if (status == "authenticated") {
       if (session.user.name !== null) {
         setlevel(session.user.email.split("@")[1].split(".")[0]);
+        localStorage.setItem("nameuser",session.user.name)
         setnameuser(session.user.name);
         setemail(session.user.email);
       }

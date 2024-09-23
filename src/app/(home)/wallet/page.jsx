@@ -4,21 +4,27 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
 import Head from "components/Head";
+import moment from "moment";
+
+import {SetTransaction} from "../../helpers/SetTransaction"
 
 // pages/_app.js
 
 const Wallet = () => {
   const [balance, setBalance] = useState(0);
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, settransactions] = useState([]);
   const [show, setShow] = useState(false);
   const [amount, setAmount] = useState(0);
   const [inpmoney, setinpmoney] = useState(0);
+  const [today, settoday] = useState(null);
 
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
   }, []);
 
   useEffect(() => {
+    settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
+
     const getData = async () => {
       const res = await fetch(`https://nextback-seven.vercel.app/abdodata`);
       if (!res.ok) {
@@ -28,6 +34,7 @@ const Wallet = () => {
       setAmount(result[0].wallet);
       const arrtransactions = result[0].transactions;
       console.log(arrtransactions);
+      settransactions(arrtransactions);
 
       // const arrt = arrtransactions.mpa((item, index) => {
       //   console.log(item);
@@ -52,29 +59,11 @@ const Wallet = () => {
     });
 
     const dataFromBackend = await response.json();
-    SetTransaction()
+    // @ts-ignore
+    SetTransaction(today, "plus", inpmoney, localStorage.getItem("nameuser"));
   };
 
-  const SetTransaction = async () => {
-    const baseURL = window.location.origin;
-    const response = await fetch(`${baseURL}/api/settransaction`, {
-      method: `PUT`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        // @ts-ignore
-        transactions: {
-          date: '9/9/2024',
-          mode: 'minus',
-          money: 1000,
-          user: 'عبد الله'
-      }
-      }),
-    });
 
-    const objFromFrontEnd = await response.json();
-  };
 
   return (
     <>
@@ -119,20 +108,36 @@ const Wallet = () => {
           <div className="card-header">
             <h3 className="text-center">سجل المعاملات</h3>
           </div>
-          <div className="card-body transaction-list p-0">
-            <ul className="list-group" id="transaction-list">
-              <li
-                className={`list-group-item list-group-item-action p-3 list-group-item-success`}
-              >
-                <div className="row g-0 d-flex justify-content-between w-100">
-                  <p className="m-0 col-6 text-center"> 9/9/2024 </p>
-                  <p className="m-0 col-6 text-center"> عبدالله </p>
-                </div>
 
-                <p className="m-0 text-center"> $ 5000+ </p>
-              </li>
-            </ul>
-          </div>
+          {transactions.map((tran, index) => (
+            <div className="card-body transaction-list p-0">
+              <ul className="list-group" id="transaction-list">
+                {tran.mode === "plus" ? (
+                  <li
+                    className={`list-group-item list-group-item-action p-3 list-group-item-success`}
+                  >
+                    <div className="row g-0 d-flex justify-content-between w-100">
+                      <p className="m-0 col-6 text-center"> {tran.date} </p>
+                      <p className="m-0 col-6 text-center"> {tran.user}</p>
+                    </div>
+
+                    <p className="m-0 text-center" style={{fontWeight:"700"}}> $ {tran.money} + </p>
+                  </li>
+                ) : (
+                  <li
+                    className={`list-group-item list-group-item-action p-3 list-group-item-danger`}
+                  >
+                    <div className="row g-0 d-flex justify-content-between w-100">
+                      <p className="m-0 col-6 text-center"> {tran.date} </p>
+                      <p className="m-0 col-6 text-center"> {tran.user}</p>
+                    </div>
+
+                    <p className="m-0 text-center" style={{fontWeight:"700"}}> $ {tran.money} - </p>
+                  </li>
+                )}
+              </ul>
+            </div>
+          ))}
         </div>
         {/* مودال إضافة الأموال */}
 

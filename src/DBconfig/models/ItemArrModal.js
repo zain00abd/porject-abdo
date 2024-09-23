@@ -4,8 +4,9 @@ const models = mongoose.models;
 
 // define the Schema (the structure of the article)
 const productSchema = new Schema({
-  expen:Array,
-
+  expen: Array,
+  wallet: Number,
+  transactions:Array,
 });
 
 // Create a model based on that schema

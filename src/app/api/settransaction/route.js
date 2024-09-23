@@ -1,28 +1,31 @@
-import TransactionModal from "DBconfig/models/TransactionModal";
+import ItemArrModal from "DBconfig/models/ItemArrModal";
 import { connectMongoDB } from "DBconfig/mongo";
 import { NextResponse } from "next/server";
 
-export async function PUT(request) {
+export async function POST(request) {
   // 1- استلام البيانات من الواجهة الأمامية
   const objFromFrontEnd = await request.json();
-  console.log(objFromFrontEnd.transactions);
+  console.log(objFromFrontEnd.mode);
 
-  console.log("iiiiiiiiiteeeeeeeeeeeeeemmmmmmmmmmmmm")
+  console.log("iiiiiiiiiteeeeeeeeeeeeeemmmmmmmmmmmmm");
 
   // 2- الاتصال بقاعدة البيانات
   await connectMongoDB();
 
-
-  const result = await TransactionModal.updateOne(
+  await ItemArrModal.updateOne(
     { _id: "66d1c9f56f10c7937d54a1b0" },
-    { $push: { transactions: {
-      date: "String",
-      mode: "String",
-      money: 1000,
-      user: "String",
-    } } }
+    {
+      $push: {
+        transactions: {
+          date: objFromFrontEnd.date,
+          mode: objFromFrontEnd.mode,
+          money: objFromFrontEnd.money,
+          user: objFromFrontEnd.user,
+        },
+      },
+    }
   );
 
   // 4- إعادة النتيجة إلى الواجهة الأمامية
-  return NextResponse.json(result);
+  return NextResponse.json("result");
 }
