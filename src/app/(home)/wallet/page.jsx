@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./style.css";
 import Head from "components/Head";
 import moment from "moment";
+import { toast } from "react-toastify";
 
-import {SetTransaction} from "../../helpers/SetTransaction"
+import { SetTransaction } from "../../helpers/SetTransaction";
+import { SetMoneyWallet } from "../../helpers/SetMoneyWallet";
+import Musseg from "components/Musseg";
 
 // pages/_app.js
 
@@ -17,6 +20,9 @@ const Wallet = () => {
   const [amount, setAmount] = useState(0);
   const [inpmoney, setinpmoney] = useState(0);
   const [today, settoday] = useState(null);
+  const [issubmit, setissubmit] = useState(false);
+
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -47,26 +53,20 @@ const Wallet = () => {
   }, []);
 
   const handeladdwallet = async () => {
-    const baseURL = window.location.origin;
-    const response = await fetch(`${baseURL}/api/addwallet`, {
-      method: `PUT`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        money: Number(+amount + +inpmoney),
-      }),
-    });
-
-    const dataFromBackend = await response.json();
+    setissubmit(true);
+    const wallet = SetMoneyWallet(Number(+amount + +inpmoney));
+    if (wallet) {
+      toast.success(" تم اضافة رصيد الى المحفظة ");
+      setissubmit(false);
+    }
     // @ts-ignore
     SetTransaction(today, "plus", inpmoney, localStorage.getItem("nameuser"));
   };
 
-
-
   return (
     <>
+      <Musseg />
+
       <Head
         actev={"wallet"}
         level={"admin"}
@@ -121,7 +121,13 @@ const Wallet = () => {
                       <p className="m-0 col-6 text-center"> {tran.user}</p>
                     </div>
 
-                    <p className="m-0 text-center" style={{fontWeight:"700"}}> $ {tran.money} + </p>
+                    <p
+                      className="m-0 text-center"
+                      style={{ fontWeight: "700" }}
+                    >
+                      {" "}
+                      $ {tran.money} +{" "}
+                    </p>
                   </li>
                 ) : (
                   <li
@@ -132,7 +138,13 @@ const Wallet = () => {
                       <p className="m-0 col-6 text-center"> {tran.user}</p>
                     </div>
 
-                    <p className="m-0 text-center" style={{fontWeight:"700"}}> $ {tran.money} - </p>
+                    <p
+                      className="m-0 text-center"
+                      style={{ fontWeight: "700" }}
+                    >
+                      {" "}
+                      $ {tran.money} -{" "}
+                    </p>
                   </li>
                 )}
               </ul>
@@ -177,7 +189,7 @@ const Wallet = () => {
                 <input
                   required
                   className=""
-                  type="tel"
+                  type="number"
                   pattern="[0-9]*"
                   inputMode="numeric"
                   placeholder="$$ المبلغ "
@@ -210,22 +222,38 @@ const Wallet = () => {
                   type="button"
                   className="btn btn-danger"
                   data-bs-dismiss="modal"
+                  // @ts-ignore
+                  disabled={issubmit && "disabled"}
+                  ref={buttonRef}
                 >
                   الغاء
                 </button>
 
-                <>
-                  {" "}
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => {
-                      handeladdwallet();
-                    }}
-                  >
-                    اضافة المبلغ
-                  </button>
-                </>
+                {issubmit ? (
+                  <>
+                    <button className="btn btn-primary" type="button" disabled>
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        aria-hidden="true"
+                      ></span>{" "}
+                      <span role="status">...انتظار</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        handeladdwallet();
+                      }}
+                      disabled={!inpmoney || inpmoney == 0}
+                    >
+                      اضافة المبلغ
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

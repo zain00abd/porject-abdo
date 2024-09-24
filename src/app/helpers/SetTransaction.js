@@ -1,6 +1,4 @@
 
-
-
 export async function  SetTransaction(today, mode, money, user){
   console.log(today)
   const baseURL = window.location.origin;
