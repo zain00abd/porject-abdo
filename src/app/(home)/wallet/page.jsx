@@ -110,7 +110,7 @@ const Wallet = () => {
           </div>
 
           {transactions.map((tran, index) => (
-            <div className="card-body transaction-list p-0">
+            <div className="card-body transaction-list p-0" key={index}>
               <ul className="list-group" id="transaction-list">
                 {tran.mode === "plus" ? (
                   <li
