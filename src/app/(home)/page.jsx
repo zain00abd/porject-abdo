@@ -12,6 +12,8 @@ import Head from "components/Head";
 import Footer from "components/Footer";
 import Loading from "./loading.jsx";
 import Musseg from "components/Musseg.jsx";
+import { SetTransaction } from "app/helpers/SetTransaction.js";
+import { SetMoneyWallet } from "app/helpers/SetMoneyWallet.js";
 
 const Page = () => {
   const { data: session, status } = useSession();
@@ -27,6 +29,8 @@ const Page = () => {
   const [email, setemail] = useState(null);
   const [issubmit, setissubmit] = useState(false);
   const [packitem, setpackitem] = useState(0);
+  const [totalwallet, settotalwallet] = useState(0);
+  
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -108,6 +112,8 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
+      settotalwallet(result[0].wallet)
+      console.log(result[0].wallet)
 
       let expensesarr = JSON.parse(result[0].expen[result[0].expen.length - 1]);
 
@@ -359,6 +365,8 @@ const Page = () => {
     if (response.ok) {
       // fetchDataAndNotify();
 
+      await SetMoneyWallet(totalwallet-plusmoney)
+      await SetTransaction(today, "munis", plusmoney, nameuser)
       toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ");
       setTimeout(() => {
         window.location.reload();
@@ -695,7 +703,7 @@ const Page = () => {
         </div>
       </div>
 
-      <Footer />
+      <Footer total={totalwallet}/>
     </>
   );
 };

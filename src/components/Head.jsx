@@ -62,16 +62,18 @@ const Head = ({ actev, level, email, name }) => {
             </ul>
 
             {/*  center nav  */}
-            <ul className="navbar-nav justify-content-center flex-grow-1">
-              <form className="d-none d-lg-flex" role="search">
-                <input
-                  className="form-control ms-2 me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-              </form>
-            </ul>
+            {actev === "adduser" && (
+              <ul className="navbar-nav justify-content-center flex-grow-1">
+                <form className="d-none d-lg-flex" role="search">
+                  <input
+                    className="form-control ms-2 me-2"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                </form>
+              </ul>
+            )}
 
             {/*  end nav  */}
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 ">
@@ -86,8 +88,8 @@ const Head = ({ actev, level, email, name }) => {
               <li
                 className="nav-item d-lg-none text-center mb-5"
                 style={{ position: "absolute", bottom: "0px", width: "90%" }}
-                >
-                  {email}
+              >
+                {email}
                 <button
                   className={`nav-link bg-danger w-50 m-auto ${
                     actev == "home" && "active"
@@ -95,11 +97,10 @@ const Head = ({ actev, level, email, name }) => {
                   onClick={() => {
                     signOut();
                   }}
-                  >
+                >
                   تسجيل الخروج <i className="fa-solid fa-right-to-bracket"></i>
                 </button>
               </li>
-              
 
               {level === "admin" && (
                 <li className="nav-item">
@@ -125,7 +126,6 @@ const Head = ({ actev, level, email, name }) => {
                   القائمة الرئيسية
                 </Link>
               </li>
-              
             </ul>
           </div>
         </div>
@@ -164,7 +164,7 @@ const Head = ({ actev, level, email, name }) => {
         </Link>
 
         {level === "admin" && (
-<>
+          <>
             <Link className="d-lg-none" href="/alldata">
               <i
                 className={`fa-solid fa-database fa-lg gradient-icon ${
@@ -175,16 +175,14 @@ const Head = ({ actev, level, email, name }) => {
             </Link>
 
             <Link className="d-lg-none" href="/wallet">
-            <i
-              className={`fa-solid fa-wallet fa-lg gradient-icon ${
-                actev == "wallet" && "actev-nav"
-              }`}
-              style={{ color: "#e0ecff" }}
-            ></i>
-          </Link>
-</>
-
-          
+              <i
+                className={`fa-solid fa-wallet fa-lg gradient-icon ${
+                  actev == "wallet" && "actev-nav"
+                }`}
+                style={{ color: "#e0ecff" }}
+              ></i>
+            </Link>
+          </>
         )}
       </div>
 

@@ -9,29 +9,51 @@ const Footer = ({ page, total }) => {
       style={styles.footer}
     >
       <div style={styles.container}>
-        <div style={styles.balance}>
-        </div>
+        <div style={styles.balance}></div>
         {page === "alldata" ? (
           <>
-          
-            <p style={{display:"inline", alignItems:"center", textAlign:"center"}}> ج </p>
-            {" "}
+            <p
+              style={{
+                display: "inline",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {" "}
+              ج{" "}
+            </p>{" "}
             <span style={styles.number}> {total} </span>
             <span> : إجمالي المعروض </span>
-            
           </>
         ) : (
-          <button
-            className="footer-button"
-            data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop"
-          >
-            <i
-              className="fa-solid fa-file-circle-plus fa-lg"
-              style={{ bottom: "3px", position: "relative" }}
-            ></i>{" "}
-            إضافة
-          </button>
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <p
+                style={{
+                  display: "inline",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                {" "}
+                ج{" "}
+              </p>{" "}
+              <span style={styles.number}> {total} </span>
+              <span> : رصيد المحفظة </span>
+            </div>
+
+            <button
+              className="footer-button"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              <i
+                className="fa-solid fa-file-circle-plus fa-lg"
+                style={{ bottom: "3px", position: "relative" }}
+              ></i>{" "}
+              إضافة
+            </button>
+          </div>
         )}
       </div>
     </footer>
