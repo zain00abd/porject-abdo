@@ -5,7 +5,13 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import "./stylecomp.css";
 
-const Head = ({ actev, level, email, name }) => {
+const Head = ({ actev, level, email, name, onValueChange }) => {
+
+  const Search = (e) => {
+    
+    onValueChange(e)
+  }
+  
   return (
     <nav
       className="navbar sticky-top navbar-expand-lg navbar-dark"
@@ -202,6 +208,9 @@ const Head = ({ actev, level, email, name }) => {
               type="search"
               placeholder="Search"
               aria-label="Search"
+              onKeyUp={(e) =>{
+                Search(e.target.value)
+              }}
             />
             <button className="btn btn-success" type="submit">
               Search

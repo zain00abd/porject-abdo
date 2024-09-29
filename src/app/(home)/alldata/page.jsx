@@ -24,7 +24,6 @@ const Page = () => {
   const [email, setemail] = useState(null);
   const [level, setlevel] = useState(null);
   const [totalalldata, settotalalldata] = useState(null);
-  
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -51,7 +50,7 @@ const Page = () => {
       if (session.user.name !== null) {
         setlevel(session.user.email.split("@")[1].split(".")[0]);
         setnameuser(session.user.name);
-        setemail(session.user.email)
+        setemail(session.user.email);
       }
     }
   }, [session]);
@@ -70,14 +69,14 @@ const Page = () => {
 
   //       if (user.arrinvoce && user.arrinvoce.length > 0) {
   //         const getmony = JSON.parse(user.arrinvoce);
-  //         
+  //
   //         let arrtoo = [];
   //         getmony.forEach((arrmoney) => {
   //           const totalonearr = arrmoney.money.reduce((acc, num) => acc + num, 0);
   //           totalarruser += totalonearr;
   //           arrtoo.push(totalarruser);
   //         });
-  //         
+  //
   //       }
 
   //       totalarruser = Math.abs(totalarruser);
@@ -102,439 +101,250 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
-      let allexpen = result[0].expen
-      
-      let allex = []
+      let allexpen = result[0].expen;
 
-      let arralltotal = []
-      allexpen.map(exn =>{
-        
-        
-        
+      let allex = [];
+
+      let arralltotal = [];
+      allexpen.map((exn) => {
         let expensesarr = JSON.parse(exn);
-        // console.log(expensesarr)
-        // console.log(expensesarr)
-        
-  
-        
-        
+        //
+        //
+
         setdate(expensesarr.date);
-        // console.log(expensesarr.date)
+        //
         setlastexpen(expensesarr.expenses);
-  
+
         let customerarr = expensesarr.expenses;
-        
-  
+
         let totalinvoicecustomer = 0;
         const datacustomer = customerarr.map((user, index) => {
-          user.date = expensesarr.date
-          
-          
-          // 
+          user.date = expensesarr.date;
+
+          //
           if (user.money && user.money.length > 0) {
             const getmony = customerarr;
-            
-            
+
             let arrtoo = [];
             getmony.forEach((arrmoney, indexI) => {
-              console.log(indexI)
-              
-              
               const totalonearr = arrmoney.money.reduce(
                 (acc, num) => acc + num,
                 0
               );
               totalinvoicecustomer += totalonearr;
-              if(index == 0){
-
-                arralltotal.push(totalonearr)
+              if (index == 0) {
+                arralltotal.push(totalonearr);
               }
               settatalarr(totalinvoicecustomer);
-              
+
               arrtoo.push(totalinvoicecustomer);
             });
-            console.log(arrtoo)
-            
           }
-          
+
           totalinvoicecustomer = Math.abs(totalinvoicecustomer);
-          console.log(totalinvoicecustomer)
+
           user.total = totalinvoicecustomer;
           if (totalinvoicecustomer === 0) {
             user.total = 0;
           }
-          console.log(arralltotal)
-          
-          // 
-          
+
+          //
+
           return user;
         });
-        
+
         settotalalldata(
           arralltotal.reduce(
             (accumulator, currentValue) => accumulator + currentValue,
             0
           )
         );
-        allex.push(datacustomer)
-        // console.log(datacustomer)
-        
-        
-      })
-      
-      setallexpen(allex)
+        allex.push(datacustomer);
+        //
+      });
 
-
-      
+      setallexpen(allex);
+      console.log(allex);
 
       // setdata(datacustomer);
       // setdataSearch(datacustomer);
-
-      addItem();
     };
 
     if (nameuser) {
-      
     }
     getData();
   }, [today]);
 
-  const searchuser = (value) => {
+  const Searchtype = (value) => {
+
     
-    const filteredData = dataSearch.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
-    );
-    
-    setdata(filteredData);
-  };
-
-  const addItem = () => {
-    
-
-    const newItem = {
-      id: 1 + items.length,
-    };
-
-    setiteams([...items, newItem]);
-    
-  };
-
-  let arrdes = [];
-  let arrmoney = [];
-  useEffect(() => {
-    settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
-    // 
-    sessionStorage.removeItem("arr1");
-    sessionStorage.removeItem("arr2");
-    arrdes = [];
-    arrmoney = [];
-  }, []);
-
-  const addarritem = (value, id, inp) => {
-    const arrmode = id.split("_")[0];
-    const arrindex = id.split("_")[1];
-
-    if (
-      sessionStorage.getItem("arr1") !== null ||
-      sessionStorage.getItem("arr2") !== null
-    ) {
-      arrmoney = JSON.parse(sessionStorage.getItem("arr1"));
-      arrdes = JSON.parse(sessionStorage.getItem("arr2"));
-    }
-
-    if (arrmode === "mon") {
-      if (isNaN(value)) {
+    const filteredData = allexpen.filter((item) => {
+      // console.log(item);
+      const filteronedata = item.filter((one) =>{
+        one.date.toLowerCase().includes(value.toLowerCase());
+        console.log(one.date.toLowerCase().includes(value.toLowerCase()))
+        // console.log(one)
         
-        const matches = value.match(/(\d+)[^\d]*$/);
-        
-
-        if (matches) {
-          value = matches[1];
-        } else if (matches == null) {
-          value = "";
-        }
-
-        inp.value = value;
-      }
-    }
-
-    if (arrmode === "dis") {
-      arrdes[arrindex] = value;
-      // 
-    } else {
-      arrmoney[arrindex] = +value;
-    }
-
-    sessionStorage.setItem("arr1", JSON.stringify(arrmoney));
-    sessionStorage.setItem("arr2", JSON.stringify(arrdes));
-
-    filterarr();
-  };
-
-  const filterarr = () => {
-    settoday(moment().format(`D/${moment().get("month") + 1}/YYYY`));
-    
-    setoclock(moment().format("LT"));
-    
-
-    let arrdesfilter = arrdes.filter(function (value) {
-      return value !== null && value !== undefined && value !== "";
+      })
+      console.log(filteronedata)
+      
+      
     });
-
-    let arrmoneyfilter = arrmoney.filter(function (value) {
-      return (
-        value !== null &&
-        value !== undefined &&
-        value !== "" &&
-        value !== 0 &&
-        !isNaN(value)
-      );
-    });
-
-    // 
-    // 
-
-    setarrdis(arrdesfilter);
-    setarrmon(arrmoneyfilter);
-
-    setplusmoney(
-      arrmoneyfilter.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-      )
-    );
-  };
-
-  const cheackoldarr = () => {};
-
-  const expobject = () => {
-    let expenarr = [
-      {
-        discraption: arrdis,
-        money: arrmon,
-        user: nameuser,
-        time: oclock,
-      },
-    ];
-
-    let newobj = {};
-
-    if (today === date) {
-      let oldexpenarr = lastexpen;
-      oldexpenarr.push(...expenarr);
-      newobj = {
-        date: today,
-        expenses: oldexpenarr,
-      };
-    } else {
-      newobj = {
-        date: today,
-        expenses: [
-          {
-            discraption: arrdis,
-            money: arrmon,
-            user: nameuser,
-            time: oclock,
-          },
-        ],
-      };
-    }
-
-    return JSON.stringify(newobj);
-  };
-
-  const submitupdate = async () => {
-    const baseURL = window.location.origin;
-    let routefile;
-    let Postroute;
-
-    if (today === date) {
-      routefile = "updatearr";
-      Postroute = "PUT";
-    } else {
-      routefile = "additeminarr";
-      Postroute = "POST";
-    }
-
-    const response = await fetch(`${baseURL}/api/${routefile}`, {
-      method: `${Postroute}`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        item: expobject(),
-      }),
-    });
-
-    const dataFromBackend = await response.json();
     
+    // console.log(filteredData)
+    // setdata(filteredData);
 
-    const fetchDataAndNotify = async () => {
-      const baseURL = window.location.origin;
-      // const response = await fetch("your-api-endpoint");
-      // const dataFromBackend = await response.json();
-
-      // استدعاء API لإرسال البريد الإلكتروني
-      await fetch(`${baseURL}/api/sendEmail`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: "noursamir190@gmail.com",
-          subject: "Subject of the Email",
-          text: "Body of the Email",
-        }),
-      });
-
-      // أكمل باقي الأكواد هنا
-    };
-
-    if (response.ok) {
-      fetchDataAndNotify();
-    }
   };
 
   return (
     <>
-      <Head actev={"adduser"} level={"admin"} email={email} name={nameuser} />
+      <Head
+        actev={"adduser"}
+        onValueChange={Searchtype}
+        level={"admin"}
+        email={email}
+        name={nameuser}
+      />
 
       {date === null ? (
-        <div className="text-center" style={{height:"100vh" , top:"150px", position:"relative"}}>
-  Loading...
-  <div className="spinner-border" role="status" style={{width:"3rem", height:"3rem"}}>
-    <span className="visually-hidden">Loading...</span>
-  </div>
-</div>
-      ) : (
-        <div className="container" style={{marginBottom:"130px"}}>
-
-        {allexpen.map((exn, index) =>(
-                    <ul
-            className="list-group mt-4 opacity-100 shadow-lg bg-body-tertiary rounded"
-            style={{ padding: 0 }}
-            key={index}
+        <div
+          className="text-center"
+          style={{ height: "100vh", top: "150px", position: "relative" }}
+        >
+          Loading...
+          <div
+            className="spinner-border"
+            role="status"
+            style={{ width: "3rem", height: "3rem" }}
           >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : (
+        <div className="container" style={{ marginBottom: "130px" }}>
+          {allexpen.map((exn, index) => (
+            <ul
+              className="list-group mt-4 opacity-100 shadow-lg bg-body-tertiary rounded"
+              style={{ padding: 0 }}
+              key={index}
+            >
+              {exn !== null && (
+                <>
+                  <li
+                    style={{ padding: "10px 0px", fontWeight: "600" }}
+                    className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border border-1 border-primary"
+                  >
+                    <div style={{ width: "50%", textAlign: "center" }}>
+                      اخراج والوقت
+                    </div>
+                    <div className="vr" />
+                    <div style={{ width: "50%", textAlign: "center" }}>
+                      المبلغ
+                    </div>
+                    <div className="vr" />
+                    <div style={{ width: "50%", textAlign: "center" }}>
+                      الوصف
+                    </div>
+                  </li>
 
+                  {/*** body invoce ***/}
 
-            {exn !== null && (
-              <>
-                <li
-                  style={{ padding: "10px 0px", fontWeight: "600" }}
-                  className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border border-1 border-primary"
-                >
-                  <div style={{ width: "50%", textAlign: "center" }}>
-                    اخراج والوقت
-                  </div>
-                  <div className="vr" />
-                  <div style={{ width: "50%", textAlign: "center" }}>
-                    المبلغ
-                  </div>
-                  <div className="vr" />
-                  <div style={{ width: "50%", textAlign: "center" }}>الوصف</div>
-                </li>
-
-                {/*** body invoce ***/}
-
-                {exn.map((entry, entryIndex) => (
-                  <div key={entryIndex} style={{ position: "relative" }}>
-                    {entry.discraption.map((item, itemIndex) => (
-                      <div key={itemIndex} style={{ position: "relative" }}>
-                        <li
-                          className="list-group-item d-flex justify-content-between align-items-center list-group-item-danger"
-                          style={{
-                            width: "66.7%",
-                            left: "33.3%",
-                            padding: "7px 0px",
-                          }}
-                        >
-                          <div
-                            style={{ width: "100%", textAlign: "center" }}
-                            id="inv_Ms"
+                  {exn.map((entry, entryIndex) => (
+                    <div key={entryIndex} style={{ position: "relative" }}>
+                      {entry.discraption.map((item, itemIndex) => (
+                        <div key={itemIndex} style={{ position: "relative" }}>
+                          <li
+                            className="list-group-item d-flex justify-content-between align-items-center list-group-item-danger"
+                            style={{
+                              width: "66.7%",
+                              left: "33.3%",
+                              padding: "7px 0px",
+                            }}
                           >
-                            {entry.money[itemIndex]}
-                          </div>
-                          <div className="vr" />
-                          <div
-                            className="dropend"
-                            style={{ width: "100%", textAlign: "center" }}
-                          >
-                            <button
-                              style={{
-                                border: "none",
-                                outline: "none",
-                                background: "none",
-                                fontWeight: 500,
-                              }}
-                              data-bs-toggle="dropdown"
-                            >
-                              {item}
-                            </button>
                             <div
-                              className="dropdown-menu"
-                              style={{
-                                width: "1%",
-                                background: "none",
-                                border: "none",
-                              }}
+                              style={{ width: "100%", textAlign: "center" }}
+                              id="inv_Ms"
                             >
-                              <p
+                              {entry.money[itemIndex]}
+                            </div>
+                            <div className="vr" />
+                            <div
+                              className="dropend"
+                              style={{ width: "100%", textAlign: "center" }}
+                            >
+                              <button
                                 style={{
-                                  backgroundColor: "rgb(68, 0, 0)",
-                                  width: "auto",
-                                  marginRight: 100,
-                                  textAlign: "center",
-                                  color: "#ffffff",
-                                  borderRadius: 18,
+                                  border: "none",
+                                  outline: "none",
+                                  background: "none",
+                                  fontWeight: 500,
+                                }}
+                                data-bs-toggle="dropdown"
+                              >
+                                {item}
+                              </button>
+                              <div
+                                className="dropdown-menu"
+                                style={{
+                                  width: "1%",
+                                  background: "none",
+                                  border: "none",
                                 }}
                               >
-                                {entry.money[itemIndex]}
-                              </p>
+                                <p
+                                  style={{
+                                    backgroundColor: "rgb(68, 0, 0)",
+                                    width: "auto",
+                                    marginRight: 100,
+                                    textAlign: "center",
+                                    color: "#ffffff",
+                                    borderRadius: 18,
+                                  }}
+                                >
+                                  {entry.money[itemIndex]}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </li>
+                          </li>
+                        </div>
+                      ))}
+
+                      <div className="div-time">
+                        {entry.user}
+                        <br />
+                        {entry.time}
                       </div>
-                    ))}
-
-                    <div className="div-time">
-                      {entry.user}
-                      <br />
-                      {entry.time}
                     </div>
-                  </div>
-                ))}
+                  ))}
 
-                {/*** body invoce ***/}
-                {/* end invoce */}
+                  {/*** body invoce ***/}
+                  {/* end invoce */}
 
-                <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1 border-secondary-subtle">
-                  <div style={{ width: "50%", textAlign: "center" }}>
-                    الاجمالي: <small className="text-danger"> {exn[0].total}</small>
-                  </div>
+                  <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1 border-secondary-subtle">
+                    <div style={{ width: "50%", textAlign: "center" }}>
+                      الاجمالي:{" "}
+                      <small className="text-danger"> {exn[0].total}</small>
+                    </div>
 
-                  <div className="vr" />
-                  <div
-                    className=""
-                    style={{ width: "50%", textAlign: "center" }}
-                    id="date"
-                  >
-                    {exn[0].date}
-                  </div>
-                </li>
-              </>
-            )}
+                    <div className="vr" />
+                    <div
+                      className=""
+                      style={{ width: "50%", textAlign: "center" }}
+                      id="date"
+                    >
+                      {exn[0].date}
+                    </div>
+                  </li>
+                </>
+              )}
 
-            {/* top invoce */}
-          </ul>
-        ))}
-
-
-
+              {/* top invoce */}
+            </ul>
+          ))}
         </div>
       )}
 
-
-      <Footer page={"alldata"} total={totalalldata}/>
+      <Footer page={"alldata"} total={totalalldata} />
     </>
   );
 };

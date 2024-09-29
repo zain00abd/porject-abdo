@@ -30,7 +30,6 @@ const Page = () => {
   const [issubmit, setissubmit] = useState(false);
   const [packitem, setpackitem] = useState(0);
   const [totalwallet, settotalwallet] = useState(0);
-  
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -59,7 +58,7 @@ const Page = () => {
     if (status == "authenticated") {
       if (session.user.name !== null) {
         setlevel(session.user.email.split("@")[1].split(".")[0]);
-        localStorage.setItem("nameuser",session.user.name)
+        localStorage.setItem("nameuser", session.user.name);
         setnameuser(session.user.name);
         setemail(session.user.email);
       }
@@ -112,10 +111,12 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
-      settotalwallet(result[0].wallet)
-      console.log(result[0].wallet)
+      settotalwallet(result[0].wallet);
+      console.log(result[0].wallet);
+      console.log(result[0].expenn[result[0].expenn.length - 1]);
 
-      let expensesarr = JSON.parse(result[0].expen[result[0].expen.length - 1]);
+      let expensesarr = result[0].expenn[result[0].expenn.length - 1];
+      console.log(expensesarr);
 
       setdate(expensesarr.date);
       setlastexpen(expensesarr.expenses);
@@ -280,18 +281,16 @@ const Page = () => {
   };
 
   const expobject = () => {
-    let expenarr = [
-      {
-        discraption: arrdis,
-        money: arrmon,
-        user: nameuser,
-        time: oclock,
-      },
-    ];
-
+    let expenarr = {
+      date: today,
+      discraption: arrdis,
+      money: arrmon,
+      user: nameuser,
+      time: oclock,
+    };
     let newobj = {};
 
-    if (today === date) {
+    if (today === !date) {
       let oldexpenarr = lastexpen;
       oldexpenarr.push(...expenarr);
       newobj = {
@@ -312,7 +311,7 @@ const Page = () => {
       };
     }
 
-    return JSON.stringify(newobj);
+    return expenarr;
   };
 
   const submitupdate = async () => {
@@ -329,6 +328,8 @@ const Page = () => {
       Postroute = "POST";
     }
 
+    console.log(expobject());
+
     const response = await fetch(`${baseURL}/api/${routefile}`, {
       method: `${Postroute}`,
       headers: {
@@ -341,39 +342,17 @@ const Page = () => {
 
     const dataFromBackend = await response.json();
 
-    // const fetchDataAndNotify = async () => {
-    //   const baseURL = window.location.origin;
-    //   // const response = await fetch("your-api-endpoint");
-    //   // const dataFromBackend = await response.json();
-
-    //   // استدعاء API لإرسال البريد الإلكتروني
-    //   await fetch(`${baseURL}/api/sendEmail`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       to: "noursamir190@gmail.com",
-    //       subject: "Subject of the Email",
-    //       text: "Body of the Email",
-    //     }),
-    //   });
-
-    //   // أكمل باقي الأكواد هنا
-    // };
-
     if (response.ok) {
       // fetchDataAndNotify();
 
-      await SetMoneyWallet(totalwallet-plusmoney)
-      await SetTransaction(today, "munis", plusmoney, nameuser)
+      await SetMoneyWallet(totalwallet - plusmoney);
+      await SetTransaction(today, "munis", plusmoney, nameuser);
       toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ");
       setTimeout(() => {
         window.location.reload();
       }, 2000);
-    }
-    else{
-      console.log("error1111111")
+    } else {
+      console.log("error1111111");
     }
   };
 
@@ -575,9 +554,7 @@ const Page = () => {
                         ></i>
                       </button>
                     ) : (
-                      <button
-                        className="col-1 opacity-0"
-                      >
+                      <button className="col-1 opacity-0">
                         <i
                           className="fa-solid fa-delete-left fa-rotate-180 fa-lg"
                           style={{ color: "#550000" }}
@@ -698,12 +675,11 @@ const Page = () => {
                 </>
               )}
             </div>
-            
           </div>
         </div>
       </div>
 
-      <Footer total={totalwallet}/>
+      <Footer total={totalwallet} />
     </>
   );
 };

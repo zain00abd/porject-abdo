@@ -5,17 +5,32 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   // 1- استلام البيانات من الواجهة الأمامية
   const objFromFrontEnd = await request.json();
-  console.log(objFromFrontEnd.item);
 
-  console.log("iiiiiiiiiteeeeeeeeeeeeeemmmmmmmmmmmmm")
+  let data = objFromFrontEnd.item;
+  console.log(objFromFrontEnd.item.date);
+
+  console.log("iiiiiiiiiteeeeeeeeeeeeeemmmmmmmmmmmmm");
 
   // 2- الاتصال بقاعدة البيانات
   await connectMongoDB();
 
-
   const result = await ItemArrModal.updateOne(
     { _id: "66d1c9f56f10c7937d54a1b0" },
-    { $push: { expen: objFromFrontEnd.item } }
+    {
+      $push: {
+        expenn: {
+          date: data.date,
+          expenses: [
+            {
+              discraption: data.discraption,
+              money: data.money,
+              user: data.user,
+              time: data.time,
+            },
+          ],
+        },
+      },
+    }
   );
 
   // 4- إعادة النتيجة إلى الواجهة الأمامية

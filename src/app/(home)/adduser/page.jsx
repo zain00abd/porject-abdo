@@ -69,7 +69,7 @@ const Page = () => {
 <>
 
 <Musseg />
-<Head actev={"adduser"} />
+<Head actev={"adduser"} level={undefined} email={undefined} name={undefined}/>
   <h4> اضافة عميل جديد </h4>
   <div className="container mt-3">
     <form onSubmit={setuser} style={{ direction: "rtl" }} >
@@ -82,6 +82,7 @@ const Page = () => {
           onChange={(e)=>{
             setname(e.target.value)
           }}
+          
           type="text"
           name="name"
           className="form-control"
