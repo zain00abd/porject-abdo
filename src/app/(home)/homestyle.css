@@ -28,6 +28,11 @@ body {
   color: #ffffff;
 }
 
+.modal-error {
+  background-color: #630015;
+  color: #ffffff;
+}
+
 .modal-body div input {
   background-color: #00313ac0;
   border: none;

@@ -40,6 +40,7 @@ const Page = () => {
   const [lastexpen, setlastexpen] = useState([]);
 
   const buttonRef = useRef(null);
+  const btnwalleterror = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -65,7 +66,6 @@ const Page = () => {
     }
   }, [session]);
 
-  // useEffect(() => {
 
   //   const getData = async () => {
   //     const res = await fetch("https://nextback-seven.vercel.app/invoice");
@@ -314,7 +314,17 @@ const Page = () => {
     return expenarr;
   };
 
-  const submitupdate = async () => {
+  const submitupdate = () => {
+    if (totalwallet < plusmoney) {
+      console.log("not money");
+      btnwalleterror.current.click();
+      return;
+    } else {
+      truesubmit();
+    }
+  };
+
+  const truesubmit = async () => {
     setissubmit(true);
     const baseURL = window.location.origin;
     let routefile;
@@ -671,6 +681,115 @@ const Page = () => {
                     }
                   >
                     حفظ الفاتورة
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        className="d-none"
+        data-bs-target="#walletavretg"
+        data-bs-toggle="modal"
+        ref={btnwalleterror}
+      >
+        1
+      </button>
+
+      <div
+        className="modal fade1"
+        id="walletavretg"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        // @ts-ignore
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content modal-error">
+            <div className="modal-header">
+              <button
+                type="button"
+                className="btn-close opacity-0"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                disabled
+              ></button>
+
+              <h5
+                className="modal-title text-center w-100"
+                id="staticBackdropLabel"
+              >
+                رصيد المحفظة؟؟
+              </h5>
+            </div>
+
+            {/* start modal body */}
+
+            <div className="modal-body">
+              <p className="text-warning text-center">
+                {" "}
+                لقد تخطيت الحد الاقصى للرصيد المحفظة{" "}
+              </p>
+              <p className="text-warning text-center">
+                {" "}
+                هل تريد اكمال العملية؟{" "}
+              </p>
+            </div>
+
+            <div
+              className="row g-0 justify-content-evenly"
+              style={{
+                display: "flex",
+                textAlign: "center",
+                alignItems: "center",
+                backgroundColor: "#00313aab",
+              }}
+            >
+              <div
+                className="col-4 text-center"
+                style={{ letterSpacing: "1.5px" }}
+              ></div>
+            </div>
+
+            {/* end modal body */}
+
+            <div className="modal-footer d-flex justify-content-between">
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+              >
+                الغاء
+              </button>
+
+              {issubmit ? (
+                <>
+                  <button className="btn btn-primary" type="button" disabled>
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>{" "}
+                    <span role="status">...انتظار</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    onClick={() => {
+                      truesubmit();
+                    }}
+                  >
+                    اتمام العملية
                   </button>
                 </>
               )}

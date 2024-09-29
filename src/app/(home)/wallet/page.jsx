@@ -258,6 +258,8 @@ const Wallet = () => {
             </div>
           </div>
         </div>
+
+        
       </div>
     </>
   );
