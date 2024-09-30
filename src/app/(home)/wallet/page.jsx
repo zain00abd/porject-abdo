@@ -17,7 +17,7 @@ const Wallet = () => {
   const [balance, setBalance] = useState(0);
   const [transactions, settransactions] = useState([]);
   const [show, setShow] = useState(false);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [inpmoney, setinpmoney] = useState(0);
   const [today, settoday] = useState(null);
   const [issubmit, setissubmit] = useState(false);
@@ -38,9 +38,13 @@ const Wallet = () => {
       }
       const result = await res.json();
       setAmount(result[0].wallet);
-      const arrtransactions = result[0].transactions;
-      console.log(arrtransactions);
-      settransactions(arrtransactions);
+      console.log(result[0].wallet)
+      if(result[0].transactions !== undefined){
+
+        const arrtransactions = result[0].transactions;
+        console.log(arrtransactions);
+        settransactions(arrtransactions);
+      }
 
       // const arrt = arrtransactions.mpa((item, index) => {
       //   console.log(item);
@@ -57,7 +61,9 @@ const Wallet = () => {
     const wallet = SetMoneyWallet(Number(+amount + +inpmoney));
     if (wallet) {
       toast.success(" تم اضافة رصيد الى المحفظة ");
-      setissubmit(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
     // @ts-ignore
     SetTransaction(today, "plus", inpmoney, localStorage.getItem("nameuser"));
@@ -83,7 +89,7 @@ const Wallet = () => {
         <div className="balance-display text-center mb-4">
           <h2>:الرصيد الحالي</h2>
           <h3 className="text-success" id="balance-display">
-            {amount == 0 ? (
+            {amount == null ? (
               <div className="spinner-border text-success" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -108,6 +114,7 @@ const Wallet = () => {
           <div className="card-header">
             <h3 className="text-center">سجل المعاملات</h3>
           </div>
+
 
           {transactions.map((tran, index) => (
             <div className="card-body transaction-list p-0" key={index}>

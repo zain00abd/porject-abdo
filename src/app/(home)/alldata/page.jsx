@@ -30,7 +30,7 @@ const Page = () => {
   const [oclock, setoclock] = useState(null);
   const [today, settoday] = useState(null);
 
-  const [allexpen, setallexpen] = useState([]);
+  const [allexpen, setallexpen] = useState(null);
   const [lastexpen, setlastexpen] = useState([]);
 
   useEffect(() => {
@@ -101,73 +101,85 @@ const Page = () => {
         // notFound();
       }
       const result = await res.json();
-      let allexpen = result[0].expen;
 
-      let allex = [];
+      if(result[0].expenn){
 
-      let arralltotal = [];
-      allexpen.map((exn) => {
-        let expensesarr = JSON.parse(exn);
-        //
-        //
-
-        setdate(expensesarr.date);
-        //
-        setlastexpen(expensesarr.expenses);
-
-        let customerarr = expensesarr.expenses;
-
-        let totalinvoicecustomer = 0;
-        const datacustomer = customerarr.map((user, index) => {
-          user.date = expensesarr.date;
-
+        console.log(result[0].expenn)
+        let allexpen = result[0].expenn;
+        // console.log(allexpen)
+  
+        let allex = [];
+  
+        let arralltotal = [];
+        allexpen.map((exn) => {
+          let expensesarr = exn;
+          // console.log(expensesarr)
           //
-          if (user.money && user.money.length > 0) {
-            const getmony = customerarr;
-
-            let arrtoo = [];
-            getmony.forEach((arrmoney, indexI) => {
-              const totalonearr = arrmoney.money.reduce(
-                (acc, num) => acc + num,
-                0
-              );
-              totalinvoicecustomer += totalonearr;
-              if (index == 0) {
-                arralltotal.push(totalonearr);
-              }
-              settatalarr(totalinvoicecustomer);
-
-              arrtoo.push(totalinvoicecustomer);
-            });
-          }
-
-          totalinvoicecustomer = Math.abs(totalinvoicecustomer);
-
-          user.total = totalinvoicecustomer;
-          if (totalinvoicecustomer === 0) {
-            user.total = 0;
-          }
-
           //
-
-          return user;
+  
+          setdate(expensesarr.date);
+          //
+          setlastexpen(expensesarr.expenses);
+  
+          let customerarr = expensesarr.expenses;
+  
+          let totalinvoicecustomer = 0;
+          const datacustomer = customerarr.map((user, index) => {
+            user.date = expensesarr.date;
+  
+            //
+            if (user.money && user.money.length > 0) {
+              const getmony = customerarr;
+  
+              let arrtoo = [];
+              getmony.forEach((arrmoney, indexI) => {
+                const totalonearr = arrmoney.money.reduce(
+                  (acc, num) => acc + num,
+                  0
+                );
+                totalinvoicecustomer += totalonearr;
+                if (index == 0) {
+                  arralltotal.push(totalonearr);
+                }
+                settatalarr(totalinvoicecustomer);
+  
+                arrtoo.push(totalinvoicecustomer);
+              });
+            }
+  
+            totalinvoicecustomer = Math.abs(totalinvoicecustomer);
+  
+            user.total = totalinvoicecustomer;
+            if (totalinvoicecustomer === 0) {
+              user.total = 0;
+            }
+  
+            //
+  
+            return user;
+          });
+  
+          settotalalldata(
+            arralltotal.reduce(
+              (accumulator, currentValue) => accumulator + currentValue,
+              0
+            )
+          );
+          allex.push(datacustomer);
+          //
         });
+  
+        setallexpen(allex);
+        // console.log(allex);
+        
+        // setdata(datacustomer);
+        // setdataSearch(datacustomer);
+      }else{
+        setallexpen([]);
 
-        settotalalldata(
-          arralltotal.reduce(
-            (accumulator, currentValue) => accumulator + currentValue,
-            0
-          )
-        );
-        allex.push(datacustomer);
-        //
-      });
-
-      setallexpen(allex);
-      console.log(allex);
-
-      // setdata(datacustomer);
-      // setdataSearch(datacustomer);
+      }
+      
+      
     };
 
     if (nameuser) {
@@ -206,7 +218,7 @@ const Page = () => {
         name={nameuser}
       />
 
-      {date === null ? (
+      {allexpen == null ? (
         <div
           className="text-center"
           style={{ height: "100vh", top: "150px", position: "relative" }}
@@ -222,7 +234,7 @@ const Page = () => {
         </div>
       ) : (
         <div className="container" style={{ marginBottom: "130px" }}>
-          {allexpen.map((exn, index) => (
+          {allexpen != [] ? <>{allexpen.map((exn, index) => (
             <ul
               className="list-group mt-4 opacity-100 shadow-lg bg-body-tertiary rounded"
               style={{ padding: 0 }}
@@ -340,7 +352,11 @@ const Page = () => {
 
               {/* top invoce */}
             </ul>
-          ))}
+          ))}</> :<p> لا توجد بيانات بعد </p>}
+
+          
+
+
         </div>
       )}
 

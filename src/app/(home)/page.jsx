@@ -30,6 +30,8 @@ const Page = () => {
   const [issubmit, setissubmit] = useState(false);
   const [packitem, setpackitem] = useState(0);
   const [totalwallet, settotalwallet] = useState(0);
+  const [notdata, setnotdata] = useState(false);
+  
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -67,42 +69,6 @@ const Page = () => {
   }, [session]);
 
 
-  //   const getData = async () => {
-  //     const res = await fetch("https://nextback-seven.vercel.app/invoice");
-  //     if (!res.ok) {
-  //       notFound();
-  //     }
-  //     const result = await res.json();
-
-  //     const updatedResult = result.map(user => {
-  //       let totalarruser = 0;
-
-  //       if (user.arrinvoce && user.arrinvoce.length > 0) {
-  //         const getmony = JSON.parse(user.arrinvoce);
-  //
-  //         let arrtoo = [];
-  //         getmony.forEach((arrmoney) => {
-  //           const totalonearr = arrmoney.money.reduce((acc, num) => acc + num, 0);
-  //           totalarruser += totalonearr;
-  //           arrtoo.push(totalarruser);
-  //         });
-  //
-  //       }
-
-  //       totalarruser = Math.abs(totalarruser);
-  //       user.total = totalarruser;
-  //       if (totalarruser === 0) {
-  //         user.total = 0;
-  //       }
-  //       return user;
-  //     });
-
-  //     setdata(updatedResult);
-  //     setdataSearch(updatedResult)
-  //   };
-  //   getData();
-
-  // }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -113,44 +79,49 @@ const Page = () => {
       const result = await res.json();
       settotalwallet(result[0].wallet);
       console.log(result[0].wallet);
-      console.log(result[0].expenn[result[0].expenn.length - 1]);
 
-      let expensesarr = result[0].expenn[result[0].expenn.length - 1];
-      console.log(expensesarr);
+      if(result[0].expenn){
 
-      setdate(expensesarr.date);
-      setlastexpen(expensesarr.expenses);
-
-      let customerarr = expensesarr.expenses;
-
-      const datacustomer = customerarr.map((user, index) => {
-        let totalinvoicecustomer = 0;
-
-        //
-        if (user.money && user.money.length > 0) {
-          const getmony = customerarr;
-
-          let arrtoo = [];
-          getmony.forEach((arrmoney) => {
-            const totalonearr = arrmoney.money.reduce(
-              (acc, num) => acc + num,
-              0
-            );
-            totalinvoicecustomer += totalonearr;
-            settatalarr(totalinvoicecustomer);
-
-            arrtoo.push(totalinvoicecustomer);
-          });
-        }
-
-        totalinvoicecustomer = Math.abs(totalinvoicecustomer);
-        user.total = totalinvoicecustomer;
-        if (totalinvoicecustomer === 0) {
-          user.total = 0;
-        }
-        //
-        return user;
-      });
+        let expensesarr = result[0].expenn[result[0].expenn.length - 1];
+        console.log(expensesarr);
+  
+        setdate(expensesarr.date);
+        setlastexpen(expensesarr.expenses);
+  
+        let customerarr = expensesarr.expenses;
+  
+        const datacustomer = customerarr.map((user, index) => {
+          let totalinvoicecustomer = 0;
+  
+          //
+          if (user.money && user.money.length > 0) {
+            const getmony = customerarr;
+  
+            let arrtoo = [];
+            getmony.forEach((arrmoney) => {
+              const totalonearr = arrmoney.money.reduce(
+                (acc, num) => acc + num,
+                0
+              );
+              totalinvoicecustomer += totalonearr;
+              settatalarr(totalinvoicecustomer);
+  
+              arrtoo.push(totalinvoicecustomer);
+            });
+          }
+  
+          totalinvoicecustomer = Math.abs(totalinvoicecustomer);
+          user.total = totalinvoicecustomer;
+          if (totalinvoicecustomer === 0) {
+            user.total = 0;
+          }
+          //
+          return user;
+        });
+      }
+      else{
+        setnotdata(true)
+      }
 
       // setdata(datacustomer);
       // setdataSearch(datacustomer);
@@ -371,13 +342,14 @@ const Page = () => {
       <Musseg />
       <Head actev={"home"} level={level} email={email} name={nameuser} />
 
-      {date === null ? (
+      {date == null && !notdata ? (
         <Loading />
       ) : (
         <div className="container">
-          <ul
-            className="list-group mb-4 mt-4 opacity-100 shadow-lg bg-body-tertiary rounded"
-            style={{ padding: 0 }}
+
+          {!notdata ? <>          <ul
+            className="list-group mt-5 opacity-100 shadow-lg bg-body-tertiary rounded"
+            style={{ padding: 0, marginBottom:"150px" }}
           >
             {lastexpen !== null && (
               <>
@@ -486,7 +458,12 @@ const Page = () => {
               </>
             )}
             {/* top invoce */}
-          </ul>
+          </ul></> :<div className="d-flex justify-content-center align-items-center vh-100">
+            <p className="text-danger"> لا توجد بيانات بعد </p>
+          </div>}
+
+
+
         </div>
       )}
 
