@@ -1,0 +1,31 @@
+body {
+  background-color: #343a40;
+  color: white;
+  direction: rtl;
+}
+.user-card {
+  background-color: #495057;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.permission-card {
+  border: 1px solid #6c757d;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+.form-check-input:checked {
+  background-color: #00743e;
+  border-color: #00743e;
+}
+.form-check-input {
+  cursor: pointer;
+}

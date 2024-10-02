@@ -5,6 +5,7 @@
 import Link from "next/link";
 import Frompage from "./frompage";
 import Musseg from "components/Musseg";
+import "./../style.css"
 
 export const metadata = {
   title: "Register page",

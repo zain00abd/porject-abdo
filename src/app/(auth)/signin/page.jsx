@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Formsignin from "./formsignin";
 import Musseg from "components/Musseg";
+import "./../style.css"
 
 export const metadata = {
   title: "Signin page",
