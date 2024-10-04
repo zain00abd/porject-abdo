@@ -31,6 +31,7 @@ const Page = () => {
   const [packitem, setpackitem] = useState(0);
   const [totalwallet, settotalwallet] = useState(0);
   const [notdata, setnotdata] = useState(false);
+  const [powers, setpowers] = useState(null);
   
 
   const [arrdis, setarrdis] = useState([]);
@@ -61,9 +62,10 @@ const Page = () => {
     if (status == "authenticated") {
       if (session.user.name !== null) {
         setlevel(session.user.email.split("@")[1].split(".")[0]);
-        localStorage.setItem("nameuser", session.user.name);
-        setnameuser(session.user.name);
+        localStorage.setItem("nameuser", session.user.name.split("/")[0]);
+        setnameuser(session.user.name.split("/")[0]);
         setemail(session.user.email);
+        setpowers(session.user.name.split("/")[1])
       }
     }
   }, [session]);
