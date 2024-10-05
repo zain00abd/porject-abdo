@@ -16,7 +16,7 @@ import { SetTransaction } from "app/helpers/SetTransaction.js";
 import { SetMoneyWallet } from "app/helpers/SetMoneyWallet.js";
 
 const Page = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [arrinv, setarrinv] = useState(0);
   const [dataa, setdata] = useState([]);
   const [dataSearch, setdataSearch] = useState([]);
@@ -32,6 +32,7 @@ const Page = () => {
   const [totalwallet, settotalwallet] = useState(0);
   const [notdata, setnotdata] = useState(false);
   const [powers, setpowers] = useState(null);
+  const [aaa, setaaa] = useState(false);
   
 
   const [arrdis, setarrdis] = useState([]);
@@ -61,16 +62,37 @@ const Page = () => {
   useEffect(() => {
     if (status == "authenticated") {
       if (session.user.name !== null) {
-        setlevel(session.user.email.split("@")[1].split(".")[0]);
+        // setlevel(session.user.email.split("@")[1].split(".")[0]);
         localStorage.setItem("nameuser", session.user.name.split("/")[0]);
         setnameuser(session.user.name.split("/")[0]);
+        console.log(session.user.name);
+        console.log(nameuser);
         setemail(session.user.email);
-        setpowers(session.user.name.split("/")[1])
+        setpowers(session.user.name.split("/")[1]);
+        if (powers) {
+          console.log(powers.split("_"));
+        }
+        setaaa(true)
       }
     }
   }, [session]);
 
+  useEffect(() => {
+    const handelsubmit = async () => {
+      const res = await signIn("credentials", {
+        email,
+        password: localStorage.getItem("pos"),
+        redirect: false,
+      });
+      console.log(res);
 
+      if (res.error) {
+        return;
+      }
+    };
+
+    handelsubmit();
+  }, [aaa]);
 
   useEffect(() => {
     const getData = async () => {
@@ -82,23 +104,22 @@ const Page = () => {
       settotalwallet(result[0].wallet);
       console.log(result[0].wallet);
 
-      if(result[0].expenn){
-
+      if (result[0].expenn) {
         let expensesarr = result[0].expenn[result[0].expenn.length - 1];
         console.log(expensesarr);
-  
+
         setdate(expensesarr.date);
         setlastexpen(expensesarr.expenses);
-  
+
         let customerarr = expensesarr.expenses;
-  
+
         const datacustomer = customerarr.map((user, index) => {
           let totalinvoicecustomer = 0;
-  
+
           //
           if (user.money && user.money.length > 0) {
             const getmony = customerarr;
-  
+
             let arrtoo = [];
             getmony.forEach((arrmoney) => {
               const totalonearr = arrmoney.money.reduce(
@@ -107,11 +128,11 @@ const Page = () => {
               );
               totalinvoicecustomer += totalonearr;
               settatalarr(totalinvoicecustomer);
-  
+
               arrtoo.push(totalinvoicecustomer);
             });
           }
-  
+
           totalinvoicecustomer = Math.abs(totalinvoicecustomer);
           user.total = totalinvoicecustomer;
           if (totalinvoicecustomer === 0) {
@@ -120,9 +141,8 @@ const Page = () => {
           //
           return user;
         });
-      }
-      else{
-        setnotdata(true)
+      } else {
+        setnotdata(true);
       }
 
       // setdata(datacustomer);
@@ -342,130 +362,142 @@ const Page = () => {
   return (
     <>
       <Musseg />
-      <Head actev={"home"} level={level} email={email} name={nameuser} />
+      <Head
+        actev={"home"}
+        level={level}
+        email={email}
+        name={nameuser}
+        powers={powers}
+      />
 
       {date == null && !notdata ? (
         <Loading />
       ) : (
         <div className="container">
+          {!notdata ? (
+            <>
+              {" "}
+              <ul
+                className="list-group mt-5 opacity-100 shadow-lg bg-body-tertiary rounded"
+                style={{ padding: 0, marginBottom: "150px" }}
+              >
+                {lastexpen !== null && (
+                  <>
+                    <li
+                      style={{ padding: "10px 0px", fontWeight: "600" }}
+                      className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border border-1 border-primary"
+                    >
+                      <div style={{ width: "50%", textAlign: "center" }}>
+                        اخراج والوقت
+                      </div>
+                      <div className="vr" />
+                      <div style={{ width: "50%", textAlign: "center" }}>
+                        المبلغ
+                      </div>
+                      <div className="vr" />
+                      <div style={{ width: "50%", textAlign: "center" }}>
+                        الوصف
+                      </div>
+                    </li>
 
-          {!notdata ? <>          <ul
-            className="list-group mt-5 opacity-100 shadow-lg bg-body-tertiary rounded"
-            style={{ padding: 0, marginBottom:"150px" }}
-          >
-            {lastexpen !== null && (
-              <>
-                <li
-                  style={{ padding: "10px 0px", fontWeight: "600" }}
-                  className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border border-1 border-primary"
-                >
-                  <div style={{ width: "50%", textAlign: "center" }}>
-                    اخراج والوقت
-                  </div>
-                  <div className="vr" />
-                  <div style={{ width: "50%", textAlign: "center" }}>
-                    المبلغ
-                  </div>
-                  <div className="vr" />
-                  <div style={{ width: "50%", textAlign: "center" }}>الوصف</div>
-                </li>
+                    {/*** body invoce ***/}
 
-                {/*** body invoce ***/}
-
-                {lastexpen.map((entry, entryIndex) => (
-                  <div key={entryIndex} style={{ position: "relative" }}>
-                    {entry.discraption.map((item, itemIndex) => (
-                      <div key={itemIndex} style={{ position: "relative" }}>
-                        <li
-                          className="list-group-item d-flex justify-content-between align-items-center list-group-item-danger"
-                          style={{
-                            width: "66.7%",
-                            left: "33.3%",
-                            padding: "7px 0px",
-                          }}
-                        >
-                          <div
-                            style={{ width: "100%", textAlign: "center" }}
-                            id="inv_Ms"
-                          >
-                            {entry.money[itemIndex]}
-                          </div>
-                          <div className="vr" />
-                          <div
-                            className="dropend"
-                            style={{ width: "100%", textAlign: "center" }}
-                          >
-                            <button
+                    {lastexpen.map((entry, entryIndex) => (
+                      <div key={entryIndex} style={{ position: "relative" }}>
+                        {entry.discraption.map((item, itemIndex) => (
+                          <div key={itemIndex} style={{ position: "relative" }}>
+                            <li
+                              className="list-group-item d-flex justify-content-between align-items-center list-group-item-danger"
                               style={{
-                                border: "none",
-                                outline: "none",
-                                background: "none",
-                                fontWeight: 500,
-                              }}
-                              data-bs-toggle="dropdown"
-                            >
-                              {item}
-                            </button>
-                            <div
-                              className="dropdown-menu"
-                              style={{
-                                width: "1%",
-                                background: "none",
-                                border: "none",
+                                width: "66.7%",
+                                left: "33.3%",
+                                padding: "7px 0px",
                               }}
                             >
-                              <p
-                                style={{
-                                  backgroundColor: "rgb(68, 0, 0)",
-                                  width: "auto",
-                                  marginRight: 100,
-                                  textAlign: "center",
-                                  color: "#ffffff",
-                                  borderRadius: 18,
-                                }}
+                              <div
+                                style={{ width: "100%", textAlign: "center" }}
+                                id="inv_Ms"
                               >
                                 {entry.money[itemIndex]}
-                              </p>
-                            </div>
+                              </div>
+                              <div className="vr" />
+                              <div
+                                className="dropend"
+                                style={{ width: "100%", textAlign: "center" }}
+                              >
+                                <button
+                                  style={{
+                                    border: "none",
+                                    outline: "none",
+                                    background: "none",
+                                    fontWeight: 500,
+                                  }}
+                                  data-bs-toggle="dropdown"
+                                >
+                                  {item}
+                                </button>
+                                <div
+                                  className="dropdown-menu"
+                                  style={{
+                                    width: "1%",
+                                    background: "none",
+                                    border: "none",
+                                  }}
+                                >
+                                  <p
+                                    style={{
+                                      backgroundColor: "rgb(68, 0, 0)",
+                                      width: "auto",
+                                      marginRight: 100,
+                                      textAlign: "center",
+                                      color: "#ffffff",
+                                      borderRadius: 18,
+                                    }}
+                                  >
+                                    {entry.money[itemIndex]}
+                                  </p>
+                                </div>
+                              </div>
+                            </li>
                           </div>
-                        </li>
+                        ))}
+
+                        <div className="div-time">
+                          {entry.user}
+                          <br />
+                          {entry.time}
+                        </div>
                       </div>
                     ))}
 
-                    <div className="div-time">
-                      {entry.user}
-                      <br />
-                      {entry.time}
-                    </div>
-                  </div>
-                ))}
+                    {/*** body invoce ***/}
+                    {/* end invoce */}
 
-                {/*** body invoce ***/}
-                {/* end invoce */}
+                    <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1 border-secondary-subtle">
+                      <div style={{ width: "50%", textAlign: "center" }}>
+                        الاجمالي:{" "}
+                        <small className="text-danger">{tatalarr}</small>
+                      </div>
 
-                <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1 border-secondary-subtle">
-                  <div style={{ width: "50%", textAlign: "center" }}>
-                    الاجمالي: <small className="text-danger">{tatalarr}</small>
-                  </div>
-
-                  <div className="vr" />
-                  <div
-                    className=""
-                    style={{ width: "50%", textAlign: "center" }}
-                    id="date"
-                  >
-                    {date}
-                  </div>
-                </li>
-              </>
-            )}
-            {/* top invoce */}
-          </ul></> :<div className="d-flex justify-content-center align-items-center vh-100">
-            <p className="text-danger"> لا توجد بيانات بعد </p>
-          </div>}
-
-
-
+                      <div className="vr" />
+                      <div
+                        className=""
+                        style={{ width: "50%", textAlign: "center" }}
+                        id="date"
+                      >
+                        {date}
+                      </div>
+                    </li>
+                  </>
+                )}
+                {/* top invoce */}
+              </ul>
+            </>
+          ) : (
+            <div className="d-flex justify-content-center align-items-center vh-100">
+              <p className="text-danger"> لا توجد بيانات بعد </p>
+            </div>
+          )}
         </div>
       )}
 

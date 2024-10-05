@@ -5,13 +5,13 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import "./stylecomp.css";
 
-const Head = ({ actev, level, email, name, onValueChange }) => {
+const Head = ({ actev, level, email, name, onValueChange, powers }) => {
+  console.log(powers);
 
   const Search = (e) => {
-    
-    onValueChange(e)
-  }
-  
+    onValueChange(e);
+  };
+
   return (
     <nav
       className="navbar sticky-top navbar-expand-lg navbar-dark"
@@ -108,7 +108,8 @@ const Head = ({ actev, level, email, name, onValueChange }) => {
                 </button>
               </li>
 
-              {level === "admin" && (
+              {powers &&
+              powers.split("_").some((item) => item.includes("alldata")) ? (
                 <li className="nav-item">
                   <Link
                     className={`nav-link d-none d-lg-block ${
@@ -119,6 +120,8 @@ const Head = ({ actev, level, email, name, onValueChange }) => {
                     جميع البيانات <i className="fa-solid fa-database"></i>
                   </Link>
                 </li>
+              ) : (
+                <></>
               )}
 
               <li className="">
@@ -169,26 +172,31 @@ const Head = ({ actev, level, email, name, onValueChange }) => {
           />
         </Link>
 
-        {level === "admin" && (
-          <>
-            <Link className="d-lg-none" href="/alldata">
-              <i
-                className={`fa-solid fa-database fa-lg gradient-icon ${
-                  actev == "adduser" && "actev-nav"
-                }`}
-                style={{ color: "#e0ecff" }}
-              ></i>
-            </Link>
+        {powers &&
+        powers.split("_").some((item) => item.includes("alldata")) ? (
+          <Link className="d-lg-none" href="/alldata">
+            <i
+              className={`fa-solid fa-database fa-lg gradient-icon ${
+                actev == "adduser" && "actev-nav"
+              }`}
+              style={{ color: "#e0ecff" }}
+            ></i>
+          </Link>
+        ) : (
+          <></>
+        )}
 
-            <Link className="d-lg-none" href="/wallet">
-              <i
-                className={`fa-solid fa-wallet fa-lg gradient-icon ${
-                  actev == "wallet" && "actev-nav"
-                }`}
-                style={{ color: "#e0ecff" }}
-              ></i>
-            </Link>
-          </>
+        {powers && powers.split("_").some((item) => item.includes("wallet")) ? (
+          <Link className="d-lg-none" href="/wallet">
+            <i
+              className={`fa-solid fa-wallet fa-lg gradient-icon ${
+                actev == "wallet" && "actev-nav"
+              }`}
+              style={{ color: "#e0ecff" }}
+            ></i>
+          </Link>
+        ) : (
+          <></>
         )}
       </div>
 
@@ -208,8 +216,8 @@ const Head = ({ actev, level, email, name, onValueChange }) => {
               type="search"
               placeholder="Search"
               aria-label="Search"
-              onKeyUp={(e) =>{
-                Search(e.target.value)
+              onKeyUp={(e) => {
+                Search(e.target.value);
               }}
             />
             <button className="btn btn-success" type="submit">

@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./style.css";
+import Musseg from "components/Musseg";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [alluser, setAlluser] = useState(null);
   const [swech, setSwech] = useState([]);
-  const [permissions, setPermissions] = useState({}); // حالة للتحكم في صلاحيات المستخدمين
+  const [permissions, setPermissions] = useState({});
+  const [isloading, setisloading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // جلب بيانات المستخدمين من الـ API
@@ -16,7 +20,7 @@ const Page = () => {
         // معالجة الخطأ
       }
       const result = await res.json();
-      
+
       setAlluser(result);
 
       // إعداد الحالة الافتراضية لصلاحيات كل مستخدم
@@ -24,15 +28,12 @@ const Page = () => {
       result.forEach((user) => {
         // تقسيم الاسم للحصول على جزء الصلاحيات
         let arrpowers = user.name.split("/")[1];
-        
+
         let arr = [];
 
         // التأكد من أن الصلاحيات موجودة ومقسمة بشكل صحيح
         if (arrpowers !== undefined && arrpowers !== null) {
-          
           arr = arrpowers.split("_");
-
-          
         }
 
         // إعداد الصلاحيات بناءً على الصلاحيات المستخرجة
@@ -60,11 +61,12 @@ const Page = () => {
 
   // دالة لتحديث صلاحيات المستخدم عند تغيير المدخل
   const handleCheckboxChange = (userId, switchName, element) => {
-
-    
     setPermissions((prevPermissions) => {
-      let name = element.parentElement.parentElement.parentElement.querySelector('h5').textContent
-      
+      let name =
+        element.parentElement.parentElement.parentElement.querySelector(
+          "h5"
+        ).textContent;
+
       const updatedPermissions = {
         ...prevPermissions,
         [userId]: {
@@ -77,83 +79,109 @@ const Page = () => {
 
       setarrpowers(updatedPermissions, userId, name);
 
-      return updatedPermissions; // العودة بالحالة المحدثة
+      return updatedPermissions; //   
     });
   };
 
   const setarrpowers = (updatedPermissions, id, name) => {
+
+    
     let arrpowers = ["addinvoice", "wallet", "alldata", "adduser"];
-    
-    
+
     // يمكنك الآن استخدام الحالة المحدثة هنا
+
+    if (!updatedPermissions[id].switch1) {
+      arrpowers = arrpowers.filter((item) => item !== "addinvoice");
+    }
+
+    if (!updatedPermissions[id].switch2) {
+      arrpowers = arrpowers.filter((item) => item !== "wallet");
+    }
+
+    if (!updatedPermissions[id].switch3) {
+      arrpowers = arrpowers.filter((item) => item !== "alldata");
+    }
+
+    if (!updatedPermissions[id].switch4) {
+      arrpowers = arrpowers.filter((item) => item !== "adduser");
+    }
+
+    console.log(name + "/" + arrpowers.join("_"));
+    let power = name + "/" + arrpowers.join("_");
+
     
-
-    if (!updatedPermissions[id].switch1) {arrpowers = arrpowers.filter(item => item !== "addinvoice")};
-
-    if (!updatedPermissions[id].switch2) {arrpowers = arrpowers.filter(item => item !== "wallet")};
-
-    if (!updatedPermissions[id].switch3) {arrpowers = arrpowers.filter(item => item !== "alldata")};
-
-    if (!updatedPermissions[id].switch4) {arrpowers = arrpowers.filter(item => item !== "adduser")};
-
-    console.log(name + "/" + arrpowers.join("_"))
-    let power = name + "/" + arrpowers.join("_")
-    Submitpowers(power, id)
+        
+      Submitpowers(power, id);
+    
     
   };
 
-  const Submitpowers = async (power, id) =>{
-
-    const baseURL = window.location.origin;
-    const response = await fetch(`${baseURL}/api/setpower`, {
-      method: `PUT`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        textpower: power,
-        Iduser:id
-      }),
-    });
-
-    const dataFromBackend = await response.json();
-
-  }
+  const Submitpowers = async (power, id) => {
+    if(!isloading){
+      setisloading(true);
+      const baseURL = window.location.origin;
+      const response = await fetch(`${baseURL}/api/setpower`, {
+        method: `PUT`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          textpower: power,
+          Iduser: id,
+        }),
+      });
+      
+      const dataFromBackend = await response.json();
+      if (response.ok) {
+        setisloading(false);
+        toast.info(" تم تعديل الصلاحية بنجاح ");
+      }
+      
+    }
+  };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">إدارة المستخدمين</h1>
+    <>
+      <Musseg />
+      <div className="container mt-5">
+        <h1 className="text-center mb-4">إدارة المستخدمين</h1>
 
-      {alluser !== null
-        ? alluser.map((user) => (
-            <div className="user-card" key={user._id} id={user._id}>
-              <h5>{user.name.split("/")[0]}</h5>
-              <p>{user.email}</p>
+        {alluser !== null
+          ? alluser.map((user) => (
+              <div className="user-card" key={user._id} id={user._id}>
+                <h5>{user.name.split("/")[0]}</h5>
+                <p>{user.email}</p>
 
-              {swech.map((s, index) => (
-                <div className="permission-card" key={index}>
-                  <span>{s.pagename}</span>
-                  <div className="form-check form-switch">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id={`switch_${index}`}
-                      onChange={(e) =>
-                        handleCheckboxChange(user._id, `switch${index + 1}`, e.target)
-                      }
-                      checked={
-                        permissions[user._id]?.[`switch${index + 1}`] || false
-                      }
-                    />
+                {swech.map((s, index) => (
+                  <div className="permission-card" key={index}>
+                    <span>{s.pagename}</span>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={`switch_${index}`}
+                        onChange={(e) =>
+                          handleCheckboxChange(
+                            user._id,
+                            `switch${index + 1}`,
+                            e.target
+                          )
+                        }
+                        checked={
+                          permissions[user._id]?.[`switch${index + 1}`] || false
+                        }
+                        disabled={isloading}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              <button className="btn btn-danger btn-sm">حذف الحساب</button>
-            </div>
-          ))
-        : null}
-    </div>
+                <button className="btn btn-danger btn-sm">حذف الحساب</button>
+              </div>
+            ))
+          : null}
+      </div>
+    </>
   );
 };
 
