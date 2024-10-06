@@ -16,7 +16,7 @@
 }
 .navbar-toggler:focus{
   box-shadow:none;
-  background-color: #0058ca;
+  background-color: #74747469;
 }
 
 .actev-nav::before{
