@@ -83,13 +83,18 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
 
             {/*  end nav  */}
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 ">
-              {level === "admin" && (
+              {powers &&
+              powers.split("_").some((item) => item.includes("adduser")) ? (
                 <li className="nav-item mb-3">
                   <Link className={`nav-link text-center`} href="/register">
                     اضافة عميل <i className="fa-solid fa-user-plus"></i>
                   </Link>
                 </li>
+              ) : (
+                <></>
               )}
+
+
 
               <li
                 className="nav-item d-lg-none text-center mb-5"
@@ -107,6 +112,21 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
                   تسجيل الخروج <i className="fa-solid fa-right-to-bracket"></i>
                 </button>
               </li>
+
+              {powers && powers.split("_").some((item) => item.includes("wallet")) ? (
+                <li className="nav-item">
+                <Link
+                  className={`nav-link d-none d-lg-block ${
+                    actev == "wallet" && "active"
+                  }`}
+                  href="/wallet"
+                >
+                  المحفظة<i className="fa-solid fa-wallet gradient-icon"></i>
+                </Link>
+              </li>
+        ) : (
+          <></>
+        )}
 
               {powers &&
               powers.split("_").some((item) => item.includes("alldata")) ? (

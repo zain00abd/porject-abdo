@@ -40,6 +40,9 @@ const Formsignin = () => {
 
       return;
     }
+
+    localStorage.setItem("email", email)
+    localStorage.setItem("password", password)
     router.replace("/");
 
     

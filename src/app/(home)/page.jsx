@@ -14,6 +14,7 @@ import Loading from "./loading.jsx";
 import Musseg from "components/Musseg.jsx";
 import { SetTransaction } from "app/helpers/SetTransaction.js";
 import { SetMoneyWallet } from "app/helpers/SetMoneyWallet.js";
+import { CheackPoint } from "app/helpers/CheackPoint.js";
 
 const Page = () => {
   const { data: session, status, update } = useSession();
@@ -71,27 +72,14 @@ const Page = () => {
         setpowers(session.user.name.split("/")[1]);
         if (powers) {
           console.log(powers.split("_"));
+          setaaa(true)
         }
-        setaaa(true)
       }
     }
   }, [session]);
 
   useEffect(() => {
-    const handelsubmit = async () => {
-      const res = await signIn("credentials", {
-        email,
-        password: localStorage.getItem("pos"),
-        redirect: false,
-      });
-      console.log(res);
-
-      if (res.error) {
-        return;
-      }
-    };
-
-    handelsubmit();
+    CheackPoint()
   }, [aaa]);
 
   useEffect(() => {
@@ -809,7 +797,12 @@ const Page = () => {
         </div>
       </div>
 
-      <Footer total={totalwallet} />
+      {powers && powers.split("_").some((item) => item.includes("addinvoice")) ? (
+        <Footer total={totalwallet} />
+        ) : (
+          <></>
+        )}
+
     </>
   );
 };
