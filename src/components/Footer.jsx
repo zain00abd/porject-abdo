@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./stylecomp.css";
 
+import { GetData } from "app/helpers/GetData";
+
 const Footer = ({ page, total }) => {
+
+  const [amount, setamount] = useState(null);
+  
+
+  const wallet = async () =>{
+    setamount(await GetData())
+
+  }
+
+  wallet()
+
   return (
     <footer
       // @ts-ignore
@@ -38,7 +51,7 @@ const Footer = ({ page, total }) => {
                 {" "}
                 ج{" "}
               </p>{" "}
-              <span style={styles.number}> {total} </span>
+              <span style={styles.number}> {amount} </span>
               <span> : رصيد المحفظة </span>
             </div>
 

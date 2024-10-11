@@ -1,12 +1,23 @@
 // @ts-nocheck
 
-import React from "react";
-import { signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import "./stylecomp.css";
 
 const Head = ({ actev, level, email, name, onValueChange, powers }) => {
   console.log(powers);
+
+  const [power, setpower] = useState(null);
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status == "authenticated") {
+      console.log(session.user.name.split("/")[1].split("_"));
+      setpower(session.user.name.split("/")[1].split("_"));
+    }
+  }, [session]);
 
   const Search = (e) => {
     onValueChange(e);
@@ -83,10 +94,9 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
 
             {/*  end nav  */}
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 ">
-              {powers &&
-              powers.split("_").some((item) => item.includes("adduser")) ? (
+              {power && power.some((item) => item.includes("adduser")) ? (
                 <li
-                  className="nav-item p-2 border-bottom"
+                  className="nav-item p-2 border-bottom d-lg-none"
                   style={{ backgroundColor: "#55555554", width: "100%" }}
                 >
                   <Link className={`nav-link text-center`} href="/register">
@@ -101,7 +111,7 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
 
               {email == "abdo@admin.com" || email == "zain@admin.com" ? (
                 <li
-                  className="nav-item p-2 border-bottom border-danger-subtle"
+                  className="nav-item p-2 border-bottom border-danger-subtle d-lg-none"
                   style={{ backgroundColor: "#55555554", width: "100%" }}
                 >
                   <Link className={`nav-link text-center `} href="/admin">
@@ -131,8 +141,7 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
                 </button>
               </li>
 
-              {powers &&
-              powers.split("_").some((item) => item.includes("wallet")) ? (
+              {power && power.some((item) => item.includes("wallet")) ? (
                 <li className="nav-item">
                   <Link
                     className={`nav-link d-none d-lg-block ${
@@ -140,15 +149,14 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
                     }`}
                     href="/wallet"
                   >
-                    المحفظة<i className="fa-solid fa-wallet gradient-icon"></i>
+                    محفظة <i className="fa-solid fa-wallet"></i>
                   </Link>
                 </li>
               ) : (
                 <></>
               )}
 
-              {powers &&
-              powers.split("_").some((item) => item.includes("alldata")) ? (
+              {power && power.some((item) => item.includes("alldata")) ? (
                 <li className="nav-item">
                   <Link
                     className={`nav-link d-none d-lg-block ${
@@ -157,6 +165,21 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
                     href="/alldata"
                   >
                     جميع البيانات <i className="fa-solid fa-database"></i>
+                  </Link>
+                </li>
+              ) : (
+                <></>
+              )}
+
+              {power && power.some((item) => item.includes("adduser")) ? (
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link d-none d-lg-block ${
+                      actev == "adduser" && "active"
+                    }`}
+                    href="/register"
+                  >
+                    اضافة مستخدم <i className="fa-solid fa-user-plus"></i>
                   </Link>
                 </li>
               ) : (
@@ -211,8 +234,7 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
           />
         </Link>
 
-        {powers &&
-        powers.split("_").some((item) => item.includes("alldata")) ? (
+        {power && power.some((item) => item.includes("alldata")) ? (
           <Link className="d-lg-none" href="/alldata">
             <i
               className={`fa-solid fa-database fa-lg gradient-icon ${
@@ -225,11 +247,23 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
           <></>
         )}
 
-        {powers && powers.split("_").some((item) => item.includes("wallet")) ? (
+        {power && power.some((item) => item.includes("wallet")) ? (
           <Link className="d-lg-none" href="/wallet">
             <i
               className={`fa-solid fa-wallet fa-lg gradient-icon ${
                 actev == "wallet" && "actev-nav"
+              }`}
+              style={{ color: "#e0ecff" }}
+            ></i>
+          </Link>
+        ) : (
+          <></>
+        )}
+        {power && power.some((item) => item.includes("storage")) ? (
+          <Link className="d-lg-none" href="/storage">
+            <i
+              className={`fa-solid fa-boxes-packing fa-lg gradient-icon ${
+                actev == "storage" && "actev-nav"
               }`}
               style={{ color: "#e0ecff" }}
             ></i>

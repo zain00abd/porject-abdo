@@ -12,7 +12,12 @@ export async function CheackPoint() {
     password: localStorage.getItem("password"),
     redirect: false,
   });
-  console.log(res);
+
+  if (res.ok){
+
+    console.log(res);
+    console.log("hgjghjghj");
+  }
 
   if (res.error) {
     toast.error(" تم حظر الوصول للتطبيق ");

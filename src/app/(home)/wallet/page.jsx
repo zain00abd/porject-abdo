@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { SetTransaction } from "../../helpers/SetTransaction";
 import { SetMoneyWallet } from "../../helpers/SetMoneyWallet";
 import Musseg from "components/Musseg";
+import { GetData } from "app/helpers/GetData";
 
 // pages/_app.js
 
@@ -38,22 +39,25 @@ const Wallet = () => {
       }
       const result = await res.json();
       setAmount(result[0].wallet);
-      console.log(result[0].wallet)
+      
       if(result[0].transactions !== undefined){
 
         const arrtransactions = result[0].transactions;
-        console.log(arrtransactions);
+        
         settransactions(arrtransactions);
       }
 
       // const arrt = arrtransactions.mpa((item, index) => {
-      //   console.log(item);
+      //   
       // });
 
-      // console.log(JSON.parse(result[0].transactions[0]));
+      // 
+      console.log(await GetData())
     };
-
+    
     getData();
+    
+    
   }, []);
 
   const handeladdwallet = async () => {

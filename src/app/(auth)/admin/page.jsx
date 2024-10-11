@@ -42,6 +42,7 @@ const Page = () => {
           switch2: arr.some((item) => item.includes("wallet")), // مثلاً "addbill" كمثال للصلاحيات
           switch3: arr.some((item) => item.includes("alldata")),
           switch4: arr.some((item) => item.includes("adduser")),
+          switch5: arr.some((item) => item.includes("storage")),
         };
       });
 
@@ -55,6 +56,7 @@ const Page = () => {
       { pagename: "المحفظة" },
       { pagename: "جميع الفواتير" },
       { pagename: "اضافة عملاء جدد" },
+      { pagename: " مخزن " },
     ];
     setSwech(arrSwech);
   }, []);
@@ -86,7 +88,7 @@ const Page = () => {
   const setarrpowers = (updatedPermissions, id, name) => {
 
     
-    let arrpowers = ["addinvoice", "wallet", "alldata", "adduser"];
+    let arrpowers = ["addinvoice", "wallet", "alldata", "adduser", "storage"];
 
     // يمكنك الآن استخدام الحالة المحدثة هنا
 
@@ -104,6 +106,10 @@ const Page = () => {
 
     if (!updatedPermissions[id].switch4) {
       arrpowers = arrpowers.filter((item) => item !== "adduser");
+    }
+
+    if (!updatedPermissions[id].switch5) {
+      arrpowers = arrpowers.filter((item) => item !== "storage");
     }
 
     console.log(name + "/" + arrpowers.join("_"));
