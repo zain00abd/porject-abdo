@@ -8,6 +8,7 @@ const productSchema = new Schema({
   wallet: Number,
   transactions:Array,
   expenn:Array,
+  storage:Array,
 });
 
 // Create a model based on that schema

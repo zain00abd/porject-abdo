@@ -10,6 +10,7 @@ import Head from 'components/Head';
 import AddIcon from '@mui/icons-material/Add'; // أيقونة لإضافة قسم جديد
 import { useState } from 'react';
 import Footer from 'components/Footer';
+import "../stylehandel.css"
 
 
 // إنشاء Cache لدعم RTL
@@ -51,6 +52,10 @@ export default function ProductForm() {
     // منطق الحفظ هنا
     const selectedCategory = showNewCategoryField ? newCategory : category;
     console.log({ selectedCategory, productName, price, quantity });
+
+    
+
+
   };
 
   const handleCancel = () => {

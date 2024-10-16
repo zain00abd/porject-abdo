@@ -16,6 +16,9 @@ export async function  SetTransaction(today, mode, money, user){
   });
 
   const objFromFrontEnd = await response.json();
+  console.log(objFromFrontEnd)
+
+  
 };
 
 
