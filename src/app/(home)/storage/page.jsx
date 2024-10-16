@@ -3,6 +3,7 @@ import Head from 'components/Head';
 import React, { useEffect } from 'react';
 import "./style.css"
 import Footer from 'components/Footer';
+import Link from "next/link";
 const Page = () => {
 
   const sections = [
@@ -56,7 +57,9 @@ const Page = () => {
         <div className="row mb-4">
           <div className="col-12 d-flex justify-content-between align-items-center">
             <h2 className="text-primary">المخزن</h2>
-            <button className="btn gradient-btn">إضافة منتج</button>
+            <button className="btn gradient-btn">
+              <Link className={`nav-link text-center`} href={"/storage/formsetdata"}> انشاء منتج </Link>
+            </button>
           </div>
         </div>
   
