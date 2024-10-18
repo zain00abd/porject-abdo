@@ -6,7 +6,7 @@ import Link from "next/link";
 import "./stylecomp.css";
 
 const Head = ({ actev, level, email, name, onValueChange, powers }) => {
-  console.log(powers);
+  
 
   const [power, setpower] = useState(null);
 
@@ -14,7 +14,7 @@ const Head = ({ actev, level, email, name, onValueChange, powers }) => {
 
   useEffect(() => {
     if (status == "authenticated") {
-      console.log(session.user.name.split("/")[1].split("_"));
+      
       setpower(session.user.name.split("/")[1].split("_"));
     }
   }, [session]);

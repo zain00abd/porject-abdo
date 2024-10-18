@@ -10,7 +10,8 @@ const Footer = ({ page, total }) => {
   
 
   const wallet = async () =>{
-    setamount(await GetData())
+    let money = await GetData()
+    setamount(money.wallet)
 
   }
 

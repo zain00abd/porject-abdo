@@ -7,8 +7,8 @@ export async function GetData() {
   }
   const result = await res.json();
 
-  console.log(result[0].wallet);
+  // console.log(result[0]);
 
-  return result[0].wallet
+  return result[0]
 }
 

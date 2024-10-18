@@ -52,7 +52,8 @@ const Wallet = () => {
       // });
 
       // 
-      console.log(await GetData())
+      let rrt = await GetData()
+      console.log(rrt.wallet)
     };
     
     getData();
@@ -62,7 +63,7 @@ const Wallet = () => {
 
   const handeladdwallet = async () => {
     setissubmit(true);
-    const wallet = SetMoneyWallet(Number(+amount + +inpmoney));
+    const wallet = await SetMoneyWallet(Number(+amount + +inpmoney));
     if (wallet) {
       toast.success(" تم اضافة رصيد الى المحفظة ");
       setTimeout(() => {
