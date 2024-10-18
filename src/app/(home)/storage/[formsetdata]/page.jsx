@@ -118,9 +118,11 @@ export default function ProductForm() {
     setPrice("");
     setQuantity("");
     setShowNewCategoryField(false);
+    setlouk(false)
   };
 
   const handleAddNewCategory = () => {
+    setlouk(false)
     setShowNewCategoryField(true); // عرض حقل القسم الجديد عند الضغط على الزر
     setCategory(""); // إزالة القسم المختار إذا كان موجودًا
   };
@@ -135,37 +137,60 @@ export default function ProductForm() {
   };
 
   const cheackExistProduct = (value, categorycheack) => {
-    console.log("323243 ");
-
+    console.log("Checking product:", value);
+  
+    // حفظ قيمة المنتج في المتغير
     setvalueinpproduct(value);
-
-    arrdata.some((item) => {
-      let selectedCategory;
-      if (categorycheack) {
-        selectedCategory = categorycheack;
-      } else {
-        selectedCategory = showNewCategoryField ? newCategory : category;
-      }
-
-      if (selectedCategory == item.sectionName) {
-        const productExists = item.products.some(
-          (arrname) => value === arrname.name
-        );
-
+  
+    // التحقق من وجود المنتج في البيانات
+    const productFound = arrdata.some((item, index) => {
+      // اختيار الفئة بناءً على المدخلات
+      let selectedCategory = categorycheack 
+        ? categorycheack 
+        : showNewCategoryField 
+        ? newCategory 
+        : category;
+  
+      // عرض معلومات الفئة والعنصر في الكونسول لمزيد من التحقق
+      console.log(`Item ${index}: sectionName = "${item.sectionName}", selectedCategory = "${selectedCategory}"`);
+  
+      // مقارنة الفئات بعد تنسيقها للتأكد من عدم وجود مسافات أو فروق في حالة الأحرف
+      if (selectedCategory.trim().toLowerCase() === item.sectionName.trim().toLowerCase()) {
+        console.log(`Matching category found: ${selectedCategory}`);
+  
+        // التحقق من وجود المنتج في القسم
+        const productExists = item.products.some((arrname) => {
+          console.log(`Checking product name: "${arrname.name}" against "${value}"`);
+          
+          // تحقق من أن value و arrname.name غير undefined قبل استخدام trim و toLowerCase
+          if (value && arrname.name) {
+            return value.trim().toLowerCase() === arrname.name.trim().toLowerCase();
+          }
+          return false; // إذا كانت أي قيمة غير صالحة، لا تتطابق
+        });
+  
+        // إذا تم العثور على المنتج، قم بتعيين القيم المناسبة
         if (productExists) {
-          console.log("already exist product");
+          console.log("Already exist product");
           setlouk(true);
+          return true; // التوقف عن التكرار عند العثور على المنتج
         } else {
-          setlouk(false);
-          console.log("no exist product");
+          console.log("Product not found in this category");
         }
-
-        return productExists; // توقف عن التكرار عند العثور على المنتج
       }
-
-      return false; // الاستمرار في التكرار إذا لم يكن القسم متطابقًا
+  
+      return false; // الاستمرار في التكرار إذا لم يكن المنتج موجود
     });
+  
+    // إذا لم يتم العثور على المنتج في أي من الفئات، قم بتعيين القيمة المناسبة
+    if (!productFound) {
+      setlouk(false);
+      console.log("No exist product in any category");
+    }
   };
+  
+  
+  
 
   return (
     <>
@@ -214,6 +239,7 @@ export default function ProductForm() {
                       fullWidth
                       value={newCategory}
                       onChange={(e) => setNewCategory(e.target.value)}
+                      onKeyUp={(e) => cheackExistProduct(valueinpproduct, e.target.value)}
                     />
                   </Grid>
                 )}
@@ -266,7 +292,8 @@ export default function ProductForm() {
                     color="primary"
                     fullWidth
                     onClick={handleSave}
-                    disabled={louk}
+                    // @ts-ignore
+                    disabled={louk || (!category && !newCategory || (!price || !productName || !quantity))}
                   >
                     حفظ
                   </Button>
@@ -279,7 +306,7 @@ export default function ProductForm() {
                     fullWidth
                     onClick={handleCancel}
                   >
-                    إلغاء
+                    مسح البيانات
                   </Button>
                 </Grid>
               </Grid>
