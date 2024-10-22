@@ -5,6 +5,7 @@ import "./style.css"
 import Footer from 'components/Footer';
 import Link from "next/link";
 import { GetData } from 'app/helpers/GetData';
+import WarehouseModal from './[formsetdata]/WarehouseModal';
 const Page = () => {
 
   const [section, setsection] = useState(null);
@@ -23,35 +24,7 @@ const Page = () => {
     getdata()
       
   }, []);
-  
 
-
-  // const sections = [
-  //   {
-  //     sectionName: ' خيط ',
-  //     products: [
-  //       { id: 1, name: 'المنتج 1', price: '100$', quantity: 20 },
-  //       { id: 2, name: 'المنتج 2', price: '200$', quantity: 15 },
-  //       { id: 2, name: 'المنتج 2', price: '200$', quantity: 15 },
-  //       { id: 2, name: 'المنتج 2', price: '200$', quantity: 15 },
-  //       { id: 2, name: 'المنتج 2', price: '200$', quantity: 15 },
-  //       { id: 2, name: 'المنتج 2', price: '200$', quantity: 15 },
-  //       { id: 2, name: 'المنتج 2', price: '200$', quantity: 15 },
-  //     ],
-  //   },
-  //   {
-  //     sectionName: ' قماش ',
-  //     products: [
-  //       { id: 3, name: 'المنتج 3', price: '300$', quantity: 10 },
-  //       { id: 4, name: 'المنتج 4', price: '400$', quantity: 5 },
-  //       { id: 4, name: 'المنتج 4', price: '500$', quantity: 4 },
-  //       { id: 4, name: 'المنتج 4', price: '400$', quantity: 5 },
-  //       { id: 4, name: 'المنتج 4', price: '400$', quantity: 5 },
-  //       { id: 4, name: 'المنتج 4', price: '400$', quantity: 5 },
-  //       { id: 4, name: 'المنتج 4', price: '400$', quantity: 5 },
-  //     ],
-  //   },
-  // ];
 
 
   useEffect(() => {
@@ -80,6 +53,7 @@ const Page = () => {
             <button className="btn gradient-btn">
               <Link className={`nav-link text-center`} href={"/storage/formsetdata"}> انشاء منتج </Link>
             </button>
+            <WarehouseModal />
           </div>
         </div>
   
