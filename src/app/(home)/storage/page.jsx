@@ -53,7 +53,8 @@ const Page = () => {
             <button className="btn gradient-btn">
               <Link className={`nav-link text-center`} href={"/storage/formsetdata"}> انشاء منتج </Link>
             </button>
-            <WarehouseModal />
+            {section && <WarehouseModal data={section && section} />}
+            
           </div>
         </div>
   
