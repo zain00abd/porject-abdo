@@ -67,6 +67,7 @@ export default function WarehouseModal({ data }) {
 
   const handleAddProduct = () => {
     setProducts([...products, { name: "", quantity: "", price: "" }]);
+    setshowerr(false);
     setisfocus(!isfocus);
   };
 
@@ -124,44 +125,39 @@ export default function WarehouseModal({ data }) {
   };
 
   const filterNewObject = (obj) => {
-
-    let cheackvalue=  true;
+    let cheackvalue = true;
 
     let newObjectfilter = newObject.filter(function (value, index) {
-      if (value === null) {
-        setshowerr(true);
-        cheackvalue= false
-        console.log(value + index);
-      } else if (value !== null) {
+      if (value !== null) {
+
         let cheackprice = value.products[0].price;
         console.log(cheackprice);
         let cheackquatity = value.products[0].quantity;
         console.log(cheackquatity);
 
-        if (!cheackprice || !cheackprice) {
+        if (!cheackprice || !cheackquatity) {
           setshowerr(true);
-          cheackvalue= false
+          cheackvalue = false;
         } else {
           setshowerr(false);
         }
-      } else {
+      } 
+      else {
         setshowerr(false);
       }
-
     });
     return cheackvalue;
   };
 
   const SubmitUpdate = async () => {
     // منطق الحفظ هنا
-    
-    let ischeack = filterNewObject();
-    console.log(ischeack)
-    
-    if(ischeack){
 
-      setisloading(true)
-      
+    let ischeack = filterNewObject();
+    console.log(ischeack);
+
+    if (ischeack) {
+      setisloading(true);
+
       const baseURL = window.location.origin;
       const response = await fetch(`${baseURL}/api/updatestorage`, {
         method: `POST`,
@@ -170,13 +166,12 @@ export default function WarehouseModal({ data }) {
         },
         body: JSON.stringify(newObject),
       });
-  
+
       const dataFromBackend = await response.json();
       console.log(dataFromBackend);
 
-      if(response.ok){
-      setisloading(false)
-
+      if (response.ok) {
+        setisloading(false);
       }
     }
   };
@@ -253,7 +248,17 @@ export default function WarehouseModal({ data }) {
                     xs={1}
                     style={{ textAlign: "center", color: "white" }}
                   >
-                    {index + 1}
+                    {newObject[index] ? (
+                      <>{index + 1}</>
+                    ) : (
+                      <small
+                        className="text-danger"
+                        style={{ fontWeight: "700" }}
+                      >
+                        {" "}
+                        X{" "}
+                      </small>
+                    )}
                   </Grid>
                   <Grid item xs={5}>
                     <CustomTextField
@@ -328,29 +333,36 @@ export default function WarehouseModal({ data }) {
           </DialogContent>
 
           {/* زر إضافة المنتج في الأسفل */}
-          <Grid container justifyContent="center" style={{ marginTop: "1rem" }}>
-            <IconButton
-              onClick={handleAddProduct}
-              // @ts-ignore
-              disabled={
-                !products[products.length - 1].name ||
-                !products[products.length - 1].price ||
-                !products[products.length - 1].quantity ||
-                newObject[newObject.length - 1] == null
-              }
-              style={{
-                backgroundColor: "#fbb040", // لون زر أنيق
-                color: "black", // لون الأيقونة
-                padding: "10px", // حشوة صغيرة لتقليل حجم الزر
-                borderRadius: "50%", // لجعل الزر دائري
-                fontSize: "1.5rem", // حجم الأيقونة
-                position: "relative",
-              }}
+          {products[products.length - 1].name &&
+          products[products.length - 1].price &&
+          products[products.length - 1].quantity &&
+          newObject[newObject.length - 1] !== null ? (
+            <Grid
+              container
+              justifyContent="center"
+              style={{ marginTop: "1rem" }}
             >
-              <AddCircleIcon style={{ fontSize: "2rem" }} />{" "}
-              {/* الأيقونة مع حجم مناسب */}
-            </IconButton>
-          </Grid>
+              <IconButton
+                onClick={handleAddProduct}
+                // @ts-ignore
+
+                style={{
+                  backgroundColor: "#fbb040", // لون زر أنيق
+                  color: "black", // لون الأيقونة
+                  padding: "10px", // حشوة صغيرة لتقليل حجم الزر
+                  borderRadius: "50%", // لجعل الزر دائري
+                  fontSize: "1.5rem", // حجم الأيقونة
+                  position: "relative",
+                }}
+              >
+                <AddCircleIcon style={{ fontSize: "2rem" }} />{" "}
+                {/* الأيقونة مع حجم مناسب */}
+              </IconButton>
+            </Grid>
+          ) : (
+            <></>
+          )}
+
           <small className={`text-danger ${showerr ? "" : "d-none"}`}>
             {" "}
             يجب عليك اكمال المطلوب{" "}
@@ -377,7 +389,12 @@ export default function WarehouseModal({ data }) {
             </Button>
           </DialogActions>
 
-          {isloading && <LinearProgress />}
+          {isloading && (
+            <>
+              <small> جار حفظ البيانات .... </small>
+              <LinearProgress />
+            </>
+          )}
         </CustomDialog>
       </div>
     </>
