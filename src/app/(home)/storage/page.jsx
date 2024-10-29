@@ -6,6 +6,7 @@ import Footer from 'components/Footer';
 import Link from "next/link";
 import { GetData } from 'app/helpers/GetData';
 import WarehouseModal from './[formsetdata]/WarehouseModal';
+import SnackM from 'components/SnackM';
 const Page = () => {
 
   const [section, setsection] = useState(null);
@@ -45,6 +46,7 @@ const Page = () => {
 
 <>
 
+< SnackM/>
     < Head actev={"storage"} level={undefined} email={undefined} name={undefined} onValueChange={undefined} powers={undefined}/>
       <div className="container-fluid text-dark py-4 mb-5" dir="rtl" style={{backgroundColor:"#b4c1cab9"}}>
         <div className="row mb-4">
