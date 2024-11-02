@@ -1,19 +1,33 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const models = mongoose.models;
+import mongoose from "mongoose";
 
-// define the Schema (the structure of the article)
-const productSchema = new Schema({
-  date:Date,
-  description:Array,
-  money:Array,
-  dateofregistration:Array,
-  user:Array,
+const invoiceSchema = new mongoose.Schema({
+  date: { type: String, required: true },
+  expense: [
+    {
+      inv: [
+        {
+          discraption: String,
+          money: Number,
+        },
+      ],
+      time: String,
+      user: String,
+    },
+  ],
+  storageinv: [
+    {
+      inv: [
+        {
+          discraption: String,
+          quatity: Number,
+          price: Number,
+        },
+      ],
+      time: String,
+      user: String,
+    },
+  ],
 });
 
-// Create a model based on that schema
-const InvoiceDataModal =
-  models.customerinvoice || mongoose.model("customerinvoice", productSchema);
-
-// export the model
-module.exports = InvoiceDataModal;
+const InvoiceDataModal = mongoose.models.InvoiceData || mongoose.model('InvoiceData', invoiceSchema);
+export default InvoiceDataModal;

@@ -63,7 +63,7 @@ const Wallet = () => {
 
   const handeladdwallet = async () => {
     setissubmit(true);
-    const wallet = await SetMoneyWallet(Number(+amount + +inpmoney));
+    const wallet = await SetMoneyWallet(inpmoney);
     if (wallet) {
       toast.success(" تم اضافة رصيد الى المحفظة ");
       setTimeout(() => {
@@ -115,14 +115,14 @@ const Wallet = () => {
           </button>
         </div>
         {/* سجل المعاملات */}
-        <div className="card shadow-sm mb-5">
+        <div className="card shadow-sm mb-5 mt-5">
           <div className="card-header">
             <h3 className="text-center">سجل المعاملات</h3>
           </div>
 
 
           {transactions.map((tran, index) => (
-            <div className="card-body transaction-list p-0" key={index}>
+            <div className="card-body transaction-list p-0 " key={index}>
               <ul className="list-group" id="transaction-list">
                 {tran.mode === "plus" ? (
                   <li

@@ -16,7 +16,7 @@ export async function PUT(request) {
 
   const result = await ItemArrModal.updateOne(
     { _id: "66d1c9f56f10c7937d54a1b0" },
-    { $set: { wallet: objFromFrontEnd.money } } 
+    { $inc: { wallet: objFromFrontEnd.money } } 
   );
 
   // 4- إعادة النتيجة إلى الواجهة الأمامية

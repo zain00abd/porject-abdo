@@ -7,46 +7,35 @@ const productSchema = new Schema({
   name: String,
   price: Number,
   quantity: Number,
-}, { _id: false });
-
-const tt = new Schema({
-  name:String,
-  quantity:Number,
-  price:Number,
-}, { _id: false });
-
-const ggt = new Schema({
-  user: String,
-  time: String,
-  invarr:[tt],
-}, { _id: false });
-
+});
 
 // Define the section schema
 const sectionSchema = new Schema({
   sectionName: String,
   products: [productSchema], // Array of products
-}, { _id: false });
+});
 
-const invSchema = new Schema({
-  date:String,
-  expenses:[ggt],
-  storageinv:[ggt]
-}, { _id: false })
+// Define the schema for expenses and storage invoices within `arrinvoice`
+const invoiceEntrySchema = new Schema({
+  date: String, // يمكن أن يكون String أو Date حسب احتياجاتك
+  expense: [Schema.Types.Mixed], // مصفوفة من البيانات العامة لنوع expense
+  storageinv: [Schema.Types.Mixed], // مصفوفة من البيانات العامة لنوع storageinv
+});
 
 // Define the main schema, with `storage` as an array of sections
 const mainSchema = new Schema({
-  arrinvoice:[invSchema],
   expen: Array,
   wallet: Number,
   transactions: Array,
   expenn: Array,
+  vv:String,
   storage: [sectionSchema], // Array of sections
+  arrinvoice: [invoiceEntrySchema], // Array of invoice entries
 });
 
 // Create a model based on that schema
-const InvoiceDataModal =
+const InvoiceDayModal =
   models.expense || mongoose.model("expense", mainSchema);
 
 // Export the model
-module.exports = InvoiceDataModal;
+module.exports = InvoiceDayModal;

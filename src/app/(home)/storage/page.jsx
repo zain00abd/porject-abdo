@@ -10,6 +10,7 @@ import SnackM from 'components/SnackM';
 const Page = () => {
 
   const [section, setsection] = useState(null);
+  const [wallet, setwallet] = useState(null);
   
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const Page = () => {
 
       const arrproduct = await GetData()
       setsection(arrproduct.storage)
+      setwallet(arrproduct.wallet)
       const sections = arrproduct.storage
       console.log(arrproduct.storage)
     }
@@ -55,7 +57,7 @@ const Page = () => {
             <button className="btn gradient-btn">
               <Link className={`nav-link text-center`} href={"/storage/formsetdata"}> انشاء منتج </Link>
             </button>
-            {section && <WarehouseModal data={section && section} />}
+            {section && <WarehouseModal data={section} wallet={wallet} />}
             
           </div>
         </div>
