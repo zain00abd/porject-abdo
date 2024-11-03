@@ -402,7 +402,7 @@ const Page = () => {
       // fetchDataAndNotify();
 
       await SetMoneyWallet(-plusmoney);
-      await SetTransaction(today, "munis", plusmoney, nameuser);
+      SetTransaction("munis", plusmoney, " مصروفات ");
       toast.success(" تمت اضافة اصناف جديدة بنجاح !!! ");
       setTimeout(() => {
         window.location.reload();

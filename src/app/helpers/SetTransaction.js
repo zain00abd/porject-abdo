@@ -1,6 +1,10 @@
 
-export async function  SetTransaction(today, mode, money, user){
-  console.log(today)
+import moment from "moment";
+
+
+
+export async function  SetTransaction(mode, money, title){
+
   const baseURL = window.location.origin;
   const response = await fetch(`${baseURL}/api/settransaction`, {
     method: `POST`,
@@ -8,10 +12,11 @@ export async function  SetTransaction(today, mode, money, user){
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      date: today,
+      date: moment().format(`D/${moment().get("month") + 1}/YYYY`),
       mode: mode,
       money: Number(money),
-      user: user,
+      title:title,
+      user: localStorage.getItem("nameuser"),
     }),
   });
 

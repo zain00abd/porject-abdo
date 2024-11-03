@@ -48,9 +48,9 @@ const Page = () => {
 
 <>
 
-< SnackM/>
+
     < Head actev={"storage"} level={undefined} email={undefined} name={undefined} onValueChange={undefined} powers={undefined}/>
-      <div className="container-fluid text-dark py-4 mb-5" dir="rtl" style={{backgroundColor:"#b4c1cab9"}}>
+      <div className="container-fluid text-dark py-4" dir="rtl" style={{backgroundColor:"#b4c1cab9", marginBottom:"75px"}}>
         <div className="row mb-4">
           <div className="col-12 d-flex justify-content-between align-items-center">
             <h2 className="text-primary">المخزن</h2>

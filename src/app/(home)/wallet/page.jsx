@@ -39,26 +39,24 @@ const Wallet = () => {
       }
       const result = await res.json();
       setAmount(result[0].wallet);
-      
-      if(result[0].transactions !== undefined){
 
-        const arrtransactions = result[0].transactions;
-        
+      if (result[0].transactions !== undefined) {
+        const arrtransactions = result[0].transactions.reverse();
+        console.log(arrtransactions)
+
         settransactions(arrtransactions);
       }
 
       // const arrt = arrtransactions.mpa((item, index) => {
-      //   
+      //
       // });
 
-      // 
-      let rrt = await GetData()
-      console.log(rrt.wallet)
+      //
+      let rrt = await GetData();
+      console.log(rrt.wallet);
     };
-    
+
     getData();
-    
-    
   }, []);
 
   const handeladdwallet = async () => {
@@ -71,7 +69,7 @@ const Wallet = () => {
       }, 2000);
     }
     // @ts-ignore
-    SetTransaction(today, "plus", inpmoney, localStorage.getItem("nameuser"));
+    SetTransaction("plus", inpmoney, " اضافة الى المحفظة ");
   };
 
   return (
@@ -115,48 +113,54 @@ const Wallet = () => {
           </button>
         </div>
         {/* سجل المعاملات */}
-        <div className="card shadow-sm mb-5 mt-5">
+        <div className="card shadow-sm mt-5" style={{ marginBottom: "70px" }}>
           <div className="card-header">
             <h3 className="text-center">سجل المعاملات</h3>
           </div>
 
-
           {transactions.map((tran, index) => (
-            <div className="card-body transaction-list p-0 " key={index}>
+            <div className="card-body transaction-list p-0" key={index}>
               <ul className="list-group" id="transaction-list">
                 {tran.mode === "plus" ? (
                   <li
                     className={`list-group-item list-group-item-action p-3 list-group-item-success`}
                   >
-                    <div className="row g-0 d-flex justify-content-between w-100">
+                    <div className="row g-0 d-flex justify-content-between w-100 m-2">
                       <p className="m-0 col-6 text-center"> {tran.date} </p>
                       <p className="m-0 col-6 text-center"> {tran.user}</p>
                     </div>
 
-                    <p
-                      className="m-0 text-center"
-                      style={{ fontWeight: "700" }}
-                    >
-                      {" "}
-                      $ {tran.money} +{" "}
-                    </p>
+                    <div className="row g-0 d-flex justify-content-between w-100 m-2">
+                      <p
+                        className="m-0 col-6 text-center"
+                        style={{ fontWeight: "700" }}
+                      >
+                        {" "}
+                        $ {tran.money} +{" "}
+                      </p>
+                      <p className="m-0 col-6 text-center"> {tran.title}</p>
+                    </div>
+
                   </li>
                 ) : (
                   <li
                     className={`list-group-item list-group-item-action p-3 list-group-item-danger`}
                   >
-                    <div className="row g-0 d-flex justify-content-between w-100">
+                    <div className="row g-0 d-flex justify-content-between w-100 m-2">
                       <p className="m-0 col-6 text-center"> {tran.date} </p>
                       <p className="m-0 col-6 text-center"> {tran.user}</p>
                     </div>
 
-                    <p
-                      className="m-0 text-center"
-                      style={{ fontWeight: "700" }}
-                    >
-                      {" "}
-                      $ {tran.money} -{" "}
-                    </p>
+                    <div className="row g-0 d-flex justify-content-between w-100 m-2">
+                      <p
+                        className="m-0 col-6 text-center"
+                        style={{ fontWeight: "700" }}
+                      >
+                        {" "}
+                        $ {tran.money} -{" "}
+                      </p>
+                      <p className="m-0 col-6 text-center"> {tran.title}</p>
+                    </div>
                   </li>
                 )}
               </ul>
@@ -270,8 +274,6 @@ const Wallet = () => {
             </div>
           </div>
         </div>
-
-        
       </div>
     </>
   );

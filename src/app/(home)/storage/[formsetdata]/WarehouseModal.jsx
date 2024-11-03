@@ -15,6 +15,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { styled } from "@mui/material/styles";
 import { SetMoneyWallet } from "app/helpers/SetMoneyWallet";
 import { SetInvoiceDay } from "app/helpers/SetInvoiceDay";
+import { toast } from "react-toastify";
+import Musseg from "components/Musseg";
+import { SetTransaction } from "app/helpers/SetTransaction";
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -45,7 +48,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 }));
 
 export default function WarehouseModal({ data, wallet }) {
-  console.log(wallet)
+  console.log(wallet);
   const [open, setOpen] = useState(false);
 
   const [newObject, setnewObject] = useState([]);
@@ -53,7 +56,7 @@ export default function WarehouseModal({ data, wallet }) {
   const [isloading, setisloading] = useState(false);
   const [showerr, setshowerr] = useState(false);
   const [totalinv, settotalinv] = useState(0);
-  
+
   const [products, setProducts] = useState([
     { name: "", quantity: "", price: "" },
   ]);
@@ -89,27 +92,26 @@ export default function WarehouseModal({ data, wallet }) {
   }, [isfocus]);
 
   const handleChange = (index, field, value) => {
-    console.log(field)
+    console.log(field);
     // console.log(newObject)
 
-    let nunbertotal = 0
+    let nunbertotal = 0;
 
-    
     let arrobj = newObject;
-    
+
     // console.log(data)
-    
+
     const updatedProducts = [...products];
     updatedProducts[index][field] = value;
     console.log(products);
     // console.log(field)
     // console.log(index)
-    products.forEach(num =>{
+    products.forEach((num) => {
       // @ts-ignore
-      nunbertotal += num.price
+      nunbertotal += num.price;
 
-      settotalinv(nunbertotal)
-    })
+      settotalinv(nunbertotal);
+    });
 
     if (typeof value === "string") {
       console.log("1112232w");
@@ -141,14 +143,10 @@ export default function WarehouseModal({ data, wallet }) {
   const filterNewObject = (obj) => {
     let cheackvalue = true;
 
-
-
     let newObjectfilter = newObject.filter(function (value, index) {
-
-      SetInvoiceDay()
+      // SetInvoiceDay()
 
       if (value !== null) {
-        cheackvalue = true;
         let cheackprice = value.products[0].price;
         console.log(cheackprice);
         let cheackquatity = value.products[0].quantity;
@@ -158,11 +156,18 @@ export default function WarehouseModal({ data, wallet }) {
           setshowerr(true);
           cheackvalue = false;
         } else {
-          setshowerr(false);
         }
-      } 
-      else {
-        setshowerr(false);
+      } else {
+        if (newObject.length > 1) {
+          cheackvalue = false;
+          const munmines = products[index].price;
+          products.splice(index, 1);
+          newObject.splice(index, 1);
+          console.log("11111112222222333333333");
+          setProducts([...products]);
+          // @ts-ignore
+          settotalinv((num) => num - munmines);
+        }
       }
     });
     return cheackvalue;
@@ -175,10 +180,9 @@ export default function WarehouseModal({ data, wallet }) {
     console.log(ischeack);
 
     if (ischeack) {
-
-
       setisloading(true);
-      
+      setshowerr(false);
+
       const baseURL = window.location.origin;
       const response = await fetch(`${baseURL}/api/updatestorage`, {
         method: `POST`,
@@ -187,29 +191,30 @@ export default function WarehouseModal({ data, wallet }) {
         },
         body: JSON.stringify(newObject),
       });
-      
+
       const dataFromBackend = await response.json();
       console.log(dataFromBackend);
 
       if (response.ok) {
         // fetchDataAndNotify();
-  
-        SetMoneyWallet(-totalinv)
-        SetInvoiceDay(products, "storageinv")
-        setisloading(false);
+
+        SetMoneyWallet(-totalinv);
+        SetInvoiceDay(products, "storageinv");
+        SetTransaction("munis", totalinv, " فاتورة مخزن ");
+        
+        toast.success(" تم اضافة الكميات الى المخزن ")
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
         console.log("error1111111");
       }
-      
-
     }
   };
 
   return (
     <>
+      <Musseg />
       <div style={{ direction: "rtl", fontFamily: "system-ui" }}>
         <Button
           style={{ fontFamily: "system-ui" }}
@@ -364,7 +369,15 @@ export default function WarehouseModal({ data, wallet }) {
             </Grid>
           </DialogContent>
 
-          <div> اجمالي السعر : {<small className={`${totalinv > wallet ? "text-danger" : ""}`}>{totalinv}</small>} </div>
+          <div>
+            {" "}
+            اجمالي السعر :{" "}
+            {
+              <small className={`${totalinv > wallet ? "text-danger" : ""}`}>
+                {totalinv}
+              </small>
+            }{" "}
+          </div>
 
           {/* زر إضافة المنتج في الأسفل */}
           {products[products.length - 1].name &&
@@ -431,6 +444,7 @@ export default function WarehouseModal({ data, wallet }) {
           )}
         </CustomDialog>
       </div>
+      
     </>
   );
 }

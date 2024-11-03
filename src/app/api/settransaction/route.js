@@ -21,6 +21,7 @@ export async function POST(request) {
           mode: objFromFrontEnd.mode,
           money: objFromFrontEnd.money,
           user: objFromFrontEnd.user,
+          title: objFromFrontEnd.title,
         },
       },
     }
