@@ -230,15 +230,18 @@ export default function WarehouseModal({ data, wallet }) {
           maxWidth="md"
           style={{ width: "110%", marginLeft: "-5%" }}
         >
-          <DialogTitle style={{ textAlign: "center", fontWeight: "bold" }}>
+          <DialogTitle style={{ textAlign: "center", fontWeight: "bold", height:"50px" }}>
             إضافة إلى المخزن
           </DialogTitle>
+          <span className="border-bottom"></span>
           <DialogContent
             style={{
               width: "105%",
               marginLeft: "-5%",
               position: "relative",
               left: "4%",
+              marginTop:"40px",
+              marginBottom:"40px"
             }}
           >
             <Grid
@@ -387,7 +390,6 @@ export default function WarehouseModal({ data, wallet }) {
             <Grid
               container
               justifyContent="center"
-              style={{ marginTop: "1rem" }}
             >
               <IconButton
                 onClick={handleAddProduct}
@@ -396,7 +398,6 @@ export default function WarehouseModal({ data, wallet }) {
                 style={{
                   backgroundColor: "#fbb040", // لون زر أنيق
                   color: "black", // لون الأيقونة
-                  padding: "10px", // حشوة صغيرة لتقليل حجم الزر
                   borderRadius: "50%", // لجعل الزر دائري
                   fontSize: "1.5rem", // حجم الأيقونة
                   position: "relative",
@@ -414,6 +415,7 @@ export default function WarehouseModal({ data, wallet }) {
             {" "}
             يجب عليك اكمال المطلوب{" "}
           </small>
+          <span className="border-bottom"></span>
 
           <DialogActions
             style={{ justifyContent: "space-between", padding: "16px" }}
