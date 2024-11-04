@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   LinearProgress,
+  ButtonGroup,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { styled } from "@mui/material/styles";
@@ -201,8 +202,8 @@ export default function WarehouseModal({ data, wallet }) {
         SetMoneyWallet(-totalinv);
         SetInvoiceDay(products, "storageinv");
         SetTransaction("munis", totalinv, " فاتورة مخزن ");
-        
-        toast.success(" تم اضافة الكميات الى المخزن ")
+
+        toast.success(" تم اضافة الكميات الى المخزن ");
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -216,21 +217,23 @@ export default function WarehouseModal({ data, wallet }) {
     <>
       <Musseg />
       <div style={{ direction: "rtl", fontFamily: "system-ui" }}>
-        <Button
-          style={{ fontFamily: "system-ui" }}
+        <ButtonGroup
+          disableElevation
           variant="contained"
-          color="primary"
-          onClick={handleClickOpen}
+          aria-label="Disabled button group"
         >
-          اضافة كميات
-        </Button>
+          <Button>Two</Button>
+          <Button>One</Button>
+        </ButtonGroup>
         <CustomDialog
           open={open}
           onClose={handleClose}
           maxWidth="md"
           style={{ width: "110%", marginLeft: "-5%" }}
         >
-          <DialogTitle style={{ textAlign: "center", fontWeight: "bold", height:"50px" }}>
+          <DialogTitle
+            style={{ textAlign: "center", fontWeight: "bold", height: "50px" }}
+          >
             إضافة إلى المخزن
           </DialogTitle>
           <span className="border-bottom"></span>
@@ -240,8 +243,8 @@ export default function WarehouseModal({ data, wallet }) {
               marginLeft: "-5%",
               position: "relative",
               left: "4%",
-              marginTop:"40px",
-              marginBottom:"40px"
+              marginTop: "40px",
+              marginBottom: "40px",
             }}
           >
             <Grid
@@ -387,10 +390,7 @@ export default function WarehouseModal({ data, wallet }) {
           products[products.length - 1].price &&
           products[products.length - 1].quantity &&
           newObject[newObject.length - 1] !== null ? (
-            <Grid
-              container
-              justifyContent="center"
-            >
+            <Grid container justifyContent="center">
               <IconButton
                 onClick={handleAddProduct}
                 // @ts-ignore
@@ -446,7 +446,6 @@ export default function WarehouseModal({ data, wallet }) {
           )}
         </CustomDialog>
       </div>
-      
     </>
   );
 }

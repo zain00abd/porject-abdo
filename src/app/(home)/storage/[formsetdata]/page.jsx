@@ -11,7 +11,13 @@ import {
   Container,
   Paper,
   IconButton,
+  SvgIcon,
 } from "@mui/material";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+import Stack from "@mui/material/Stack";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
@@ -23,6 +29,9 @@ import { useState, useEffect } from "react";
 import Footer from "components/Footer";
 import "../stylehandel.css";
 import { GetData } from "app/helpers/GetData";
+import Musseg from "components/Musseg";
+import { toast } from "react-toastify";
+
 
 // إنشاء Cache لدعم RTL
 const cacheRtl = createCache({
@@ -60,7 +69,8 @@ export default function ProductForm() {
   const [quantity, setQuantity] = useState("");
   const [arrdata, setarrdata] = useState(null);
   const [valueinpproduct, setvalueinpproduct] = useState(null);
-
+  const [loading, setloading] = useState(false);
+  
   const [louk, setlouk] = useState(false);
 
   const [selectarr, setselectarr] = useState(null);
@@ -82,11 +92,13 @@ export default function ProductForm() {
     };
 
     getdata();
-  }, []);
+  }, [category, loading]);
 
   // const selectarr = [" خيط "," قماش "," خشب "," مطاط ",]
 
   const handleSave = async () => {
+
+    setloading(true)
     // منطق الحفظ هنا
     const selectedCategory = showNewCategoryField ? newCategory : category;
     console.log({ selectedCategory, productName, price, quantity });
@@ -107,6 +119,13 @@ export default function ProductForm() {
       }),
     });
 
+    if (response.ok) {
+      await GetData();
+    setloading(false)
+    toast.success(" تم اضافة منتج جديد ")
+    handleCancel()
+    }
+
     // const dataFromBackend = await response.json();
   };
 
@@ -118,11 +137,12 @@ export default function ProductForm() {
     setPrice("");
     setQuantity("");
     setShowNewCategoryField(false);
-    setlouk(false)
+    setlouk(false);
+    cheackExistProduct("","")
   };
 
   const handleAddNewCategory = () => {
-    setlouk(false)
+    setlouk(false);
     setShowNewCategoryField(true); // عرض حقل القسم الجديد عند الضغط على الزر
     setCategory(""); // إزالة القسم المختار إذا كان موجودًا
   };
@@ -138,37 +158,46 @@ export default function ProductForm() {
 
   const cheackExistProduct = (value, categorycheack) => {
     console.log("Checking product:", value);
-  
+
     // حفظ قيمة المنتج في المتغير
     setvalueinpproduct(value);
-  
+
     // التحقق من وجود المنتج في البيانات
     const productFound = arrdata.some((item, index) => {
       // اختيار الفئة بناءً على المدخلات
-      let selectedCategory = categorycheack 
-        ? categorycheack 
-        : showNewCategoryField 
-        ? newCategory 
+      let selectedCategory = categorycheack
+        ? categorycheack
+        : showNewCategoryField
+        ? newCategory
         : category;
-  
+
       // عرض معلومات الفئة والعنصر في الكونسول لمزيد من التحقق
-      console.log(`Item ${index}: sectionName = "${item.sectionName}", selectedCategory = "${selectedCategory}"`);
-  
+      console.log(
+        `Item ${index}: sectionName = "${item.sectionName}", selectedCategory = "${selectedCategory}"`
+      );
+
       // مقارنة الفئات بعد تنسيقها للتأكد من عدم وجود مسافات أو فروق في حالة الأحرف
-      if (selectedCategory.trim().toLowerCase() === item.sectionName.trim().toLowerCase()) {
+      if (
+        selectedCategory.trim().toLowerCase() ===
+        item.sectionName.trim().toLowerCase()
+      ) {
         console.log(`Matching category found: ${selectedCategory}`);
-  
+
         // التحقق من وجود المنتج في القسم
         const productExists = item.products.some((arrname) => {
-          console.log(`Checking product name: "${arrname.name}" against "${value}"`);
-          
+          console.log(
+            `Checking product name: "${arrname.name}" against "${value}"`
+          );
+
           // تحقق من أن value و arrname.name غير undefined قبل استخدام trim و toLowerCase
           if (value && arrname.name) {
-            return value.trim().toLowerCase() === arrname.name.trim().toLowerCase();
+            return (
+              value.trim().toLowerCase() === arrname.name.trim().toLowerCase()
+            );
           }
           return false; // إذا كانت أي قيمة غير صالحة، لا تتطابق
         });
-  
+
         // إذا تم العثور على المنتج، قم بتعيين القيم المناسبة
         if (productExists) {
           console.log("Already exist product");
@@ -178,22 +207,22 @@ export default function ProductForm() {
           console.log("Product not found in this category");
         }
       }
-  
+
       return false; // الاستمرار في التكرار إذا لم يكن المنتج موجود
     });
-  
+
     // إذا لم يتم العثور على المنتج في أي من الفئات، قم بتعيين القيمة المناسبة
     if (!productFound) {
       setlouk(false);
       console.log("No exist product in any category");
     }
   };
-  
-  
-  
 
   return (
     <>
+
+<Musseg />
+
       <Head />
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={darkTheme}>
@@ -239,7 +268,9 @@ export default function ProductForm() {
                       fullWidth
                       value={newCategory}
                       onChange={(e) => setNewCategory(e.target.value)}
-                      onKeyUp={(e) => cheackExistProduct(valueinpproduct, e.target.value)}
+                      onKeyUp={(e) =>
+                        cheackExistProduct(valueinpproduct, e.target.value)
+                      }
                     />
                   </Grid>
                 )}
@@ -287,16 +318,40 @@ export default function ProductForm() {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={handleSave}
-                    // @ts-ignore
-                    disabled={louk || (!category && !newCategory || (!price || !productName || !quantity))}
-                  >
-                    حفظ
-                  </Button>
+                  {loading ? (
+                    <>
+                      {" "}
+                      <LoadingButton
+                        style={{ width: "100%" }}
+                        loading
+                        loadingPosition="start"
+                        startIcon={<SaveIcon />}
+                        variant="outlined"
+                      >
+                        جار الحفظ...
+                      </LoadingButton>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={handleSave}
+                        // @ts-ignore
+                        disabled={
+                          louk ||
+                          (!category && !newCategory) ||
+                          !price ||
+                          !productName ||
+                          !quantity
+                        }
+                      >
+                        حفظ
+                      </Button>
+                    </>
+                  )}
                 </Grid>
 
                 <Grid item xs={6}>
