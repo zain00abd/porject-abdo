@@ -52,7 +52,7 @@ export default function WarehouseModal({ data, wallet }) {
   console.log(wallet);
   const [open, setOpen] = useState(false);
 
-  const [newObject, setnewObject] = useState([]);
+  const [newObject, setnewObject] = useState([null]);
   const [isfocus, setisfocus] = useState(false);
   const [isloading, setisloading] = useState(false);
   const [showerr, setshowerr] = useState(false);
@@ -75,6 +75,7 @@ export default function WarehouseModal({ data, wallet }) {
 
   const handleAddProduct = () => {
     setProducts([...products, { name: "", quantity: "", price: "" }]);
+    setnewObject([...newObject, null]);
     setshowerr(false);
     setisfocus(!isfocus);
   };
@@ -209,6 +210,10 @@ export default function WarehouseModal({ data, wallet }) {
         }, 2000);
       } else {
         console.log("error1111111");
+        toast.error(" حدث خطا!! اعادة المحاولة ");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     }
   };
@@ -217,14 +222,14 @@ export default function WarehouseModal({ data, wallet }) {
     <>
       <Musseg />
       <div style={{ direction: "rtl", fontFamily: "system-ui" }}>
-        <ButtonGroup
-          disableElevation
+      <Button
+          style={{ fontFamily: "system-ui" }}
           variant="contained"
-          aria-label="Disabled button group"
+          color="primary"
+          onClick={handleClickOpen}
         >
-          <Button>Two</Button>
-          <Button>One</Button>
-        </ButtonGroup>
+          اضافة كميات
+        </Button>
         <CustomDialog
           open={open}
           onClose={handleClose}
@@ -243,8 +248,8 @@ export default function WarehouseModal({ data, wallet }) {
               marginLeft: "-5%",
               position: "relative",
               left: "4%",
-              marginTop: "40px",
-              marginBottom: "40px",
+              paddingTop: "70px",
+              paddingBottom: "70px",
             }}
           >
             <Grid
@@ -418,7 +423,7 @@ export default function WarehouseModal({ data, wallet }) {
           <span className="border-bottom"></span>
 
           <DialogActions
-            style={{ justifyContent: "space-between", padding: "16px" }}
+            style={{ justifyContent: "space-between" }}
           >
             <Button
               onClick={handleClose}
