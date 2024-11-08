@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+
 import {
   Button,
   TextField,
@@ -11,7 +12,12 @@ import {
   IconButton,
   LinearProgress,
   ButtonGroup,
+  MenuItem,
+  Menu,
 } from "@mui/material";
+
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { styled } from "@mui/material/styles";
 import { SetMoneyWallet } from "app/helpers/SetMoneyWallet";
@@ -38,6 +44,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
     borderRadius: "4px",
     textAlign: "center",
   },
+
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "#555555",
@@ -51,13 +58,17 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 export default function WarehouseModal({ data, wallet }) {
   console.log(wallet);
   const [open, setOpen] = useState(false);
-
+  
   const [newObject, setnewObject] = useState([null]);
   const [isfocus, setisfocus] = useState(false);
   const [isloading, setisloading] = useState(false);
   const [showerr, setshowerr] = useState(false);
   const [totalinv, settotalinv] = useState(0);
+  const [inpmin, setinpmin] = useState(false);
 
+
+
+  
   const [products, setProducts] = useState([
     { name: "", quantity: "", price: "" },
   ]);
@@ -70,7 +81,20 @@ export default function WarehouseModal({ data, wallet }) {
     }
   }, [open]);
 
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = (id) => {
+    if (id === "min") {
+      setinpmin(true);
+    } else {
+      setinpmin(false);
+    }
+
+
+      setProducts([{ name: "", quantity: "", price: "" }])
+      setnewObject([null])
+
+    console.log(id);
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   const handleAddProduct = () => {
@@ -106,7 +130,27 @@ export default function WarehouseModal({ data, wallet }) {
     const updatedProducts = [...products];
     updatedProducts[index][field] = value;
     console.log(products);
-    // console.log(field)
+
+    if (field == "quantity" && inpmin) {
+      let price = newObject[index].priceitem;
+      console.log(price);
+      let quantity = newObject[index].quantityitem;
+      console.log(quantity);
+
+      let total = value;
+
+      // حساب النسبة المئوية
+      let percentage = total / quantity;
+
+      // حساب السعر بناءً على النسبة
+      let calculatedPrice = Math.round(price * percentage);
+
+      // @ts-ignore
+      updatedProducts[index].price = calculatedPrice;
+
+      console.log("السعر بناءً على الكمية المسحوبة:", calculatedPrice);
+    }
+    console.log(field);
     // console.log(index)
     products.forEach((num) => {
       // @ts-ignore
@@ -123,8 +167,15 @@ export default function WarehouseModal({ data, wallet }) {
       );
 
       if (section !== undefined) {
+        const product = section.products.find(
+          (product) => product.name === value
+        );
+        console.log(product.price);
+
         let obj = {
           sectionName: section.sectionName,
+          priceitem: product.price,
+          quantityitem: product.quantity,
           products: [updatedProducts[index]],
         };
 
@@ -200,17 +251,28 @@ export default function WarehouseModal({ data, wallet }) {
       if (response.ok) {
         // fetchDataAndNotify();
 
-        SetMoneyWallet(-totalinv);
-        SetInvoiceDay(products, "storageinv");
-        SetTransaction("munis", totalinv, " فاتورة مخزن ");
+        if(inpmin){
+          SetInvoiceDay(products, "storageminus");
 
-        toast.success(" تم اضافة الكميات الى المخزن ");
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+          toast.warning(" تم سحب الكميات من المخزن بنجاح ");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+        else{
+
+          SetMoneyWallet(-totalinv);
+          SetInvoiceDay(products, "storageinv");
+          SetTransaction("munis", totalinv, " فاتورة مخزن ");
+  
+          toast.success(" تم اضافة الكميات الى المخزن ");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
       } else {
         console.log("error1111111");
-        toast.error(" حدث خطا!! اعادة المحاولة ");
+        toast.error(" حدث خطا!! يرجى اعادة المحاولة ");
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -222,14 +284,59 @@ export default function WarehouseModal({ data, wallet }) {
     <>
       <Musseg />
       <div style={{ direction: "rtl", fontFamily: "system-ui" }}>
-      <Button
+        {/* <Button
           style={{ fontFamily: "system-ui" }}
           variant="contained"
           color="primary"
           onClick={handleClickOpen}
         >
           اضافة كميات
-        </Button>
+        </Button> */}
+
+        <PopupState variant="popover" popupId="demo-popup-menu">
+          {(popupState) => (
+            <React.Fragment>
+              <Button
+                variant="contained"
+                {...bindTrigger(popupState)}
+                style={{ fontFamily: "system-ui" }}
+              >
+                اجراء عملية
+              </Button>
+              <Menu {...bindMenu(popupState)}>
+                <MenuItem
+                  id="add"
+                  onClick={(e) => {
+                    handleClickOpen(e.target.id);
+                  }}
+                  style={{
+                    fontFamily: "system-ui",
+                    backgroundColor: "green",
+                    fontWeight: "600",
+                  }}
+                >
+                  {" "}
+                  اضافة الى المخزن{" "}
+                </MenuItem>
+                <MenuItem
+                  id="min"
+                  onClick={(e) => {
+                    handleClickOpen(e.target.id);
+                  }}
+                  style={{
+                    fontFamily: "system-ui",
+                    backgroundColor: "gold",
+                    fontWeight: "600",
+                  }}
+                >
+                  {" "}
+                  سحب من المخزن{" "}
+                </MenuItem>
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
+
         <CustomDialog
           open={open}
           onClose={handleClose}
@@ -239,7 +346,11 @@ export default function WarehouseModal({ data, wallet }) {
           <DialogTitle
             style={{ textAlign: "center", fontWeight: "bold", height: "50px" }}
           >
-            إضافة إلى المخزن
+            {inpmin ? (
+              <h4 className="text-warning"> سحب من المخزن --</h4>
+            ) : (
+              <h4 className="text-success"> إضافة إلى المخزن++ </h4>
+            )}
           </DialogTitle>
           <span className="border-bottom"></span>
           <DialogContent
@@ -285,7 +396,7 @@ export default function WarehouseModal({ data, wallet }) {
                 xs={3}
                 style={{ textAlign: "center", fontWeight: "bold" }}
               >
-                السعر
+                {inpmin ? <> سعر ≈ </> : <> السعر </>}
               </Grid>
 
               {/* الحقول الديناميكية لإدخال البيانات */}
@@ -326,10 +437,10 @@ export default function WarehouseModal({ data, wallet }) {
                       fullWidth
                       variant="outlined"
                       type="tel"
-                      value={product.quantity}
+                      value={Math.abs(product.quantity)}
                       disabled={!newObject[index]}
                       onChange={(e) =>
-                        handleChange(index, "quantity", Number(e.target.value))
+                        handleChange(index, "quantity", Number(inpmin ? -e.target.value : e.target.value))
                       }
                       placeholder="الكمية"
                       autoComplete="off" // تعطيل الاقتراحات
@@ -350,13 +461,14 @@ export default function WarehouseModal({ data, wallet }) {
                   </Grid>
                   <Grid item xs={3}>
                     <CustomTextField
+                    
                       fullWidth
                       variant="outlined"
                       type="tel"
-                      value={product.price}
-                      disabled={!newObject[index]}
+                      value={Math.abs(product.price)}
+                      disabled={!newObject[index] || inpmin}
                       onChange={(e) =>
-                        handleChange(index, "price", Number(e.target.value))
+                        handleChange(index, "price", Number(inpmin ? -e.target.value : e.target.value))
                       }
                       placeholder="السعر"
                       autoComplete="off" // تعطيل الاقتراحات
@@ -380,7 +492,7 @@ export default function WarehouseModal({ data, wallet }) {
             </Grid>
           </DialogContent>
 
-          <div>
+{   inpmin ?<></> :       <div>
             {" "}
             اجمالي السعر :{" "}
             {
@@ -388,7 +500,7 @@ export default function WarehouseModal({ data, wallet }) {
                 {totalinv}
               </small>
             }{" "}
-          </div>
+          </div>}
 
           {/* زر إضافة المنتج في الأسفل */}
           {products[products.length - 1].name &&
@@ -422,9 +534,7 @@ export default function WarehouseModal({ data, wallet }) {
           </small>
           <span className="border-bottom"></span>
 
-          <DialogActions
-            style={{ justifyContent: "space-between" }}
-          >
+          <DialogActions style={{ justifyContent: "space-between" }}>
             <Button
               onClick={handleClose}
               variant="contained"

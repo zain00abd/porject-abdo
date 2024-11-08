@@ -31,7 +31,8 @@ const sectionSchema = new Schema({
 const invSchema = new Schema({
   date:String,
   expenses:[ggt],
-  storageinv:[ggt]
+  storageinv:[ggt],
+  storageminus:[ggt],
 }, { _id: false })
 
 // Define the main schema, with `storage` as an array of sections

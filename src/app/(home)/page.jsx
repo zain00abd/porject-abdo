@@ -275,19 +275,32 @@ const Page = () => {
     );
   };
 
-  const daleteitem = (item) => {
-    let ItemIndex = item.parentElement.parentElement.id;
+  const daleteitem = (item, Iitem) => {
+    console.log(Iitem)
 
-    if (
-      item.parentElement.parentElement.className ===
-      "row g-0 justify-content-evenly"
-    ) {
-      addarritem(null, `dis_${ItemIndex}`);
-      addarritem(null, `mon_${ItemIndex}`);
 
-      item.parentElement.parentElement.remove();
-      setpackitem((num) => num - 2);
-    }
+    let inpprice =  product.splice(Iitem, 1)
+    console.log(inpprice)
+    console.log(product)
+
+    setproduct([...product])
+    setplusmoney((num) =>num - inpprice[0].price)
+
+    cheackarrisnull();
+      // item.parentElement.parentElement.remove();
+    // let ItemIndex = item.parentElement.parentElement.id;
+    
+    // if (
+    //   item.parentElement.parentElement.className ===
+    //   "row g-0 justify-content-evenly"
+    // ) {
+    //   // console.log(item)
+    //   addarritem(null, `dis_${ItemIndex}`);
+    //   addarritem(null, `mon_${ItemIndex}`);
+    //   console.log(ItemIndex)
+
+    //   setpackitem((num) => num - 2);
+    // }
   };
 
   const handleAddProduct = () => {
@@ -300,6 +313,7 @@ const Page = () => {
     updatedProducts[index][field] = value;
     console.log(product);
 
+    setproduct([...product])
     cheackarrisnull();
   };
 
@@ -458,7 +472,7 @@ const Page = () => {
                       </small>
                       <li
                         className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border-primary rounded-top"
-                        style={{ padding: "10px 0px", fontWeight: "600" }}
+                        style={{ padding: "10px 0px", fontWeight: "600"}}
                       >
                         <div style={{ width: "50%", textAlign: "center" }}>
                           اخراج والوقت
@@ -660,7 +674,7 @@ const Page = () => {
                     <li className=" d-flex justify-content-between align-items-center border-secondary-subtle">
                       <div style={{ width: "35%", textAlign: "center" }}>
                       اجمالي الكلي{" "} 
-                        <small className="text-danger bg-secondary pe-2 ps-2 fw-semibold" style={{letterSpacing:"1.2px"}}>
+                        <small className=" pe-2 ps-2 fw-semibold " style={{letterSpacing:"1.2px", backgroundColor:"#9191919f", color:"#cf2d5e"}}>
                           {inv.combinedTotal} 
                         </small>
                       </div>
@@ -670,6 +684,7 @@ const Page = () => {
                       </div>
                     </li>
                   </div>
+
                 </div>
               </div>
             ))}
@@ -741,7 +756,7 @@ const Page = () => {
                       <button
                         className="col-1"
                         onClick={(e) => {
-                          daleteitem(e.target);
+                          daleteitem(e.target ,index);
                         }}
                       >
                         <i
@@ -759,6 +774,7 @@ const Page = () => {
                     )}
 
                     <input
+                    value={item.price}
                       required
                       className="col-3"
                       type="tel"
@@ -783,6 +799,7 @@ const Page = () => {
                     ></i>
 
                     <input
+                    value={item.name}
                       className="col-6"
                       type="text"
                       maxLength={19}

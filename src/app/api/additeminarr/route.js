@@ -37,6 +37,7 @@ export async function POST(request) {
             date: date,
             expenses: type === "expenses" ? data : [],
             storageinv: type === "storageinv" ? data : [],
+            storageminus: type === "storageminus" ? data : [],
             
           },
         },

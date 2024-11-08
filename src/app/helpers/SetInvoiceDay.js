@@ -1,6 +1,6 @@
 
 import moment from "moment";
-
+import "moment/locale/ar-ly";
 
 export async function  SetInvoiceDay(arrinvoice, mode){
 
