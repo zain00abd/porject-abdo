@@ -433,9 +433,9 @@ const Page = () => {
         powers={powers}
       />
 
-      <div className="container">
+      <div className="container p-0 mt-4">
         <ul
-          className="list-group mt-5 opacity-100 bg-body-tertiary rounded"
+          className="list-group opacity-100 bg-body-tertiary rounded"
           style={{ padding: 0, marginBottom: "150px" }}
         >
           {lastinvoice &&
@@ -446,7 +446,7 @@ const Page = () => {
                 style={{ margin: "0px", backgroundColor: "#b4c1cab9" }}
               >
                 <div
-                  className=" m-3 p-2 rounded-4"
+                  className=" m-2 p-1 rounded-4"
                   style={{ backgroundColor: "#6b6b6b48" }}
                 >
                   {/* عرض بيانات storageinv */}
