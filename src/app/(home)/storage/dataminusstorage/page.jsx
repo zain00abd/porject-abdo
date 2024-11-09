@@ -90,20 +90,19 @@ const Page = () => {
       const res = await fetch(`https://nextback-seven.vercel.app/abdodata`);
       const result = await res.json();
       const arrdata = result[0].arrinvoice;
-      console.log(arrdata)
+      console.log(arrdata);
 
       arrdata.forEach((item) => {
         let expensePrice = 0;
         let storagePrice = 0;
-        let totalPages1 = 0
-        let totalPages2 = 0
+        let totalPages1 = 0;
+        let totalPages2 = 0;
 
-        item.expenses.forEach((exp) => {
+        item.storageminus.forEach((exp) => {
           exp.invarr.forEach((price, Iprice) => {
             expensePrice += price.price;
-            
           });
-          totalPages1 += exp.invarr.length
+          totalPages1 += exp.invarr.length;
         });
 
         item.storageinv.forEach((inv) => {
@@ -111,11 +110,11 @@ const Page = () => {
           inv.invarr.forEach((price, Iprice) => {
             storagePrice += price.price;
           });
-          totalPages2 += inv.invarr.length
+          totalPages2 += inv.invarr.length;
         });
 
-        item.Pagesex = totalPages1
-        item.Pagesst = totalPages2
+        item.Pagesex = totalPages1;
+        item.Pagesst = totalPages2;
         item.expenseprice = expensePrice;
         item.storageprice = storagePrice;
         item.combinedTotal = expensePrice + storagePrice; // Add this line for combined total
@@ -276,20 +275,19 @@ const Page = () => {
   };
 
   const daleteitem = (item, Iitem) => {
-    console.log(Iitem)
+    console.log(Iitem);
 
+    let inpprice = product.splice(Iitem, 1);
+    console.log(inpprice);
+    console.log(product);
 
-    let inpprice =  product.splice(Iitem, 1)
-    console.log(inpprice)
-    console.log(product)
-
-    setproduct([...product])
-    setplusmoney((num) =>num - inpprice[0].price)
+    setproduct([...product]);
+    setplusmoney((num) => num - inpprice[0].price);
 
     cheackarrisnull();
-      // item.parentElement.parentElement.remove();
+    // item.parentElement.parentElement.remove();
     // let ItemIndex = item.parentElement.parentElement.id;
-    
+
     // if (
     //   item.parentElement.parentElement.className ===
     //   "row g-0 justify-content-evenly"
@@ -313,7 +311,7 @@ const Page = () => {
     updatedProducts[index][field] = value;
     console.log(product);
 
-    setproduct([...product])
+    setproduct([...product]);
     cheackarrisnull();
   };
 
@@ -439,13 +437,7 @@ const Page = () => {
   return (
     <>
       <Musseg />
-      <Head
-        actev={"adduser"}
-        level={level}
-        email={email}
-        name={nameuser}
-        powers={powers}
-      />
+      <Head />
 
       <div className="container p-0 mt-4">
         <ul
@@ -456,236 +448,113 @@ const Page = () => {
             lastinvoice.map((inv, index) => (
               <div
                 key={index}
-                className=" "
+                className="ps-2 pe-2 "
                 style={{ margin: "0px", backgroundColor: "#b4c1cab9" }}
               >
-                <div
-                  className=" m-2 p-1 rounded-4"
-                  style={{ backgroundColor: "#6b6b6b48" }}
-                >
-                  {/* عرض بيانات storageinv */}
-                  {inv.storageinv?.length > 0 && (
-                    <div className="mt-3 rounded-3">
-                      <small className="bg-warning text-center">
-                        {" "}
-                        فاتورة مخزن{" "}
-                      </small>
-                      <li
-                        className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border-primary rounded-top"
-                        style={{ padding: "10px 0px", fontWeight: "600"}}
-                      >
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          اخراج والوقت
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "28%", textAlign: "center" }}>
-                          المبلغ
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "28%", textAlign: "center" }}>
-                          الكمية
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "43.3%", textAlign: "center" }}>
-                          الوصف
-                        </div>
-                      </li>
+                {inv.storageminus?.length > 0 && (
+                  <div className="mt-3 rounded-3">
 
-                      {inv.storageinv.map((item, itemIndex) => (
-                        <div key={itemIndex} style={{ position: "relative" }}>
-                          {item.invarr.map((product, productIndex) => (
-                            <li
-                              key={productIndex}
-                              className="list-group-item d-flex justify-content-between align-items-center list-group-item-warning"
-                              style={{
-                                width: "66.7%",
-                                left: "33.3%",
-                                padding: "7px 0px",
-                              }}
-                            >
-                              <div
-                                style={{ width: "65%", textAlign: "center" }}
-                              >
-                                {product.price}
-                              </div>
-                              <div className="vr" />
-                              <div
-                                style={{ width: "65%", textAlign: "center" }}
-                              >
-                                {product.quantity}
-                              </div>
-                              <div className="vr" />
-                              <div
-                                className="dropend"
-                                style={{ width: "100%", textAlign: "center" }}
-                              >
-                                {product.name}
-                                <div
-                                  className="dropdown-menu"
-                                  style={{
-                                    width: "1%",
-                                    background: "none",
-                                    border: "none",
-                                  }}
-                                >
-                                  <p
-                                    style={{
-                                      backgroundColor: "rgb(68, 0, 0)",
-                                      width: "auto",
-                                      marginRight: 100,
-                                      textAlign: "center",
-                                      color: "#ffffff",
-                                      borderRadius: 18,
-                                    }}
-                                  >
-                                    {item.user}
-                                  </p>
-                                </div>
-                              </div>
-                            </li>
-                          ))}
-                          <div
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border-primary rounded-top"
+                      style={{ padding: "10px 0px", fontWeight: "600" }}
+                    >
+                      <div style={{ width: "50%", textAlign: "center" }}>
+                        اخراج والوقت
+                      </div>
+                      <div className="vr" />
+                      <div style={{ width: "28%", textAlign: "center" }}>
+                        المبلغ
+                      </div>
+                      <div className="vr" />
+                      <div style={{ width: "28%", textAlign: "center" }}>
+                        الكمية
+                      </div>
+                      <div className="vr" />
+                      <div style={{ width: "43.3%", textAlign: "center" }}>
+                        الوصف
+                      </div>
+                    </li>
+
+                    {inv.storageminus.map((item, itemIndex) => (
+                      <div key={itemIndex} style={{ position: "relative" }}>
+                        {item.invarr.map((product, productIndex) => (
+                          <li
+                            key={productIndex}
+                            className="list-group-item d-flex justify-content-between align-items-center list-group-item-warning"
                             style={{
-                              backgroundColor: "#fff3cd",
-                              border: "0.5px solid #fbe08c",
+                              width: "66.7%",
+                              left: "33.3%",
+                              padding: "7px 0px",
                             }}
-                            className="div-time"
                           >
-                            {item.user}
-                            <br />
-                            {item.time}
-                          </div>
-                        </div>
-                      ))}
-
-                      <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1">
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          الاجمالي:{" "}
-                          <small className="text-danger">
-                            {inv.storageprice}
-                          </small>
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          عدد الاصناف: {" "}
-                          <small className="text-success">
-                          {inv.Pagesst}
-                          </small>
-                        </div>
-                      </li>
-                    </div>
-                  )}
-
-                  {/* عرض بيانات expenses */}
-                  {inv.expenses?.length > 0 && (
-                    <div className="mt-3 rounded-3">
-                      <small className="bg-primary text-white"> مصروفات </small>
-                      <li
-                        className="list-group-item d-flex justify-content-between align-items-center list-group-item-primary border border-1 border-primary rounded-top"
-                        style={{ padding: "10px 0px", fontWeight: "600" }}
-                      >
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          اخراج والوقت
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          المبلغ
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          الوصف
-                        </div>
-                      </li>
-
-                      {inv.expenses.map((item, itemIndex) => (
-                        <div key={itemIndex} style={{ position: "relative" }}>
-                          {item.invarr.map((expense, expenseIndex) => (
-                            <li
-                              key={expenseIndex}
-                              className="list-group-item d-flex justify-content-between align-items-center list-group-item-danger"
-                              style={{
-                                width: "66.7%",
-                                left: "33.3%",
-                                padding: "7px 0px",
-                              }}
+                            <div style={{ width: "65%", textAlign: "center" }}>
+                              {product.price}
+                            </div>
+                            <div className="vr" />
+                            <div style={{ width: "65%", textAlign: "center" }}>
+                              {product.quantity}
+                            </div>
+                            <div className="vr" />
+                            <div
+                              className="dropend"
+                              style={{ width: "100%", textAlign: "center" }}
                             >
+                              {product.name}
                               <div
-                                style={{ width: "100%", textAlign: "center" }}
+                                className="dropdown-menu"
+                                style={{
+                                  width: "1%",
+                                  background: "none",
+                                  border: "none",
+                                }}
                               >
-                                {expense.price}
-                              </div>
-                              <div className="vr" />
-                              <div
-                                className="dropend"
-                                style={{ width: "100%", textAlign: "center" }}
-                              >
-                                {expense.name}
-                                <div
-                                  className="dropdown-menu"
+                                <p
                                   style={{
-                                    width: "1%",
-                                    background: "none",
-                                    border: "none",
+                                    backgroundColor: "rgb(68, 0, 0)",
+                                    width: "auto",
+                                    marginRight: 100,
+                                    textAlign: "center",
+                                    color: "#ffffff",
+                                    borderRadius: 18,
                                   }}
                                 >
-                                  <p
-                                    style={{
-                                      backgroundColor: "rgb(68, 0, 0)",
-                                      width: "auto",
-                                      marginRight: 100,
-                                      textAlign: "center",
-                                      color: "#ffffff",
-                                      borderRadius: 18,
-                                    }}
-                                  >
-                                    {item.user}
-                                  </p>
-                                </div>
+                                  {item.user}
+                                </p>
                               </div>
-                            </li>
-                          ))}
-                          <div className="div-time">
-                            {item.user}
-                            <br />
-                            {item.time}
-                          </div>
+                            </div>
+                          </li>
+                        ))}
+                        <div
+                          style={{
+                            backgroundColor: "#fff3cd",
+                            border: "0.5px solid #fbe08c",
+                          }}
+                          className="div-time"
+                        >
+                          {item.user}
+                          <br />
+                          {item.time}
                         </div>
-                      ))}
+                      </div>
+                    ))}
 
-                      <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1">
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          الاجمالي:{" "}
-                          <small className="text-danger">
-                            {inv.expenseprice}
-                          </small>
-                        </div>
-                        <div className="vr" />
-                        <div style={{ width: "50%", textAlign: "center" }}>
-                          عدد الاصناف: {" "}
-                          <small className="text-success">
-                          {inv.Pagesex}
-                          </small>
-                        </div>
-                      </li>
-                    </div>
-                  )}
-
-                  <div className="mt-3 " style={{backgroundColor:"#61616100"}}>
-                    <li className=" d-flex justify-content-between align-items-center border-secondary-subtle">
-                      <div style={{ width: "35%", textAlign: "center" }}>
-                      اجمالي الكلي{" "} 
-                        <small className=" pe-2 ps-2 fw-semibold " style={{letterSpacing:"1.2px", backgroundColor:"#9191919f", color:"#cf2d5e"}}>
-                          {inv.combinedTotal} 
+                    <li className="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary border border-1">
+                      <div style={{ width: "50%", textAlign: "center" }}>
+                        الاجمالي:{" "}
+                        <small className="text-danger">
+                          {inv.expenseprice}
                         </small>
                       </div>
                       <div className="vr" />
                       <div style={{ width: "50%", textAlign: "center" }}>
-                        {inv.date}
+                        
+                        <small className="text-success">{inv.date}</small>
                       </div>
                     </li>
                   </div>
+                )}
 
-                </div>
+                {/* عرض بيانات expenses */}
               </div>
             ))}
         </ul>
@@ -756,7 +625,7 @@ const Page = () => {
                       <button
                         className="col-1"
                         onClick={(e) => {
-                          daleteitem(e.target ,index);
+                          daleteitem(e.target, index);
                         }}
                       >
                         <i
@@ -774,7 +643,7 @@ const Page = () => {
                     )}
 
                     <input
-                    value={item.price}
+                      value={item.price}
                       required
                       className="col-3"
                       type="tel"
@@ -799,7 +668,7 @@ const Page = () => {
                     ></i>
 
                     <input
-                    value={item.name}
+                      value={item.name}
                       className="col-6"
                       type="text"
                       maxLength={19}

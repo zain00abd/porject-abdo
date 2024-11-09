@@ -17,6 +17,7 @@ import { SetTransaction } from "app/helpers/SetTransaction.js";
 import { SetMoneyWallet } from "app/helpers/SetMoneyWallet.js";
 import { CheackPoint } from "app/helpers/CheackPoint.js";
 import { SetInvoiceDay } from "app/helpers/SetInvoiceDay.js";
+import { GetData } from "app/helpers/GetData";
 
 const Page = () => {
   const { data: session, status, update } = useSession();
@@ -81,6 +82,15 @@ const Page = () => {
     }
   }, [session]);
 
+
+  const wallet = async () =>{
+    let money = await GetData()
+    settotalwallet(money.wallet)
+
+  }
+
+  wallet()
+
   useEffect(() => {
     CheackPoint();
   }, [aaa]);
@@ -122,7 +132,10 @@ const Page = () => {
       });
 
       if (result[0].expenn) {
-        setlastinvoice(result[0].arrinvoice);
+        setlastinvoice(result[0].arrinvoice[result[0].arrinvoice.length-1]);
+
+
+
         let expensesarr = result[0].expenn[result[0].expenn.length - 1];
 
         setdate(expensesarr.date);
@@ -453,9 +466,9 @@ const Page = () => {
           style={{ padding: 0, marginBottom: "150px" }}
         >
           {lastinvoice &&
-            lastinvoice.map((inv, index) => (
+            
               <div
-                key={index}
+
                 className=" "
                 style={{ margin: "0px", backgroundColor: "#b4c1cab9" }}
               >
@@ -464,7 +477,7 @@ const Page = () => {
                   style={{ backgroundColor: "#6b6b6b48" }}
                 >
                   {/* عرض بيانات storageinv */}
-                  {inv.storageinv?.length > 0 && (
+                  {lastinvoice.storageinv?.length > 0 && (
                     <div className="mt-3 rounded-3">
                       <small className="bg-warning text-center">
                         {" "}
@@ -491,7 +504,7 @@ const Page = () => {
                         </div>
                       </li>
 
-                      {inv.storageinv.map((item, itemIndex) => (
+                      {lastinvoice.storageinv.map((item, itemIndex) => (
                         <div key={itemIndex} style={{ position: "relative" }}>
                           {item.invarr.map((product, productIndex) => (
                             <li
@@ -562,14 +575,14 @@ const Page = () => {
                         <div style={{ width: "50%", textAlign: "center" }}>
                           الاجمالي:{" "}
                           <small className="text-danger">
-                            {inv.storageprice}
+                            {lastinvoice.storageprice}
                           </small>
                         </div>
                         <div className="vr" />
                         <div style={{ width: "50%", textAlign: "center" }}>
                           عدد الاصناف: {" "}
                           <small className="text-success">
-                          {inv.Pagesst}
+                          {lastinvoice.Pagesst}
                           </small>
                         </div>
                       </li>
@@ -577,7 +590,7 @@ const Page = () => {
                   )}
 
                   {/* عرض بيانات expenses */}
-                  {inv.expenses?.length > 0 && (
+                  {lastinvoice.expenses?.length > 0 && (
                     <div className="mt-3 rounded-3">
                       <small className="bg-primary text-white"> مصروفات </small>
                       <li
@@ -597,7 +610,7 @@ const Page = () => {
                         </div>
                       </li>
 
-                      {inv.expenses.map((item, itemIndex) => (
+                      {lastinvoice.expenses.map((item, itemIndex) => (
                         <div key={itemIndex} style={{ position: "relative" }}>
                           {item.invarr.map((expense, expenseIndex) => (
                             <li
@@ -656,14 +669,14 @@ const Page = () => {
                         <div style={{ width: "50%", textAlign: "center" }}>
                           الاجمالي:{" "}
                           <small className="text-danger">
-                            {inv.expenseprice}
+                            {lastinvoice.expenseprice}
                           </small>
                         </div>
                         <div className="vr" />
                         <div style={{ width: "50%", textAlign: "center" }}>
                           عدد الاصناف: {" "}
                           <small className="text-success">
-                          {inv.Pagesex}
+                          {lastinvoice.Pagesex}
                           </small>
                         </div>
                       </li>
@@ -675,19 +688,19 @@ const Page = () => {
                       <div style={{ width: "35%", textAlign: "center" }}>
                       اجمالي الكلي{" "} 
                         <small className=" pe-2 ps-2 fw-semibold " style={{letterSpacing:"1.2px", backgroundColor:"#9191919f", color:"#cf2d5e"}}>
-                          {inv.combinedTotal} 
+                          {lastinvoice.combinedTotal} 
                         </small>
                       </div>
                       <div className="vr" />
                       <div style={{ width: "50%", textAlign: "center" }}>
-                        {inv.date}
+                        {lastinvoice.date}
                       </div>
                     </li>
                   </div>
 
                 </div>
               </div>
-            ))}
+            }
         </ul>
       </div>
 

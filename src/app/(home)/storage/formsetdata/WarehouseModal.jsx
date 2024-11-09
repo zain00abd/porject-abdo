@@ -347,9 +347,9 @@ export default function WarehouseModal({ data, wallet }) {
             style={{ textAlign: "center", fontWeight: "bold", height: "50px" }}
           >
             {inpmin ? (
-              <h4 className="text-warning"> سحب من المخزن --</h4>
+              <><h4 className="text-warning"> سحب من المخزن --</h4></>
             ) : (
-              <h4 className="text-success"> إضافة إلى المخزن++ </h4>
+              <><h4 className="text-success"> إضافة إلى المخزن++ </h4></>
             )}
           </DialogTitle>
           <span className="border-bottom"></span>

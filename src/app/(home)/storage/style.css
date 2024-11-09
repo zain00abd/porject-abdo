@@ -1,19 +1,24 @@
 /* خلفية متدرجة للأزرار */
-.gradient-btn {
+.adds {
   background: linear-gradient(135deg, #1e90ff, #00bfff);
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 8px;
+  font-weight: 600;
   border-radius: 30px;
   transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
-.gradient-btn:hover {
-  background: linear-gradient(135deg, #00bfff, #1e90ff);
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+.sto{
+  background: linear-gradient(135deg, #fff01e, #ffae00);
+  color: black;
+  border: none;
+  padding: 8px;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: background 0.3s ease-in-out, transform 0.2s;
 }
+
 
 /* تنسيق عصري للأزرار */
 .modern-btn {

@@ -5,7 +5,7 @@ import "./style.css"
 import Footer from 'components/Footer';
 import Link from "next/link";
 import { GetData } from 'app/helpers/GetData';
-import WarehouseModal from './[formsetdata]/WarehouseModal';
+import WarehouseModal from './formsetdata/WarehouseModal';
 import SnackM from 'components/SnackM';
 const Page = () => {
 
@@ -52,10 +52,13 @@ const Page = () => {
     < Head actev={"storage"} level={undefined} email={undefined} name={undefined} onValueChange={undefined} powers={undefined}/>
       <div className="container-fluid text-dark py-4" dir="rtl" style={{backgroundColor:"#b4c1cab9", marginBottom:"75px"}}>
         <div className="row mb-4">
-          <div className="col-12 d-flex justify-content-between align-items-center">
             <h2 className="text-primary">المخزن</h2>
+          <div className="col-12 d-flex justify-content-between align-items-center">
             <button className="btn gradient-btn">
-              <Link className={`nav-link text-center`} href={"/storage/formsetdata"}> انشاء منتج </Link>
+              <Link className={`nav-link text-center adds`} href={"/storage/formsetdata"}> انشاء منتج </Link>
+            </button>
+            <button className="btn gradient-btn">
+              <Link className={`nav-link text-center sto`} href={"/storage/dataminusstorage"}> اخراجات المخزن </Link>
             </button>
             {section && <WarehouseModal data={section} wallet={wallet} />}
             
