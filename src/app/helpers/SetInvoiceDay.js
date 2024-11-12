@@ -7,7 +7,7 @@ export async function  SetInvoiceDay(arrinvoice, mode){
 
 
   const newInvoiceData = {
-    date: moment().format(`D/${moment().get("month") + 1}/YYYY`) + "  |  " +  moment().format('dddd'), // التاريخ
+    date: moment().format(`15/${moment().get("month") + 2}/YYYY`) + "|" +  moment().format('dddd'), // التاريخ
     type: mode, // نوع الفاتورة، إما expense أو storageinv
     data: {
       invarr: 
