@@ -38,7 +38,6 @@ const Page = () => {
   const [aaa, setaaa] = useState(false);
   const [inperror, setinperror] = useState(false);
   const [datamonth, setdatamonth] = useState([]);
-  
 
   const [arrdis, setarrdis] = useState([]);
   const [arrmon, setarrmon] = useState([]);
@@ -97,7 +96,6 @@ const Page = () => {
       const result = await res.json();
       const arrdata = result[0].arrinvoice;
 
-
       let totalmonth = 0;
       let arrmonth = [];
       for (let i = 0; i < arrdata.length; i++) {
@@ -142,8 +140,8 @@ const Page = () => {
           console.log(expensePrice + storagePrice);
           console.log(totalmonth);
 
-          if (i == arrdata.length-1) {
-            console.log(i)
+          if (i == arrdata.length - 1) {
+            console.log(i);
             arrmonth.push({
               total: totalmonth,
               month: monthbhaend,
@@ -164,9 +162,8 @@ const Page = () => {
           // console.log(false)
         }
       }
-      
-      setdatamonth(arrmonth)
 
+      setdatamonth(arrmonth);
     };
 
     if (nameuser) {
@@ -430,64 +427,65 @@ const Page = () => {
       />
 
       <div className="container">
+        {datamonth &&
+          datamonth.map((month, Imonth) => {
+            return (
+              <div
+                key={Imonth}
+                className=" rounded-4 d-flex justify-content-between align-items-center mt-5"
+                style={{
+                  backgroundColor: "#2c3e50",
+                  position: "relative",
+                  width: "85%",
+                  margin: "auto",
+                }}
+              >
+                <div
+                  className="ms-5 fs-1 text-danger align-items-center"
+                  style={{
+                    left: "18%",
+                    position: "relative",
+                    letterSpacing: "1.1px",
+                  }}
+                >
+                  {" "}
+                  {month.total}{" "}
+                </div>
 
-      {datamonth && datamonth.map((month, Imonth) =>{
+                <div
+                  className="bg-warning text-center p-3 fs-4 p-absolute rounded-circle align-items-center"
+                  style={{
+                    position: "absolute",
+                    right: "-2%",
+                    width: "65px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {month.month}
+                </div>
 
-        return(         <div
-          className=" rounded-4 d-flex justify-content-between align-items-center mt-5"
-          style={{
-            backgroundColor: "#2c3e50",
-            position: "relative",
-            width: "85%",
-            margin: "auto",
-          }}
-        >
-          <div
-            className="ms-5 fs-1 text-danger align-items-center"
-            style={{
-              left: "18%",
-              position: "relative",
-              letterSpacing: "1.1px",
-            }}
-          >
-            {" "}
-            {month.total}{" "}
-          </div>
-
-          <div
-            className="bg-warning text-center p-3 fs-4 p-absolute rounded-circle align-items-center"
-            style={{
-              position: "absolute",
-              right: "-2%",
-              width: "65px",
-              fontWeight: "700",
-            }}
-          >
-            {month.month}
-          </div>
-
-          <div
-            className="text-center"
-            style={{
-              position: "absolute",
-            }}
-          >
-            <button
-              style={{ border: "none", outline: "none", background: "none" }}
-            >
-              <i
-                className="fa-solid fa-circle-info fa-2xl"
-                style={{ color: "#ffc107" }}
-              ></i>
-            </button>
-          </div>
-        </div>)
-
-        
-      })}
-
-
-
+                <div
+                  className="text-center"
+                  style={{
+                    position: "absolute",
+                  }}
+                >
+                  <button
+                    style={{
+                      border: "none",
+                      outline: "none",
+                      background: "none",
+                    }}
+                  >
+                    <i
+                      className="fa-solid fa-circle-info fa-2xl"
+                      style={{ color: "#ffc107" }}
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
       </div>
 
       <div
