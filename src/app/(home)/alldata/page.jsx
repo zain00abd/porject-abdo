@@ -12,6 +12,8 @@ import "moment/locale/ar-ly";
 import Head from "components/Head";
 import Footer from "components/Footer";
 
+
+
 import Musseg from "components/Musseg.jsx";
 import { SetTransaction } from "app/helpers/SetTransaction.js";
 import { SetMoneyWallet } from "app/helpers/SetMoneyWallet.js";
@@ -471,16 +473,19 @@ const Page = () => {
                   }}
                 >
                   <button
+
                     style={{
                       border: "none",
                       outline: "none",
                       background: "none",
                     }}
                   >
-                    <i
-                      className="fa-solid fa-circle-info fa-2xl"
-                      style={{ color: "#ffc107" }}
-                    ></i>
+<Link href={`/alldata/showonedata`}>
+                      <i
+                        className="fa-solid fa-circle-info fa-2xl"
+                        style={{ color: "#ffc107" }}
+                      ></i>
+</Link>
                   </button>
                 </div>
               </div>

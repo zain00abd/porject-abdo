@@ -1,0 +1,16 @@
+.chart-container {
+  width: 100%;
+  height: 400px; /* الارتفاع الافتراضي */
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 300px; /* ارتفاع أصغر للشاشات الصغيرة */
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    height: 250px; /* ارتفاع أصغر جدًا للشاشات الصغيرة جدًا */
+  }
+}
