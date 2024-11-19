@@ -1,19 +1,13 @@
 "use client";
 import React from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels"; // استيراد الإضافة
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels); // تسجيل الإضافة
 
 const HorizontalBarChart = () => {
   const data = {
@@ -35,43 +29,70 @@ const HorizontalBarChart = () => {
       {
         label: "المصروفات",
         data: [45874, 50054, 45871, 45241, 52014, 4578, 5545, 42157, 32515, 24475, 45782, 45578],
-        backgroundColor: "rgba(75, 192, 192, 0.8)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 2,
+        backgroundColor: "rgba(0, 158, 206, 0.8)", // لون مميز مع وضوح
+        borderColor: "rgba(75, 192, 192, 1)", // لون إطار أوضح
+        borderWidth: 2, // عرض الإطار
       },
     ],
   };
 
   const options = {
+    responsive: true,
     maintainAspectRatio: false,
-    indexAxis: "y", // يجعل الرسم أفقيًا
+    indexAxis: "y", // تحويل الرسم البياني إلى أفقي
     plugins: {
       legend: {
         position: "top",
+        labels: {
+          font: {
+            size: 14,
+            family: "Arial",
+          },
+        },
       },
       title: {
         display: true,
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            return `${context.raw.toLocaleString()} جنيه`;
-          },
+        text: "رسم بياني أفقي للمبيعات",
+        font: {
+          size: 18,
+          family: "Arial",
         },
+      },
+      datalabels: {
+        // إعدادات القيم داخل الأشرطة
+        display: true,
+        color: "#000000", // لون النص داخل الشريط
+        font: {
+          size: 13,
+          weight: "bold",
+        },
+        anchor: "center", // تحديد موقع النص بالنسبة للشريط
+        align: "center", // توسيط النص داخل الشريط
+        formatter: (value) => value.toLocaleString(), // تنسيق الرقم
       },
     },
     scales: {
       x: {
         ticks: {
-          callback: (value) => `${value.toLocaleString()} جنيه`,
+          callback: (value) => `${value.toLocaleString()} `, // عرض القيم بالريال
+          font: {
+            size: 10,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 12,
+          },
         },
       },
     },
   };
 
-  const handleInfoClick = (month) => {
-    alert(`تم النقر على الشهر: ${month}`);
-  };
+  const handleInfoClick = (ss) =>{
+    window.alert(ss)
+  }
 
   return (
     <div className="chart-container" style={{ width: "100%", padding: "3%" }}>
