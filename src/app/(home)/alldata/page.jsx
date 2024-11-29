@@ -262,7 +262,7 @@ const Page = () => {
                     color: "#007bff",
                   }}
                   aria-label={`تفاصيل ${month}`}
-                  href={"/alldata/showonedata"}
+                  href={`/alldata/showonedata?${month}_${index+1}`}
                 >
 
                   <FontAwesomeIcon icon={faInfoCircle} size="sm" />
