@@ -164,8 +164,8 @@ const Page = () => {
           {
             label: "مخزن",
             data: [totalstorage],
-            backgroundColor: ["#c42400"], // لون لكل عمود
-            borderColor: ["#c42400"], // لون إطار لكل عمود
+            backgroundColor: ["#ff9900da"], // لون لكل عمود
+            borderColor: ["#ff9900"], // لون إطار لكل عمود
             borderWidth: 2, // عرض الإطار
           },
         ],
