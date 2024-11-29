@@ -214,6 +214,8 @@ const Page = () => {
           console.log(arrmonth);
           totalmonth = 0;
           totalmonth += expensePrice + storagePrice;
+          console.log(storagePrice)
+          console.log(expensePrice)
 
         }
       }

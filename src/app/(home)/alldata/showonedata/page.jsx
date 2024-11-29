@@ -1,12 +1,19 @@
 // @ts-nocheck
 "use client";
 
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels"; // استيراد الإضافة
 import { Bar } from "react-chartjs-2";
 
 import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 import { notFound, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense, useRef } from "react";
 
@@ -16,15 +23,18 @@ import Footer from "components/Footer";
 
 import { CheackPoint } from "app/helpers/CheackPoint.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels); // تسجيل الإضافة
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ChartDataLabels
+); // تسجيل الإضافة
 
 const Page = () => {
   const { data: session, status, update } = useSession();
-
-
-
-
-  
 
   const [nameuser, setnameuser] = useState(null);
 
@@ -40,98 +50,13 @@ const Page = () => {
   const [lastexpen, setlastexpen] = useState([]);
   const [lastinvoice, setlastinvoice] = useState(null);
   const [month, setmonth] = useState(null);
+
   const [data, setdata] = useState(null);
   const [options, setoptions] = useState(null);
+  const [monthtotal, setmonthtotal] = useState(null);
   
 
   useEffect(() => {
-    const monthselect = window.location.search;
-    const decodedValue = decodeURIComponent(monthselect).substring(1);
-    setmonth(decodedValue.split("_")[0])
-    console.log(decodedValue.split("_")[0]);
-
-    setdata({
-      labels: [""],
-      datasets: [
-        {
-          label: "المصروفات",
-          data: [3435],
-          backgroundColor: ["#0097ddcc", "#c42400"], // لون لكل عمود
-          borderColor: ["#0097dd", "#ff5733"], // لون إطار لكل عمود
-          borderWidth: 2, // عرض الإطار
-        },
-        {
-          label: "مخزن",
-          data: [8545],
-          backgroundColor: [ "#c42400"], // لون لكل عمود
-          borderColor: ["#ff5733"], // لون إطار لكل عمود
-          borderWidth: 2, // عرض الإطار
-        },
-      ],
-    })
-    
-    setoptions({
-      responsive: true,
-      maintainAspectRatio: false,
-      indexAxis: "x", // تحويل الرسم البياني إلى أفقي
-      plugins: {
-        legend: {
-          position: "top",
-          labels: {
-            font: {
-              size: 14,
-              family: "Arial",
-            },
-          },
-        },
-        title: {
-          display: true,
-          text: `مصروفات شهر ${decodedValue.split("_")[0]}   `,
-    
-          font: {
-            size: 18,
-            family: "Arial",
-          },
-        },
-        datalabels: {
-          // إعدادات القيم داخل الأشرطة
-          display: true,
-          color: "#270000", // لون النص داخل الشريط
-          font: {
-            size: 12,
-            weight: "bold",
-          },
-          anchor: "center", // تحديد موقع النص بالنسبة للشريط
-          align: "end", // توسيط النص داخل الشريط
-          formatter: (value) => `جنيه ${value.toLocaleString()}`, // تنسيق الرقم
-        },
-      },
-      scales: {
-        y: {
-          ticks: {
-            callback: (value) => `${value.toLocaleString()} `, // عرض القيم بالريال
-            font: {
-              size: 14,
-            },
-          },
-        },
-        x: {
-          ticks: {
-            font: {
-              size: 16,
-            },
-          },
-        },
-      },
-    })
-
-
-
-
-
-
-
-    console.log(decodedValue);
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
     const bootstrap = require("bootstrap/dist/js/bootstrap.bundle.min.js");
     const popoverTriggerList = document.querySelectorAll(
@@ -168,7 +93,138 @@ const Page = () => {
       const res = await fetch(`https://nextback-seven.vercel.app/abdodata`);
       const result = await res.json();
       const arrdata = result[0].arrinvoice;
-      console.log(arrdata);
+
+      const monthselect = window.location.search;
+      const decodedValue = decodeURIComponent(monthselect).substring(1);
+      setmonth(decodedValue.split("_")[1]);
+
+      let totalmonth = 0;
+      let arrmonth = [];
+
+      let totalstorage = 0
+      let totalexpense = 0
+
+
+      for (let i = 0; i < arrdata.length; i++) {
+        let expensePrice = 0;
+        let storagePrice = 0;
+        let totalPages1 = 0;
+        let totalPages2 = 0;
+
+        arrdata[i].expenses.forEach((exp) => {
+          exp.invarr.forEach((price, Iprice) => {
+            expensePrice += price.price;
+          });
+          totalPages1 += exp.invarr.length;
+        });
+
+        arrdata[i].storageinv.forEach((inv) => {
+          inv.invarr.forEach((price, Iprice) => {
+            storagePrice += price.price;
+          });
+          totalPages2 += inv.invarr.length;
+        });
+
+        arrdata[i].Pagesex = totalPages1;
+        arrdata[i].Pagesst = totalPages2;
+        arrdata[i].expenseprice = expensePrice;
+        arrdata[i].storageprice = storagePrice;
+        arrdata[i].combinedTotal = expensePrice + storagePrice;
+        
+
+        let monthone = arrdata[i].date.split("|")[0].split("/")[1];
+        console.log(monthone);
+
+        if(monthone == decodedValue.split("_")[1]){
+          arrdata[i].month = decodedValue.split("_")[1]
+          totalstorage += storagePrice
+          console.log(totalstorage)
+          totalexpense += expensePrice
+          console.log(totalexpense)
+          totalmonth += (expensePrice + storagePrice)
+          console.log(totalmonth)
+          setmonthtotal(totalmonth)
+
+        }
+
+        console.log(arrdata)
+
+      }
+
+      setdata({
+        labels: [""],
+        datasets: [
+          {
+            label: "المصروفات",
+            data: [totalexpense],
+            backgroundColor: ["#0097ddcc"], // لون لكل عمود
+            borderColor: ["#0097ddcc"], // لون إطار لكل عمود
+            borderWidth: 2, // عرض الإطار
+          },
+          {
+            label: "مخزن",
+            data: [totalstorage],
+            backgroundColor: ["#c42400"], // لون لكل عمود
+            borderColor: ["#c42400"], // لون إطار لكل عمود
+            borderWidth: 2, // عرض الإطار
+          },
+        ],
+      });
+
+      setoptions({
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: "x", // تحويل الرسم البياني إلى أفقي
+        plugins: {
+          legend: {
+            position: "top",
+            labels: {
+              font: {
+                size: 14,
+                family: "Arial",
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: `مصروفات شهر ${decodedValue.split("_")[0]}   `,
+
+            font: {
+              size: 18,
+              family: "Arial",
+            },
+          },
+          datalabels: {
+            // إعدادات القيم داخل الأشرطة
+            display: true,
+            color: "#020000", // لون النص داخل الشريط
+            font: {
+              size: 16,
+              weight: "bold",
+            },
+            anchor: "end", // تحديد موقع النص بالنسبة للشريط
+            align: "center", // توسيط النص داخل الشريط
+            formatter: (value) => `جنيه ${value.toLocaleString()}`, // تنسيق الرقم
+          },
+        },
+        scales: {
+          y: {
+            ticks: {
+              callback: (value) => `${value.toLocaleString()} `, // عرض القيم بالريال
+              font: {
+                size: 14,
+              },
+            },
+          },
+          x: {
+            ticks: {
+              font: {
+                size: 16,
+              },
+            },
+          },
+        },
+      });
 
       arrdata.forEach((item) => {
         let expensePrice = 0;
@@ -184,7 +240,6 @@ const Page = () => {
         });
 
         item.storageinv.forEach((inv) => {
-          // console.log(inv)
           inv.invarr.forEach((price, Iprice) => {
             storagePrice += price.price;
           });
@@ -241,8 +296,6 @@ const Page = () => {
 
       // setdata(datacustomer);
       // setdataSearch(datacustomer);
-
-
     };
 
     if (nameuser) {
@@ -252,17 +305,20 @@ const Page = () => {
 
   return (
     <>
-      <Head/>
+      <Head />
 
       <div>
-
-
-
-      <div style={{ position: "relative", width: "85%", height: "500px", margin:"auto" }}>
-        {data && <Bar data={data} options={options} />}
-        
-      </div>
-        <p className="text-end bg-danger p-1 m-0"> اجمالي الشهر: 45586 </p>
+        <div
+          style={{
+            position: "relative",
+            width: "85%",
+            height: "500px",
+            margin: "auto",
+          }}
+        >
+          {data && <Bar data={data} options={options} />}
+        </div>
+        <p className="text-end p-2 m-0"> اجمالي الشهر: <small className="text-danger fs-6">{monthtotal}</small>  </p>
       </div>
 
       <div className="container p-0 mt-4">
@@ -272,12 +328,14 @@ const Page = () => {
         >
           {lastinvoice &&
             lastinvoice.map((inv, index) => (
+
+              
               <div
                 key={index}
                 className=" "
                 style={{ margin: "0px", backgroundColor: "#b4c1cab9" }}
               >
-                <div
+                {month == inv.month &&                 <div
                   className=" m-2 p-1 rounded-4"
                   style={{ backgroundColor: "#6b6b6b48" }}
                 >
@@ -508,8 +566,11 @@ const Page = () => {
                       </div>
                     </li>
                   </div>
-                </div>
+                </div>}
+
               </div>
+
+
             ))}
         </ul>
       </div>
