@@ -27,7 +27,7 @@ export async function POST(request) {
 
   // 4- Try to Store obj to DB
   await UserModal.create({
-    name: objFromFrontEnd.name,
+    name: objFromFrontEnd.name + "/home",
     email: objFromFrontEnd.email,
     password: hashedPassword,
     
