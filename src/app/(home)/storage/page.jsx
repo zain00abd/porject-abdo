@@ -56,7 +56,7 @@ const Page = () => {
             <h2 className="text-primary">المخزن</h2>
           <div className="col-12 d-flex justify-content-between align-items-center">
             <button className="btn gradient-btn">
-              <Link className={`nav-link text-center adds`} href={"/storage/formsetdata"}> انشاء منتج </Link>
+              <Link className={`nav-link text-center adds`} href={"/storage/formsetdata"}> <i className="fa-solid fa-plus fa-fade fa-xl"></i> </Link>
             </button>
             <button className="btn gradient-btn">
               <Link className={`nav-link text-center sto`} href={"/storage/dataminusstorage"}> اخراجات المخزن </Link>
@@ -122,7 +122,7 @@ const Page = () => {
 
       </div>
 
-      < Footer/>
+
   
 </>
 

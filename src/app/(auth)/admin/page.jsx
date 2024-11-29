@@ -146,6 +146,25 @@ const Page = () => {
     }
   };
 
+  const deleteuser = async (email, i) =>{
+    const baseURL = window.location.origin;
+    const response = await fetch(`${baseURL}/api/deleteuser`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+    
+    const dataFromBackend = await response;
+    if (response.ok) {
+      i.parentElement.remove()
+      toast.error(" تم حذف الحساب  بنجاح ");
+    }
+  }
+
   return (
     <>
       <Musseg />
@@ -153,7 +172,7 @@ const Page = () => {
         <h1 className="text-center mb-4">إدارة المستخدمين</h1>
 
         {alluser !== null
-          ? alluser.map((user) => (
+          ? alluser.map((user, Iuser) => (
               <div className="user-card" key={user._id} id={user._id}>
                 <h5>{user.name.split("/")[0]}</h5>
                 <p>{user.email}</p>
@@ -182,7 +201,7 @@ const Page = () => {
                   </div>
                 ))}
 
-                <button className="btn btn-danger btn-sm">حذف الحساب</button>
+                <button className="btn btn-danger btn-sm" onClick={(e) => deleteuser(user.email, e.target)}>حذف الحساب</button>
               </div>
             ))
           : null}

@@ -868,12 +868,7 @@ const Page = () => {
         </div>
       </div>
 
-      {powers &&
-      powers.split("_").some((item) => item.includes("addinvoice")) ? (
-        <Footer total={totalwallet} />
-      ) : (
-        <></>
-      )}
+
     </>
   );
 };
