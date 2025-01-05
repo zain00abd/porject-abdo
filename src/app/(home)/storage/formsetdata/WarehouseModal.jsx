@@ -66,8 +66,17 @@ export default function WarehouseModal({ data, wallet }) {
   const [totalinv, settotalinv] = useState(0);
   const [inpmin, setinpmin] = useState(false);
 
+  const [open1, setOpen1] = useState(false);
+
+  const handleOpen = () => {
+    setOpen1(true);
+  };
 
 
+
+  const SimpleDialog = () => {
+  
+  }
   
   const [products, setProducts] = useState([
     { name: "", quantity: "", price: "" },
@@ -94,8 +103,10 @@ export default function WarehouseModal({ data, wallet }) {
 
     console.log(id);
     setOpen(true);
+    setOpen1(false);
   };
   const handleClose = () => setOpen(false);
+  const handleClose1 = () => setOpen1(false);
 
   const handleAddProduct = () => {
     setProducts([...products, { name: "", quantity: "", price: "" }]);
@@ -296,7 +307,83 @@ export default function WarehouseModal({ data, wallet }) {
         <PopupState variant="popover" popupId="demo-popup-menu">
           {(popupState) => (
             <React.Fragment>
-              <Button
+
+
+<div>
+      {/* زر لفتح النافذة */}
+      <Button variant="contained" color="primary" onClick={handleOpen}>
+        افتح النافذة
+      </Button>
+
+      {/* نافذة الحوار */}
+      <Dialog
+        open={open1}
+        onClose={handleClose1}
+        PaperProps={{
+          style: {
+            backgroundColor: '#333', // لون الخلفية
+            padding: '20px',
+            borderRadius: '10px',
+          },
+        }}
+      >
+        <DialogTitle
+          style={{
+            textAlign: 'center',
+            color: '#fff',
+            fontWeight: 'bold',
+          }}
+        >
+          أنواع العمليات
+        </DialogTitle>
+        <DialogContent
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '20px',
+          }}
+        >
+          {/* الزر الأول */}
+          <Button
+          id="add"
+          onClick={(e) => {
+            handleClickOpen(e.target.id);
+          }}
+            variant="contained"
+            style={{
+              backgroundColor: '#005847',
+              color: '#fff',
+              fontWeight: 'bold',
+              borderRadius: '25px',
+              width: '200px',
+            }}
+          >
+            إضافة إلى المخزن
+          </Button>
+
+          {/* الزر الثاني */}
+          <Button
+          id="min"
+          onClick={(e) => {
+            handleClickOpen(e.target.id);
+          }}
+            variant="contained"
+            style={{
+              backgroundColor: '#9e8f44',
+              color: '#fff',
+              fontWeight: 'bold',
+              borderRadius: '25px',
+              width: '200px',
+            }}
+          >
+            سحب من المخزن
+          </Button>
+        </DialogContent>
+      </Dialog>
+    </div>
+
+              {/* <Button
                 variant="contained"
                 {...bindTrigger(popupState)}
                 style={{ fontFamily: "system-ui" }}
@@ -332,7 +419,8 @@ export default function WarehouseModal({ data, wallet }) {
                   {" "}
                   سحب من المخزن{" "}
                 </MenuItem>
-              </Menu>
+              </Menu> */}
+
             </React.Fragment>
           )}
         </PopupState>
